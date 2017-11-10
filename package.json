@@ -1,0 +1,35 @@
+{
+  "name": "voting-app",
+  "version": "1.0.0",
+  "description": "Full stack JavaScript app to create, view and vote on polls",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmccormack/voting-app.git"
+  },
+  "keywords": [
+    "Node.js",
+    "Node",
+    "Voting",
+    "JS",
+    "FreeCodeCamp",
+    "FCC"
+  ],
+  "author": "Christopher McCormack https://mackville.net",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cmccormack/voting-app/issues"
+  },
+  "homepage": "https://github.com/cmccormack/voting-app#readme",
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  },
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.2"
+  }
+}

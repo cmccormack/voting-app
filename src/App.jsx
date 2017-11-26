@@ -5,6 +5,8 @@ import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'
 import Main from './views/Main.jsx'
 import Login from './views/Login.jsx'
 
+import './styles/body.scss'
+
 const entry_point = document.getElementById('root')
 
 const App = () => (

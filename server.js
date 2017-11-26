@@ -1,28 +1,49 @@
-// Import Modules
+///////////////////////////////////////////////////////////
+//  Import modules
+///////////////////////////////////////////////////////////
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
+require('dotenv').config({path: path.resolve(__dirname, '.env')})
 
-// Import Express Routes
-const routes = require('./app/routes.js')
 
+///////////////////////////////////////////////////////////
+//  Configure and connect to MongoDB database
+///////////////////////////////////////////////////////////
+const dbconf = require('./db.js')
+mongoose.Promise = global.Promise
+mongoose.connect(dbconf.url, dbconf.options)
+.then(
+  () => { console.log('Successfully connected to database!') },
+  err => { console.error(`${err.name}: ${err.message}`) }
+)
+
+
+///////////////////////////////////////////////////////////
+//  Initialize Express and configure Middleware
+///////////////////////////////////////////////////////////
 const app = express()
 const port = process.env.PORT || 3000
 
-// Serve static files middleware
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public')))
 
-// Body parsing middleware - parse application/x-www-form-urlencoded
+// Body parsing - parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
-// Handle cross-site request middleware
+// Handle cross-site request
 app.use(cors())
 
-// Call route handler with Express app
+// Import Express Routes and call with Express app
+const routes = require('./app/routes.js')
 routes(app)
 
-// Start Express server
+
+///////////////////////////////////////////////////////////
+//  Start Express Server
+///////////////////////////////////////////////////////////
 const server = app.listen(port, () => {
   const {port, address} = server.address()
   console.log(`Express server started on ${address}:${port}`)

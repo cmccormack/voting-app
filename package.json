@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "build": "webpack --env.production --colors --progress",
+    "build": "rimraf ./static && webpack --env.production --colors --progress",
     "webpack": "webpack -d --watch",
     "webpackdev": "webpack-dev-server --env.development --colors --progress"
   },

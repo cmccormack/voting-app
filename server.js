@@ -11,7 +11,7 @@ const app = express()
 const port = process.env.PORT || 3000
 
 // Serve static files middleware
-app.use(express.static(path.join(__dirname, 'static')))
+app.use(express.static(path.join(__dirname, 'public')))
 
 // Body parsing middleware - parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))

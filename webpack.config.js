@@ -26,7 +26,7 @@ module.exports = (env={}) => {
       app: './src/app.jsx'
     },
     output: {
-      path: path.resolve(__dirname, 'static'),
+      path: path.resolve(__dirname, 'public'),
       filename: '[name].bundle.js',
     },
     resolve: {

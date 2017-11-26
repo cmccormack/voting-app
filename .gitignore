@@ -59,4 +59,8 @@ typings/
 
 # Build files
 static/
+public/
+
+# OS files
+.DS_Store
 

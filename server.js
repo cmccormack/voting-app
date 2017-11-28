@@ -13,7 +13,6 @@ require('dotenv').config({path: path.resolve(__dirname, '.env')})
 //  Configure and connect to MongoDB database
 ///////////////////////////////////////////////////////////
 const dbconf = require('./db.js')
-const User = require('./models/user')
 mongoose.Promise = global.Promise
 mongoose.connect(dbconf.url, dbconf.options)
   .then(
@@ -23,16 +22,6 @@ mongoose.connect(dbconf.url, dbconf.options)
 
 const db = mongoose.connection
 db.on('error', err => { console.error(`${err.name}: ${err.message}`) })
-
-const testUser = new User({
-  username: 'testuser1',
-  password: 'password'
-}).save(err => { console.error(`${err.name}: ${err.message}`) })
-
-// User.find({'username': testUser.username}, (err, res)=>{
-//   if (err) console.error(`${err.name}: ${err.message}`)
-//   console.log(res)
-// })
 
 
 ///////////////////////////////////////////////////////////
@@ -46,6 +35,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // Body parsing - parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
+
+// Body parsing - parse json
+app.use(bodyParser.json())
 
 // Handle cross-site request
 app.use(cors())

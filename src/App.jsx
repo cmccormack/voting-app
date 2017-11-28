@@ -4,6 +4,7 @@ import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'
 
 import Main from './views/Main.jsx'
 import Login from './views/Login.jsx'
+import Register from './views/Register.jsx'
 
 import './styles/body.scss'
 
@@ -11,8 +12,9 @@ const entry_point = document.getElementById('root')
 
 const App = () => (
   <div>
-    <nav>
+    <nav style={{backgroundColor: 'lightcyan'}}>
       <ul>
+        <li><Link to="/register">Register</Link></li>
         <li><Link to="/login">Login</Link></li>
         <li><Link to="/main">Main</Link></li>
       </ul>
@@ -20,6 +22,7 @@ const App = () => (
     <div>
       <Switch>
         <Route exact path="/login" component={Login} />
+        <Route exact path="/register" component={Register} />
         <Route exact path="/main" component={Main} />
         <Route exact path="/" component={Main} />
         <Route render={(props) => (

@@ -13,12 +13,26 @@ require('dotenv').config({path: path.resolve(__dirname, '.env')})
 //  Configure and connect to MongoDB database
 ///////////////////////////////////////////////////////////
 const dbconf = require('./db.js')
+const User = require('./models/user')
 mongoose.Promise = global.Promise
 mongoose.connect(dbconf.url, dbconf.options)
-.then(
-  () => { console.log('Successfully connected to database!') },
-  err => { console.error(`${err.name}: ${err.message}`) }
-)
+  .then(
+    () => { console.log(`Successfully connected to database [${dbconf.db}]`) },
+    err => { }
+  )
+
+const db = mongoose.connection
+db.on('error', err => { console.error(`${err.name}: ${err.message}`) })
+
+const testUser = new User({
+  username: 'testuser1',
+  password: 'password'
+}).save(err => { console.error(`${err.name}: ${err.message}`) })
+
+// User.find({'username': testUser.username}, (err, res)=>{
+//   if (err) console.error(`${err.name}: ${err.message}`)
+//   console.log(res)
+// })
 
 
 ///////////////////////////////////////////////////////////

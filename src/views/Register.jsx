@@ -6,8 +6,7 @@ class Register extends Component {
     super(props)
     this.state = {
       username: '',
-      password: '',
-      passwordConfirm: ''
+      password: ''
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -23,13 +22,12 @@ class Register extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    console.log(this.state)
-    console.log('Submitted!')
-    const body = JSON.stringify({
+    // console.log(this.state)
+    // console.log('Submitted!')
+    const body = {
       username: this.state.username,
       password: this.state.password
-    })
-
+    }
 
     const myHeaders = new Headers()
     myHeaders.append('Content-Type', 'application/json')
@@ -37,18 +35,13 @@ class Register extends Component {
       method: 'POST',
       headers: myHeaders,
       cache: 'default',
-      body: body
+      body: JSON.stringify(body)
     })
     .then(res => res.json()).then(data => {console.log(data)})
     .catch(err => { console.error(err) })
   }
 
   render() {
-
-    const match = this.state.password === this.state.passwordConfirm
-    const match_symbol = match
-      ? <span id='password_match' style={{ color: 'green' }}>{'✔'}</span>
-      : <span id='password_match' style={{ color: 'red' }}>{'✘'}</span>
 
     return (
       <div>
@@ -60,7 +53,7 @@ class Register extends Component {
             id='input_username'
             name='username'
             onChange={this.handleInputChange}
-            placeholder='username'
+            placeholder='Username'
             type='text'
             value={this.state.username}
           />
@@ -71,21 +64,11 @@ class Register extends Component {
             id='input_password'
             name='password'
             onChange={this.handleInputChange}
-            placeholder='password'
+            placeholder='Password'
+            required
             type='password'
             value={this.state.password}
           />
-          <br />
-    
-          <label htmlFor='passwordConfirm'>Confirm Password: </label>
-          <input
-            id='input_password_confirm'
-            name='passwordConfirm'
-            onChange={this.handleInputChange}
-            placeholder='password'
-            type='password'
-            value={this.state.passwordConfirm}
-          />{match_symbol}
           <br />
     
           <button type='submit'>Submit</button>

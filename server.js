@@ -6,8 +6,12 @@ const cors = require('cors')
 const path = require('path')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const passport = require('passport')
+const session = require('express-session')
+const favicon = require('serve-favicon')
 require('dotenv').config({path: path.resolve(__dirname, '.env')})
 
+const passportInit = require('./passport/init')
 
 ///////////////////////////////////////////////////////////
 //  Configure and connect to MongoDB database
@@ -28,10 +32,11 @@ db.on('error', err => { console.error(`${err.name}: ${err.message}`) })
 //  Initialize Express and configure Middleware
 ///////////////////////////////////////////////////////////
 const app = express()
-const port = process.env.PORT || 3000
+app.set('port', process.env.PORT || 3000)
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(favicon(path.resolve(__dirname, 'public', 'images', 'favicon.ico')))
 
 // Body parsing - parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -46,11 +51,25 @@ app.use(cors())
 const routes = require('./app/routes.js')
 routes(app)
 
+// Initialize Passport and enable persistent login sessions
+const sessionOptions = {
+  secret: 'cmccormack-voting-app',
+  resave: false,
+  saveUninitialized: false
+}
+app.use(session(sessionOptions))
+app.use(passport.initialize())
+app.use(passport.session())
+passportInit(passport)
+
+
+
+
 
 ///////////////////////////////////////////////////////////
 //  Start Express Server
 ///////////////////////////////////////////////////////////
-const server = app.listen(port, () => {
+const server = app.listen(app.get('port'), () => {
   const {port, address} = server.address()
   console.log(`Express server started on ${address}:${port}`)
 })

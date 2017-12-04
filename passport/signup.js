@@ -37,9 +37,9 @@ module.exports = (passport, models) => {
           console.error(`Mongoose error writing user to database: ${err}`)
           return done(err)
         }
-        console.log(`Mongoose: User ${username} added to database!`)
+        console.log(`User ${username} added to database!`)
         return done(null, newUser, {
-          message: `Mongoose: User ${username} added to database!`
+          message: `User ${username} added to database!`
         })
       })
     

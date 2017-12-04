@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
+import { Alert } from './layout'
 
 class Register extends Component {
 
@@ -6,7 +8,8 @@ class Register extends Component {
     super(props)
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      alert: { visible: false }
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -35,7 +38,17 @@ class Register extends Component {
       cache: 'default',
       body: JSON.stringify(body)
     })
-    .then(res => res.json()).then(data => {console.log(data)})
+    .then(res => res.json()).then(data => {
+      // Response from registration attempt
+      console.log(data)
+      this.setState({alert: {
+        success: data.success ? 'alert-success' : 'alert-warning',
+        title: data.success ? 'Success!' : 'Warning!',
+        message: data.message,
+        visible: true
+      }})
+      this.props.loggedIn(data.success)
+    })
     .catch(err => { console.error(err) })
   }
 
@@ -43,6 +56,7 @@ class Register extends Component {
 
     return (
       <div>
+        { this.state.alert.visible && <Alert {...this.state.alert} />}
         <h1>Register</h1>
         <form id='login_form' onSubmit={this.handleSubmit}>
     

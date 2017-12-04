@@ -1,7 +1,7 @@
 const path = require('path')
 const User = require('../models/user')
 
-module.exports = (app) => {
+module.exports = (app, passport) => {
 
   const root = path.resolve(__dirname, '..')
   const public = path.join(root, 'public')
@@ -24,42 +24,30 @@ module.exports = (app) => {
     ))
   })
 
-  app.post('/register', (req, res) => {
+  app.post('/register', (req, res, next) => {
 
-    res.type('json').send({ 
-      path: '/register',
-      method: 'POST',
-      status: 'Success',
-      body: JSON.stringify(req.body)
-    })
-    // const testUser = new User({
-    //   username: req.body.username,
-    //   password: req.body.password
-    // }).save(err => {
-    //   if (err) {
-    //     console.error(`${err.name}: ${err.message}`)
-    //     res.send('Error Registering')
-    //   }
-      
-    //   res.type('json').send(JSON.stringify(
-    //     {
-    //       'username': req.body.username,
-    //       'password': req.body.password
-    //     }
-    //   ))
-    
-    // })
+    passport.authenticate('signup', (err, user, info) => {
 
-    // User.find({'username': testUser.username}, (err, res)=>{
-    //   if (err) console.error(`${err.name}: ${err.message}`)
-    //   console.log(res)
-    // })
+      if (err) return next(err)
+      if (!user) {
+        return res.type('json').send({
+          success: false,
+          message: info.message
+        })
+      }
 
+      // Establish session with user
+      req.login(user, err => {
+        if (err) return next(err)
+        console.log(`New session created for user ${user.username}`)
+        res.type('json').send({
+          success: true,
+          message: info.message
+        })
+      })
 
+    })(req, res, next)
   })
-
-
-
 
   // Handle invalid routes that React Router cannot
   app.get('/:path/*', (req, res) => {

@@ -17,13 +17,11 @@ class Register extends Component {
     const target = event.target
     this.setState({
       [target.name]: target.value
-    }, () => console.log(this.state))
+    })
   }
 
   handleSubmit(event) {
     event.preventDefault()
-    // console.log(this.state)
-    // console.log('Submitted!')
     const body = {
       username: this.state.username,
       password: this.state.password

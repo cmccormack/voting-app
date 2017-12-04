@@ -19,13 +19,15 @@ const passportInit = require('./passport/init')
 const dbconf = require('./db.js')
 mongoose.Promise = global.Promise
 mongoose.connect(dbconf.url, dbconf.options)
-  .then(
-    () => { console.log(`Successfully connected to database [${dbconf.db}]`) },
-    err => { }
-  )
 
+// The connection used by default for every model created using mongoose.model
 const db = mongoose.connection
-db.on('error', err => { console.error(`${err.name}: ${err.message}`) })
+db.on('error', err => {
+  console.error(`Mongoose default connection error: ${err}`) 
+})
+db.once('open', () => {
+  console.log(`Mongoose default connection opened [${dbconf.db}]`)
+})
 
 
 ///////////////////////////////////////////////////////////
@@ -47,10 +49,6 @@ app.use(bodyParser.json())
 // Handle cross-site request
 app.use(cors())
 
-// Import Express Routes and call with Express app
-const routes = require('./app/routes.js')
-routes(app)
-
 // Initialize Passport and enable persistent login sessions
 const sessionOptions = {
   secret: 'cmccormack-voting-app',
@@ -60,9 +58,15 @@ const sessionOptions = {
 app.use(session(sessionOptions))
 app.use(passport.initialize())
 app.use(passport.session())
-passportInit(passport)
+
+passportInit(mongoose, passport)
 
 
+///////////////////////////////////////////////////////////
+//  Import Express Routes and call with Express app
+///////////////////////////////////////////////////////////
+const routes = require('./app/routes.js')
+routes(app, passport)
 
 
 

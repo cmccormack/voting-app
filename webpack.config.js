@@ -19,6 +19,7 @@ const cssProd = ExtractTextPlugin.extract({
 
 
 module.exports = (env={}) => {
+  console.log(env)
   
   return {
     context: path.join(__dirname, './'),
@@ -46,7 +47,14 @@ module.exports = (env={}) => {
         {
           test: /\.s?css$/,
           use: env.production ? cssProd : cssDev
-        }
+        },
+        {
+          test: /\.(png|ico|jpe?g|gif)$/i,
+          use: [
+            'file-loader?name=images/[name].[ext]',
+            'image-webpack-loader'
+          ]
+        },
       ],
     },
     plugins: [
@@ -57,7 +65,7 @@ module.exports = (env={}) => {
         inject: 'body'
       }),
       new ExtractTextPlugin({
-        filename: './styles/[name].css',
+        filename: './styles/styles.css',
         disable: !env.production,
         allChunks: true
       }),

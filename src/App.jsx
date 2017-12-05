@@ -9,9 +9,9 @@ import {
 } from 'react-router-dom'
 
 import './images/favicon.ico'
-import Main from './views/Main.jsx'
-import Login from './views/Login.jsx'
-import Register from './views/Register.jsx'
+import Main from './views/Main'
+import Login from './views/Login'
+import RegisterPage from './views/containers/RegisterPage'
 import { Header } from './views/layout'
 
 import './styles/body.scss'
@@ -70,8 +70,8 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" render={() => (
               this.state.loggedIn
-              ? ( <Redirect to='/main' /> )
-              : ( <Register loggedIn={this.updateLoggedIn} />)
+              ? ( <Redirect to='/' /> )
+              : ( <RegisterPage loggedIn={this.updateLoggedIn} />)
             )}/>
             <Route exact path="/main" render={() => (
               <Main loggedIn={this.state.loggedIn} />

@@ -14,6 +14,12 @@ module.exports = (app, passport) => {
       }
     ))
   })
+
+  app.get('/isauthenticated', (req, res) => {
+    console.log('GET request to /isauthenticated')
+    console.log(req.session)
+    res.type('json').send({isAuthenticated: req.isAuthenticated()})
+  })
   
   app.post('/login', (req, res) => {
     res.type('json').send(JSON.stringify(
@@ -24,15 +30,26 @@ module.exports = (app, passport) => {
     ))
   })
 
+  app.get('/logout', (req, res) => {
+    console.log('GET request to /logout')
+    const { username } = req.user
+    req.logout()
+    res.type('json').send({
+      success: true,
+      message: `User ${username} logged out.`
+    })
+  })
+
   app.post('/register', (req, res, next) => {
 
-    passport.authenticate('signup', (err, user, info) => {
+    passport.authenticate('register', (err, user, info) => {
 
       if (err) return next(err)
       if (!user) {
         return res.type('json').send({
           success: false,
-          message: info.message
+          message: info.message,
+          username: user.username
         })
       }
 
@@ -42,7 +59,8 @@ module.exports = (app, passport) => {
         console.log(`New session created for user ${user.username}`)
         res.type('json').send({
           success: true,
-          message: info.message
+          message: info.message,
+          username: user.username
         })
       })
 

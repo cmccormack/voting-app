@@ -1,4 +1,4 @@
-const signup = require('./signup')
+const signup = require('./register')
 const login = require('./login')
 
 module.exports = (mongoose, passport) => {
@@ -20,6 +20,7 @@ module.exports = (mongoose, passport) => {
   })
 
   passport.deserializeUser((id, done) => {
+    console.log(`Deserializing id: ${id}`);
     User.findById(id, (err, user) => {
       done(err, user)
     })

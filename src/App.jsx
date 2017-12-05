@@ -8,9 +8,11 @@ import {
   Switch
 } from 'react-router-dom'
 
+import './images/favicon.ico'
 import Main from './views/Main.jsx'
 import Login from './views/Login.jsx'
 import Register from './views/Register.jsx'
+import { Header } from './views/layout'
 
 import './styles/body.scss'
 
@@ -24,22 +26,45 @@ class App extends Component {
       loggedIn: false
     }
     this.updateLoggedIn = this.updateLoggedIn.bind(this)
+    this.validateAuth = this.validateAuth.bind(this)
+    this.handleLogout = this.handleLogout.bind(this)
   }
 
-  updateLoggedIn(loggedIn){
+  handleLogout() {
+    fetch('/logout', {
+      method: 'GET',
+      credentials: 'same-origin'
+    }).then(()=>{
+      this.setState({loggedIn: false})
+    })
+  }
+
+  updateLoggedIn(loggedIn) {
     this.setState({ loggedIn })
   }
 
+  validateAuth() {
+    fetch('/isauthenticated', {
+      method: 'GET',
+      credentials: 'same-origin'
+    })
+    .then(resp => resp.json())
+    .then((data) => {
+      if (data.isAuthenticated !== this.state.loggedIn) {
+        this.setState({loggedIn: data.isAuthenticated})
+      }
+      console.log(data)
+    })
+  }
+
   render() {
+    this.validateAuth()
     return (
       <div>
-        <nav style={{ backgroundColor: 'lightseagreen'}}>
-          <ul>
-            <li><Link to="/register">Register</Link></li>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/main">Main</Link></li>
-          </ul>
-        </nav>
+        <Header
+          handleLogout={this.handleLogout}
+          loggedIn={this.state.loggedIn}
+        />
         <div>
           <Switch>
             <Route exact path="/login" component={Login} />
@@ -48,11 +73,13 @@ class App extends Component {
               ? ( <Redirect to='/main' /> )
               : ( <Register loggedIn={this.updateLoggedIn} />)
             )}/>
-            <Route exact path="/main" component={Main} />
+            <Route exact path="/main" render={() => (
+              <Main loggedIn={this.state.loggedIn} />
+            )} />
             <Route exact path="/" component={Main} />
             <Route render={(props) => (
               <h1>404 Page not found</h1>
-            )}/>
+            )} />
           </Switch>
         </div>
       </div>

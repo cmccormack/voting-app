@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
-import RegisterForm from '../components/RegisterForm'
+import { RegisterForm } from '../components'
 
-class Register extends Component {
+class RegisterPage extends Component {
 
   constructor(props) {
     super(props)
@@ -66,4 +66,4 @@ class Register extends Component {
 }
 
 
-export default Register
+export default RegisterPage

@@ -35,7 +35,9 @@ class App extends Component {
       method: 'GET',
       credentials: 'same-origin'
     }).then(()=>{
-      this.setState({loggedIn: false})
+      this.setState({
+        loggedIn: false
+      })
     })
   }
 
@@ -48,7 +50,7 @@ class App extends Component {
       method: 'GET',
       credentials: 'same-origin'
     })
-    .then(resp => resp.json())
+    .then(res => res.json())
     .then((data) => {
       if (data.isAuthenticated !== this.state.loggedIn) {
         this.setState({loggedIn: data.isAuthenticated})
@@ -57,8 +59,14 @@ class App extends Component {
     })
   }
 
+  componentWillMount() {
+    this.setState({recentlyLoggedOut: false})
+  }
+
   render() {
+
     this.validateAuth()
+
     return (
       <div>
         <Header
@@ -70,13 +78,15 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" render={() => (
               this.state.loggedIn
-              ? ( <Redirect to='/' /> )
+              ? ( <Redirect to='/main' /> )
               : ( <RegisterPage loggedIn={this.updateLoggedIn} />)
             )}/>
             <Route exact path="/main" render={() => (
               <Main loggedIn={this.state.loggedIn} />
             )} />
-            <Route exact path="/" component={Main} />
+            <Route exact path="/" render={() => (
+              <Redirect to='/main' />
+            )} />
             <Route render={(props) => (
               <h1>404 Page not found</h1>
             )} />

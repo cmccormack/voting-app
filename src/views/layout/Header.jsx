@@ -28,7 +28,7 @@ class Header extends Component {
       <nav className="row teal lighten-1">
         <div className="nav-wrapper">
           <div className="col s12">
-            <Link to='/' className="brand-logo">Votery</Link>
+            <Link to='/main' className="brand-logo">Votery</Link>
             { links }
           </div>
         </div>

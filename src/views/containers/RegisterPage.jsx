@@ -18,6 +18,7 @@ class RegisterPage extends Component {
 
   handleInputChange(event){
     const target = event.target
+    console.log(target)
     this.setState({
       [target.name]: target.value
     })
@@ -42,7 +43,7 @@ class RegisterPage extends Component {
     .then(res => res.json()).then(data => {
       // Response from registration attempt
       console.log(data)
-      this.props.loggedIn(data.success)
+      this.props.updateLoggedIn(data.success)
     })
     .catch(err => { console.error(err) })
   }

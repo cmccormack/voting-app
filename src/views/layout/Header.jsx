@@ -5,12 +5,9 @@ class Header extends Component {
 
   constructor(props){
     super(props)
-
   }
 
   render() {
-
-    console.log(this.props.loggedIn)
 
     const links = (
       <ul className="right hide-on-med-and-down">

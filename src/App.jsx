@@ -10,8 +10,7 @@ import {
 
 import './images/favicon.ico'
 import Main from './views/Main'
-import Login from './views/Login'
-import RegisterPage from './views/containers/RegisterPage'
+import { RegisterPage, LoginPage } from './views/containers'
 import { Header } from './views/layout'
 
 import './styles/body.scss'
@@ -69,24 +68,41 @@ class App extends Component {
 
     return (
       <div>
-        <Header
+        {/* <Header
           handleLogout={this.handleLogout}
           loggedIn={this.state.loggedIn}
-        />
+        /> */}
+        <Route render={props => (
+          <Header
+            handleLogout={this.handleLogout}
+            loggedIn={this.state.loggedIn}
+            {...props}
+          /> 
+        )} />
         <div>
           <Switch>
-            <Route exact path="/login" component={Login} />
+            <Route exact path="/login" component={LoginPage} />
+
+            <Route exact path="/logout" render={() => (
+              this.state.loggedIn
+              ? ( <Logout loggedIn={this.state.loggedIn} /> )
+              : ( <Redirect to="/main" /> )
+            )} />
+
             <Route exact path="/register" render={() => (
               this.state.loggedIn
               ? ( <Redirect to='/main' /> )
-              : ( <RegisterPage loggedIn={this.updateLoggedIn} />)
+              : ( <RegisterPage updateLoggedIn={this.updateLoggedIn} />)
             )}/>
+
             <Route exact path="/main" render={() => (
               <Main loggedIn={this.state.loggedIn} />
             )} />
+
             <Route exact path="/" render={() => (
               <Redirect to='/main' />
             )} />
+
             <Route render={(props) => (
               <h1>404 Page not found</h1>
             )} />

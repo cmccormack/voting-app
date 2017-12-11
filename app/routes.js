@@ -6,7 +6,9 @@ module.exports = (app, passport) => {
   const root = path.resolve(__dirname, '..')
   const public = path.join(root, 'public')
 
-
+  ///////////////////////////////////////////////////////////
+  // Test if API is Available
+  ///////////////////////////////////////////////////////////
   app.get('/api_test', (req, res) => {
     res.type('json').send(JSON.stringify(
       {
@@ -15,12 +17,20 @@ module.exports = (app, passport) => {
     ))
   })
 
+
+  ///////////////////////////////////////////////////////////
+  // User Authentication Verification
+  ///////////////////////////////////////////////////////////
   app.get('/isauthenticated', (req, res) => {
     console.log('GET request to /isauthenticated')
     console.log(req.session)
     res.type('json').send({isAuthenticated: req.isAuthenticated()})
   })
-  
+
+
+  ///////////////////////////////////////////////////////////
+  // User Login and Create New Session
+  ///////////////////////////////////////////////////////////
   app.post('/login', (req, res, next) => {
     console.log('POST request to /login')
     passport.authenticate('login', (err, user, info) => {
@@ -48,6 +58,10 @@ module.exports = (app, passport) => {
     })(req, res, next)
   })
 
+
+  ///////////////////////////////////////////////////////////
+  // User Logout
+  ///////////////////////////////////////////////////////////
   app.get('/logout', (req, res) => {
     console.log('GET request to /logout')
     const { username } = req.user
@@ -58,6 +72,10 @@ module.exports = (app, passport) => {
     })
   })
 
+
+  ///////////////////////////////////////////////////////////
+  // User Registration, Login, and Create New Session
+  ///////////////////////////////////////////////////////////
   app.post('/register', (req, res, next) => {
 
     passport.authenticate('register', (err, user, info) => {
@@ -85,19 +103,28 @@ module.exports = (app, passport) => {
     })(req, res, next)
   })
 
-  // Handle invalid routes that React Router cannot
+
+  ///////////////////////////////////////////////////////////
+  // Handle Invalid Routes that React Router Does Not
+  ///////////////////////////////////////////////////////////
   app.get('/:path/*', (req, res) => {
     console.log(`New Request for ${req.hostname + req.path}`)
     res.redirect('/')
   })
 
-  // Default route loads React app
+
+  ///////////////////////////////////////////////////////////
+  // Default Route Handler, Loads React App
+  ///////////////////////////////////////////////////////////
   app.get('*', (req, res) => {
     console.log(`New Request for ${req.hostname + req.path}`)
     res.sendFile(path.join(public, 'index.html'))
   })
 
-  // Handle errors
+
+  ///////////////////////////////////////////////////////////
+  // Error Handler
+  ///////////////////////////////////////////////////////////
   app.use((err, req, res, next) => {
     console.log('Error Handler Route')
     console.log(err)

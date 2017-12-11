@@ -7,7 +7,7 @@ module.exports = (app, passport) => {
   const public = path.join(root, 'public')
 
   ///////////////////////////////////////////////////////////
-  // Test if API is Available
+  // Test API is Availability
   ///////////////////////////////////////////////////////////
   app.get('/api_test', (req, res) => {
     res.type('json').send(JSON.stringify(

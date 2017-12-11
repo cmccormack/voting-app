@@ -27,6 +27,6 @@ module.exports = (mongoose, passport) => {
   })
 
   signup(passport, models)
-  // login(mongoose, passport)
+  login(passport, models)
 
 }

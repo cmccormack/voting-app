@@ -21,13 +21,31 @@ module.exports = (app, passport) => {
     res.type('json').send({isAuthenticated: req.isAuthenticated()})
   })
   
-  app.post('/login', (req, res) => {
-    res.type('json').send(JSON.stringify(
-      {
-        'username': req.body.username,
-        'password': req.body.password
+  app.post('/login', (req, res, next) => {
+    console.log('POST request to /login')
+    passport.authenticate('login', (err, user, info) => {
+
+      if (err) return next(err)
+      if (!user) {
+        return res.type('json').send({
+          success: false,
+          message: info.message,
+          username: user.username
+        })
       }
-    ))
+
+      // Establish session with user
+      req.login(user, err => {
+        if (err) return next(err)
+        console.log(`New session created for user ${user.username}`)
+        res.type('json').send({
+          success: true,
+          message: info.message,
+          username: user.username
+        })
+      })
+
+    })(req, res, next)
   })
 
   app.get('/logout', (req, res) => {
@@ -77,6 +95,12 @@ module.exports = (app, passport) => {
   app.get('*', (req, res) => {
     console.log(`New Request for ${req.hostname + req.path}`)
     res.sendFile(path.join(public, 'index.html'))
+  })
+
+  // Handle errors
+  app.use((err, req, res, next) => {
+    console.log('Error Handler Route')
+    console.log(err)
   })
 
 }

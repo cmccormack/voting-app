@@ -1,7 +1,8 @@
+const bcrypt = require('bcrypt')
 
 module.exports = mongoose => {
   
-  const userSchema = mongoose.Schema({
+  const userSchema = new mongoose.Schema({
     username: {
       type: String,
       unique: true,
@@ -12,6 +13,10 @@ module.exports = mongoose => {
       required: true
     },
   })
+
+  userSchema.methods.comparePasswords = function(password, callback) {
+    bcrypt.compare(this.password, password, callback)
+  }
 
   return mongoose.model('User', userSchema, 'users')
 

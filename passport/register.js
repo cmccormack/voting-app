@@ -10,10 +10,14 @@ module.exports = (passport, models) => {
   }
 
   passport.use('register', new LocalStrategy({
-    session: true, // Change this?
+    session: true,
     passReqToCallback: true
   },
   (req, username, password, done) => {
+    
+    // Cleanup extraneous whitespace from inputs
+    username = username.trim()
+    password = password.trim()
 
     User.findOne({username}, (err, user)=>{
       // Handle error when querying user

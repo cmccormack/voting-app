@@ -54,7 +54,7 @@ class App extends Component {
       if (data.isAuthenticated !== this.state.loggedIn) {
         this.setState({loggedIn: data.isAuthenticated})
       }
-      console.log(data)
+      console.log(JSON.stringify(data))
     })
   }
 
@@ -68,10 +68,6 @@ class App extends Component {
 
     return (
       <div>
-        {/* <Header
-          handleLogout={this.handleLogout}
-          loggedIn={this.state.loggedIn}
-        /> */}
         <Route render={props => (
           <Header
             handleLogout={this.handleLogout}

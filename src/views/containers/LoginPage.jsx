@@ -32,7 +32,7 @@ class LoginPage extends Component {
     }
     const myHeaders = new Headers()
     myHeaders.append("Content-Type", "application/json")
-    fetch("/register", {
+    fetch("/login", {
       method: "POST",
       headers: myHeaders,
       cache: "default",
@@ -40,7 +40,7 @@ class LoginPage extends Component {
       body: JSON.stringify(body)
     })
       .then(res => res.json()).then(data => {
-        // Response from registration attempt
+        // Response from login attempt
         console.log(data)
         this.props.updateLoggedIn(data.success)
       })

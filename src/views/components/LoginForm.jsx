@@ -11,9 +11,11 @@ class LoginForm extends Component {
 
   render() {
 
+    const { error } = this.props
+
     const props = {
       title: "Log in to Votery!",
-      error: "Placeholder error message",
+      error: error,
       footer: (
         <div>
           {'Don\'t have an account?  '}

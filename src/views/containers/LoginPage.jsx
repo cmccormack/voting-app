@@ -9,18 +9,21 @@ class LoginPage extends Component {
     super(props)
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      error: ""
     }
-
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
   }
 
-  handleInputChange(event) {
-    const target = event.target
-    this.setState({
-      [target.name]: target.value
-    })
+  handleInputChange(e) {
+    let newState = {
+      [e.target.name]: e.target.value
+    }
+    if (e.target.name === 'username') {
+      newState.error = ''
+    }
+    this.setState(newState)
   }
 
   handleSubmit(event) {

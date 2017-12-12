@@ -10,7 +10,7 @@ class RegisterPage extends Component {
     this.state = {
       username: "",
       password: "",
-      error: ''
+      error: ""
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -18,7 +18,6 @@ class RegisterPage extends Component {
 
 
   handleInputChange(e){
-    console.log(e.target)
     let newState = {
       [e.target.name]: e.target.value
     }

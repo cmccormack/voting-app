@@ -23,8 +23,11 @@ module.exports = (app, passport) => {
   ///////////////////////////////////////////////////////////
   app.get('/isauthenticated', (req, res) => {
     console.log('GET request to /isauthenticated')
-    console.log(req.session)
-    res.type('json').send({isAuthenticated: req.isAuthenticated()})
+
+    res.type('json').send({
+      isAuthenticated: req.isAuthenticated(),
+      user: req.user ? req.user.username : ''
+    })
   })
 
 

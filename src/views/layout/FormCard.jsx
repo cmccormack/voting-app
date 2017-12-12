@@ -19,9 +19,10 @@ const FormCardTitle = styled.div.attrs({
   text-transform: capitalize;
 `
 
-
 const FormBody = styled.div`
   margin: 0 0 60px;
+  transform: translateY(${props => props.slide ? '0px' : '-50px'});
+  transition: transform .2s linear;
 `
 
 const FormCard = ({title, footer, error, children}) => {
@@ -39,13 +40,13 @@ const FormCard = ({title, footer, error, children}) => {
         <div className="row">
           <WarningAlert
             className="col s8 offset-s2"
-            show={error ? 'block' : 'none'}
+            show={error ? true : false}
           >
             <strong>Warning!  </strong>{error}
           </WarningAlert>
         </div>
 
-        <FormBody>
+        <FormBody slide={error ? true : false}>
           { children }
         </FormBody>
 

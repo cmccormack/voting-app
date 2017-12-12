@@ -22,10 +22,10 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      loggedIn: false
+      loggedIn: false,
+      user: ''
     }
-    this.updateLoggedIn = this.updateLoggedIn.bind(this)
-    this.validateAuth = this.validateAuth.bind(this)
+    this.getAuthStatus = this.getAuthStatus.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
   }
 
@@ -40,21 +40,18 @@ class App extends Component {
     })
   }
 
-  updateLoggedIn(loggedIn) {
-    this.setState({ loggedIn })
-  }
-
-  validateAuth() {
+  getAuthStatus(callback) {
     fetch('/isauthenticated', {
       method: 'GET',
       credentials: 'same-origin'
     })
-    .then(res => res.json())
-    .then((data) => {
-      if (data.isAuthenticated !== this.state.loggedIn) {
-        this.setState({loggedIn: data.isAuthenticated})
-      }
+    .then(res => res.json()).then((data) => {
+      this.setState({
+        loggedIn: data.isAuthenticated,
+        user: data.user
+      })
       console.log(JSON.stringify(data))
+      callback(data)
     })
   }
 
@@ -64,44 +61,50 @@ class App extends Component {
 
   render() {
 
-    this.validateAuth()
-
     return (
       <div>
-        <Route render={props => (
+        <Route render={routeProps => (
           <Header
             handleLogout={this.handleLogout}
-            loggedIn={this.state.loggedIn}
-            {...props}
+            {...this.state}
+            {...routeProps}
           /> 
         )} />
         <div>
           <Switch>
+
+            // Login Route
             <Route exact path="/login" component={LoginPage} />
 
+            // Logout Route
             <Route exact path="/logout" render={() => (
               this.state.loggedIn
               ? ( <Logout loggedIn={this.state.loggedIn} /> )
               : ( <Redirect to="/main" /> )
             )} />
 
+            // Registration Route
             <Route exact path="/register" render={() => (
               this.state.loggedIn
               ? ( <Redirect to='/main' /> )
-              : ( <RegisterPage updateLoggedIn={this.updateLoggedIn} />)
+              : (<RegisterPage getAuthStatus={this.getAuthStatus} />)
             )}/>
 
+            // Main page route 
             <Route exact path="/main" render={() => (
               <Main loggedIn={this.state.loggedIn} />
             )} />
 
+            // Redirect to Main page for now
             <Route exact path="/" render={() => (
               <Redirect to='/main' />
             )} />
 
+            // 404 Page not found Route
             <Route render={(props) => (
               <h1>404 Page not found</h1>
             )} />
+
           </Switch>
         </div>
       </div>

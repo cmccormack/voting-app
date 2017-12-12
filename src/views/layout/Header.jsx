@@ -9,15 +9,16 @@ class Header extends Component {
 
   render() {
 
+    const {loggedIn, user, handleLogout} = this.props
+    console.log(user)
+
     const links = (
       <ul className="right hide-on-med-and-down">
+        <li hidden={!loggedIn}><Link to="/user">{`Hello, ${user}!`}</Link></li>
         <li><Link to="/main">Main</Link></li>
-        { 
-          this.props.loggedIn && 
-          <li><a onClick={this.props.handleLogout}>Logout</a></li>
-        } 
-        { !this.props.loggedIn && <li><Link to="/login">Login</Link></li> }
-        { !this.props.loggedIn && <li><Link to="/register">Register</Link></li> }
+        <li hidden={loggedIn}><Link to="/login">Login</Link></li>
+        <li hidden={loggedIn}><Link to="/register">Register</Link></li>
+        <li hidden={!loggedIn}><a onClick={handleLogout}>Logout</a></li>
       </ul>
     )
 
@@ -26,7 +27,10 @@ class Header extends Component {
         <div className="nav-wrapper">
           <div className="col s12">
             <Link to='/main' className="brand-logo">Votery</Link>
-            { links }
+            <div className="right">
+              { user && <span></span> }
+              { links }
+            </div>
           </div>
         </div>
       </nav>

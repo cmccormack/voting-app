@@ -1,11 +1,11 @@
-import Alert from './Alert'
+import Alerts from './Alerts'
 import Header from './Header'
 import FormCard from './FormCard'
 import FormSubmitButton from './FormSubmitButton'
 import FormInput from './FormInput'
 
 export {
-  Alert,
+  Alerts,
   Header,
   FormCard,
   FormSubmitButton,

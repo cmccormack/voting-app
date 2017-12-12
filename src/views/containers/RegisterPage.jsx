@@ -9,20 +9,25 @@ class RegisterPage extends Component {
     super(props)
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      error: ''
     }
-
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
   }
 
-  handleInputChange(event){
-    const target = event.target
-    console.log(target)
-    this.setState({
-      [target.name]: target.value
-    })
+
+  handleInputChange(e){
+    console.log(e.target)
+    let newState = {
+      [e.target.name]: e.target.value
+    }
+    if (e.target.name === 'username') {
+      newState.error = ''
+    }
+    this.setState(newState)
   }
+
 
   handleSubmit(event) {
     event.preventDefault()
@@ -43,10 +48,15 @@ class RegisterPage extends Component {
     .then(res => res.json()).then(data => {
       // Response from registration attempt
       console.log(data)
-      this.props.updateLoggedIn(data.success)
+      this.props.getAuthStatus( response => {
+        if (!response.isAuthenticated || !data.success) {
+          this.setState({error: data.message})
+        }
+      })
     })
     .catch(err => { console.error(err) })
   }
+
 
   render() {
 

@@ -11,9 +11,11 @@ class RegisterForm extends Component {
 
   render() {
 
+    const {error} = this.props
+
     const props = {
       title: "register an account with votery!",
-      error: "Placeholder error message",
+      error: error,
       footer: (
         <div>
           {'Already have an account? '}

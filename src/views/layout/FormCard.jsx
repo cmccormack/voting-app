@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
+import { WarningAlert } from './Alerts'
+
 const FormCardMain = styled.div.attrs({
   className: "card z-depth-4"
 }) `
@@ -17,12 +19,6 @@ const FormCardTitle = styled.div.attrs({
   text-transform: capitalize;
 `
 
-const FormErrorMessage = styled.div.attrs({
-  className: "center amber lighten-2 col s8 offset-s2"
-}) `
-  display: visible;
-  border-radius: 5px;
-`
 
 const FormBody = styled.div`
   margin: 0 0 60px;
@@ -41,9 +37,12 @@ const FormCard = ({title, footer, error, children}) => {
         </div>
 
         <div className="row">
-          <FormErrorMessage>
-            {'Placeholder error message'}
-          </FormErrorMessage>
+          <WarningAlert
+            className="col s8 offset-s2"
+            show={error ? 'block' : 'none'}
+          >
+            <strong>Warning!  </strong>{error}
+          </WarningAlert>
         </div>
 
         <FormBody>

@@ -15,12 +15,12 @@ module.exports = (mongoose, passport) => {
   })
 
   passport.serializeUser((user, done) => {
-    console.log(`Serializing user: ${user.username}`);
+    // console.log(`Serializing user: ${user.username}`)
     done(null, user._id)
   })
 
   passport.deserializeUser((id, done) => {
-    console.log(`Deserializing id: ${id}`);
+    // console.log(`Deserializing id: ${id}`)
     User.findById(id, (err, user) => {
       done(err, user)
     })

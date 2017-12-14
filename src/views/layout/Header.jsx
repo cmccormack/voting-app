@@ -22,7 +22,7 @@ class Header extends Component {
         <li><Link to="/main">Main</Link></li>
         <li hidden={loggedIn}><Link to="/login">Login</Link></li>
         <li hidden={loggedIn}><Link to="/register">Register</Link></li>
-        <li hidden={!loggedIn}><a onClick={handleLogout}>Logout</a></li>
+        <li hidden={!loggedIn}><Link to="/logout">Logout</Link></li>
       </ul>
     )
 

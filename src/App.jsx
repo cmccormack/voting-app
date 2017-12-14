@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { 
   BrowserRouter,
+  HashRouter,
   Redirect,
   Link,
   Route,
@@ -10,12 +11,26 @@ import {
 
 import './images/favicon.ico'
 import Main from './views/Main'
-import { RegisterPage, LoginPage } from './views/containers'
+import { RegisterPage, LoginPage, LogoutPage, UserPage } from './views/containers'
 import { Header } from './views/layout'
 
 import './styles/body.scss'
 
 const entry_point = document.getElementById('root')
+
+const PrivateRoute = ({component: Component, loggedIn, ...rest}) => (
+  <Route 
+    {...rest}
+    render={ props => (
+      loggedIn
+      ? <Component {...props} />
+      : <Redirect to={{
+        pathname: '/login',
+        state: { referrer: props.location }
+      }} />
+    )}
+  />
+)
 
 class App extends Component {
 
@@ -31,7 +46,7 @@ class App extends Component {
 
   handleLogout() {
     fetch('/logout', {
-      method: 'GET',
+      method: 'POST',
       credentials: 'same-origin'
     }).then(()=>{
       this.setState({
@@ -40,12 +55,17 @@ class App extends Component {
     })
   }
 
+  componentDidUpdate(){
+    // this.getAuthStatus(console.log)
+  }
+
   getAuthStatus(callback) {
     fetch('/isauthenticated', {
       method: 'GET',
-      credentials: 'same-origin'
+      credentials: 'include'
     })
     .then(res => res.json()).then((data) => {
+      console.log(`App: User is authenticated, setting state...`)
       this.setState({
         loggedIn: data.isAuthenticated,
         user: data.user
@@ -55,9 +75,6 @@ class App extends Component {
     })
   }
 
-  componentWillMount() {
-    this.setState({recentlyLoggedOut: false})
-  }
 
   render() {
 
@@ -77,11 +94,15 @@ class App extends Component {
             <Route exact path="/login" component={LoginPage} />
 
             // Logout Route
-            <Route exact path="/logout" render={() => (
-              this.state.loggedIn
-              ? ( <Logout loggedIn={this.state.loggedIn} /> )
-              : ( <Redirect to="/main" /> )
-            )} />
+            <Route
+              exact path="/logout"
+              render={() => (
+                <LogoutPage
+                  loggedIn={this.state.loggedIn}
+                  handleLogout={this.handleLogout}
+                /> 
+              )}
+            />
 
             // Registration Route
             <Route exact path="/register" render={() => (
@@ -95,10 +116,17 @@ class App extends Component {
               <Main loggedIn={this.state.loggedIn} />
             )} />
 
+            <PrivateRoute
+              exact path="/user"
+              component={UserPage}
+              loggedIn={this.state.loggedIn}
+            />
+
             // Redirect to Main page for now
             <Route exact path="/" render={() => (
               <Redirect to='/main' />
             )} />
+
 
             // 404 Page not found Route
             <Route render={(props) => (
@@ -113,9 +141,9 @@ class App extends Component {
 }
 
 ReactDOM.render((
-    <BrowserRouter>
+    <HashRouter>
       <App/>
-    </BrowserRouter>
+    </HashRouter>
   ),
   entry_point
 )

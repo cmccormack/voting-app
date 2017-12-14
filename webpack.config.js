@@ -41,7 +41,10 @@ module.exports = (env={}) => {
           exclude: /node_modules/,
           include: path.join(__dirname, 'src'),
           options: {
-            presets: ['react', 'env']
+            presets: ['react', 'env'],
+            plugins: [
+              ["transform-object-rest-spread", { "useBuiltIns": true }]
+            ]
           }
         },
         {
@@ -60,7 +63,7 @@ module.exports = (env={}) => {
     plugins: [
       new HtmlWebpackPlugin({
         template: './src/index.html',
-        title: 'Voting App - Christopher McCormack',
+        title: 'Votery | Main',
         style: 'styles.css',
         inject: 'body'
       }),

@@ -53,7 +53,11 @@ class RegisterPage extends Component {
         }
       })
     })
-    .catch(err => { console.error(err) })
+    .catch(console.error)
+  }
+
+  componentDidMount() {
+    document.title = 'Votery | Register'
   }
 
 

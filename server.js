@@ -53,7 +53,8 @@ app.use(cors())
 const sessionOptions = {
   secret: 'cmccormack-voting-app',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: { secure: false }
 }
 app.use(session(sessionOptions))
 app.use(passport.initialize())

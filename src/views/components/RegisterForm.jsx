@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
+import { Link } from 'react-router-dom'
+
 import {
   FormCard,
   FormSubmitButton,
@@ -19,7 +21,7 @@ class RegisterForm extends Component {
       footer: (
         <div>
           {'Already have an account? '}
-          <a href="/login">Login!</a>
+          <Link to="/login">Login!</Link>
         </div>
       )
     }

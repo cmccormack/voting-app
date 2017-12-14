@@ -23,7 +23,7 @@ module.exports = (app, passport) => {
   ///////////////////////////////////////////////////////////
   app.get('/isauthenticated', (req, res) => {
     console.log('GET request to /isauthenticated')
-
+    console.log(req.session)
     res.type('json').send({
       isAuthenticated: req.isAuthenticated(),
       user: req.user ? req.user.username : ''
@@ -65,8 +65,8 @@ module.exports = (app, passport) => {
   ///////////////////////////////////////////////////////////
   // User Logout
   ///////////////////////////////////////////////////////////
-  app.get('/logout', (req, res) => {
-    console.log('GET request to /logout')
+  app.post('/logout', (req, res) => {
+    console.log('POST request to /logout')
     const { username } = req.user
     req.logout()
     res.type('json').send({
@@ -80,7 +80,7 @@ module.exports = (app, passport) => {
   // User Registration, Login, and Create New Session
   ///////////////////////////////////////////////////////////
   app.post('/register', (req, res, next) => {
-
+    console.log('POST request to /register')
     passport.authenticate('register', (err, user, info) => {
 
       if (err) return next(err)

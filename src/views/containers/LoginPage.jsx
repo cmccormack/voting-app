@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-
 import { LoginForm } from '../components'
 
 class LoginPage extends Component {
@@ -51,6 +50,8 @@ class LoginPage extends Component {
   }
 
   render() {
+
+    // Add redirect logic if referral
 
     return (
       <div className="container">

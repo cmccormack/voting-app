@@ -47,7 +47,7 @@ class RegisterPage extends Component {
     .then(res => res.json()).then(data => {
       // Response from registration attempt
       console.log(data)
-      this.props.getAuthStatus( response => {
+      this.props.updateAuthStatus( response => {
         if (!response.isAuthenticated || !data.success) {
           this.setState({error: data.message})
         }

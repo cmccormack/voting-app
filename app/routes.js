@@ -6,6 +6,11 @@ module.exports = (app, passport) => {
   const root = path.resolve(__dirname, '..')
   const public = path.join(root, 'public')
 
+  app.use((req, res, next) => {
+    // console.log(req.headers)
+    next()
+  })
+
   ///////////////////////////////////////////////////////////
   // Test API is Availability
   ///////////////////////////////////////////////////////////
@@ -23,10 +28,11 @@ module.exports = (app, passport) => {
   ///////////////////////////////////////////////////////////
   app.get('/isauthenticated', (req, res) => {
     console.log('GET request to /isauthenticated')
-    console.log(req.session)
+    console.log(`sessionID: ${req.sessionID}`)
     res.type('json').send({
       isAuthenticated: req.isAuthenticated(),
-      user: req.user ? req.user.username : ''
+      user: req.user ? req.user.username : '',
+      sessionID: req.sessionID
     })
   })
 
@@ -95,7 +101,7 @@ module.exports = (app, passport) => {
       // Establish session with user
       req.login(user, err => {
         if (err) return next(err)
-        console.log(`New session created for user ${user.username}`)
+        console.log(`New session created for user ${user.username} sessionID: ${req.sessionID}`)
         res.type('json').send({
           success: true,
           message: info.message,

@@ -8,6 +8,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const passport = require('passport')
 const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
 const favicon = require('serve-favicon')
 require('dotenv').config({path: path.resolve(__dirname, '.env')})
 
@@ -49,12 +50,13 @@ app.use(bodyParser.json())
 // Handle cross-site request
 app.use(cors())
 
-// Initialize Passport and enable persistent login sessions
+// Initialize Passport and enable persistent login sessions stored in mongodb
 const sessionOptions = {
   secret: 'cmccormack-voting-app',
   resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false }
+  saveUninitialized: true,
+  cookie: { secure: false },
+  store: new MongoStore({ mongooseConnection: mongoose.connection})
 }
 app.use(session(sessionOptions))
 app.use(passport.initialize())

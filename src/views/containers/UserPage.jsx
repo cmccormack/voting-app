@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 
-const User = props => (
+const UserPage = props => (
   props.loggedIn
   ? <h1>User Page</h1>
-  : <div></div>
+  : <div>User Not Logged In</div>
 )
 
-export default User
+export default UserPage

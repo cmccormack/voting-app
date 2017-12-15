@@ -24,7 +24,8 @@ class App extends Component {
     super(props)
     this.state = {
       loggedIn: true,
-      user: ''
+      user: '',
+      allowRedirects: false
     }
     this.getAuthStatus = this.getAuthStatus.bind(this)
     this.updateAuthStatus = this.updateAuthStatus.bind(this)
@@ -43,25 +44,32 @@ class App extends Component {
   }
 
   getAuthStatus(callback) {
-    fetch('/isauthenticated', {
+    const cb = callback || function() {}
+
+    return fetch('/isauthenticated', {
       method: 'GET',
       credentials: 'include'
     })
     .then(res => res.json()).then((data) => {
       console.log(`App.getAuthStatus: ${JSON.stringify(data)}`)
-      callback(data)
+      cb(data)
+      return data
     })
   }
 
   updateAuthStatus(callback) {
+    const cb = callback || function() {}
+
     this.getAuthStatus(data => {
       this.setState({
         loggedIn: data.isAuthenticated,
-        user: data.user
+        user: data.user,
+        allowRedirects: true
       })
-      callback(data)
+      cb(data)
     })
   }
+
 
   componentDidMount() {
     this.updateAuthStatus(console.log)
@@ -91,6 +99,15 @@ class App extends Component {
             />
 
 
+            // Registration Route
+            <Route
+              exact path="/register"
+              render={() => (
+                this.state.loggedIn && this.state.user
+                ? ( <Redirect to='/main' /> )
+                : (<RegisterPage updateAuthStatus={this.updateAuthStatus} />)
+              )}
+            />
             // Logout Route
             <Route
               exact path="/logout"
@@ -103,16 +120,9 @@ class App extends Component {
             />
 
 
-            // Registration Route
-            <Route exact path="/register" render={() => (
-              this.state.loggedIn && this.state.user
-              ? ( <Redirect to='/main' /> )
-              : (<RegisterPage updateAuthStatus={this.updateAuthStatus} />)
-            )}/>
-
-
             // Access user page only if logged in, else redirect to login
             <PrivateRoute
+              allowRedirects={this.state.allowRedirects}
               exact path="/user"
               component={UserPage}
               loggedIn={this.state.loggedIn}

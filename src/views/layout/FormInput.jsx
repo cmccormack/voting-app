@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const FormInput = props => (
   <div className="row">
-    <div className="input-field col s6 offset-s3">
+    <div className="input-field col s12 m12 l8 offset-l2">
       { props.icon && (
           <i className="material-icons prefix">
             {props.icon}

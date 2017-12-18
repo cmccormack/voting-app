@@ -44,16 +44,16 @@ class RegisterPage extends Component {
       credentials: "same-origin",
       body: JSON.stringify(body)
     })
-    .then(res => res.json()).then(data => {
-      // Response from registration attempt
-      console.log(data)
-      this.props.updateAuthStatus( response => {
-        if (!response.isAuthenticated || !data.success) {
-          this.setState({error: data.message})
-        }
+      .then(res => res.json()).then(data => {
+        // Response from registration attempt
+        console.log(data)
+        this.props.updateAuthStatus( response => {
+          if (!response.isAuthenticated || !data.success) {
+            this.setState({error: data.message})
+          }
+        })
       })
-    })
-    .catch(console.error)
+      .catch(console.error)
   }
 
   componentDidMount() {

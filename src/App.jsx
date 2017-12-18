@@ -93,8 +93,10 @@ class App extends Component {
             // Login Route
             <Route
               exact path="/login"
-              render={(routeProps) => (
-                <LoginPage loggedIn={this.state.loggedIn} {...routeProps} />
+              render={() => (
+                this.state.loggedIn && this.state.user
+                  ? (<Redirect to='/main' />)
+                  : (<LoginPage updateAuthStatus={this.updateAuthStatus} />)
               )}
             />
 
@@ -108,6 +110,8 @@ class App extends Component {
                 : (<RegisterPage updateAuthStatus={this.updateAuthStatus} />)
               )}
             />
+
+
             // Logout Route
             <Route
               exact path="/logout"

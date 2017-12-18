@@ -10,9 +10,9 @@ module.exports = (mongoose, passport) => {
   const User = models.User
 
   // Debug
-  User.find({}, {username: 1, password:1, _id: 0}, (err, doc) => {
-    console.log(doc)
-  })
+  // User.find({}, {username: 1, password:1, _id: 0}, (err, doc) => {
+  //   console.log(doc)
+  // })
 
   passport.serializeUser((user, done) => {
     // console.log(`Serializing user: ${user.username}`)

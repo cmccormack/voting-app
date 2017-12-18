@@ -13,41 +13,42 @@ module.exports = (passport, models) => {
     session: true,
     passReqToCallback: true
   },
-  (req, username, password, done) => {
-    
-    // Cleanup extraneous whitespace from inputs
-    username = username.trim()
-    password = password.trim()
-
-    User.findOne({username}, (err, user)=>{
-      // Handle error when querying user
-      if (err) return done(err)
-
-      // Return early if user already exists in database
-      if (user) { 
-        console.log(`Register: Username ${username} already exists`)
-        return done(null, false, {message: 'Username already exists.'})
-      }
+    (req, username, password, done) => {
       
-      // Create new user
-      console.log(`Mongoose: User [${username}] not found in db, adding...`)
-      const newUser = new User({
-        username: username,
-        password: hashPassword(password)
-      })
+      // Cleanup extraneous whitespace from inputs
+      username = username.trim()
+      password = password.trim()
 
-      // Save new user to database
-      newUser.save(err => {
-        if (err) {
-          console.error(`Mongoose error writing user to database: ${err}`)
-          return done(err)
+      User.findOne({username}, (err, user)=>{
+        
+        // Handle error when querying user
+        if (err) return done(err)
+
+        // Return early if user already exists in database
+        if (user) { 
+          console.log(`Register: Username ${username} already exists`)
+          return done(null, false, {message: 'Username already exists.'})
         }
-        console.log(`User ${newUser.username} added to database!`)
-        return done(null, newUser, {
-          message: `User ${username} added to database!`
+        
+        // Create new user
+        console.log(`Mongoose: User [${username}] not found in db, adding...`)
+        const newUser = new User({
+          username: username,
+          password: hashPassword(password)
         })
+
+        // Save new user to database
+        newUser.save(err => {
+          if (err) {
+            console.error(`Mongoose error writing user to database: ${err}`)
+            return done(err)
+          }
+          console.log(`User ${newUser.username} added to database!`)
+          return done(null, newUser, {
+            message: `User ${username} added to database!`
+          })
+        })
+      
       })
-    
-    })
-  }))
+    }))
 }

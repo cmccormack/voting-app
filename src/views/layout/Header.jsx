@@ -38,7 +38,7 @@ class Header extends Component {
     )
 
     return (
-      <div>
+      <header>
         { sidenav }
         <div className="navbar-fixed row">
           <nav className="teal lighten-1">
@@ -57,7 +57,7 @@ class Header extends Component {
             </div>
           </nav>
         </div>
-      </div>
+      </header>
     )
   }
 }

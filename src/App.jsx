@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import styled from 'styled-components'
 import { 
   BrowserRouter,
   Redirect,
@@ -10,12 +11,18 @@ import {
 
 import './images/favicon.ico'
 import Routes from './Routes'
-import Main from './views/Main'
-import { Header } from './views/layout'
+import { Header, Footer } from './views/layout'
 
-import './styles/body.scss'
 
-const entry_point = document.getElementById('root')
+const Wrapper = styled.div`
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  `
+
+const Main = styled.main`
+  flex: 1 0 auto;
+  `
 
 class App extends Component {
 
@@ -78,7 +85,7 @@ class App extends Component {
   render() {
 
     return (
-      <div>
+      <Wrapper>
         <Route render={routeProps => (
           <Header
             handleLogout={this.handleLogout}
@@ -86,12 +93,15 @@ class App extends Component {
             {...routeProps}
           /> 
         )} />
-        <Routes
-          {...this.state}
-          handleLogout={this.handleLogout}
-          updateAuthStatus={this.updateAuthStatus}
-        />
-      </div>
+        <Main>
+          <Routes
+            {...this.state}
+            handleLogout={this.handleLogout}
+            updateAuthStatus={this.updateAuthStatus}
+          />
+        </Main>
+        <Footer />
+      </Wrapper>
     )
   }
 }
@@ -101,5 +111,5 @@ ReactDOM.render((
       <App/>
     </BrowserRouter>
   ),
-  entry_point
+  document.getElementById('root')
 )

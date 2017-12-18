@@ -6,7 +6,7 @@ import { WarningAlert } from './Alerts'
 const FormCardMain = styled.div.attrs({
   className: "card z-depth-4 hoverable"
 }) `
-  margin-top: 100px;
+  margin-top: 80px;
 `
 
 const FormCardTitle = styled.div.attrs({

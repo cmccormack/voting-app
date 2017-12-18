@@ -9,6 +9,7 @@ const mongoose = require('mongoose')
 const passport = require('passport')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
+const logger = require('morgan')
 const favicon = require('serve-favicon')
 require('dotenv').config({path: path.resolve(__dirname, '.env')})
 
@@ -49,6 +50,8 @@ app.use(bodyParser.json())
 
 // Handle cross-site request
 app.use(cors())
+
+app.use(logger('dev'))
 
 // Initialize Passport and enable persistent login sessions stored in mongodb
 const sessionOptions = {

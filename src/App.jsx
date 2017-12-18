@@ -9,10 +9,9 @@ import {
 } from 'react-router-dom'
 
 import './images/favicon.ico'
+import Routes from './Routes'
 import Main from './views/Main'
-import { RegisterPage, LoginPage, LogoutPage, UserPage } from './views/containers'
 import { Header } from './views/layout'
-import { PrivateRoute } from './views/utils'
 
 import './styles/body.scss'
 
@@ -23,7 +22,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      loggedIn: true,
+      loggedIn: false,
       user: '',
       allowRedirects: false
     }
@@ -87,71 +86,11 @@ class App extends Component {
             {...routeProps}
           /> 
         )} />
-        <div>
-          <Switch>
-
-            // Login Route
-            <Route
-              exact path="/login"
-              render={() => (
-                this.state.loggedIn && this.state.user
-                  ? (<Redirect to='/main' />)
-                  : (<LoginPage updateAuthStatus={this.updateAuthStatus} />)
-              )}
-            />
-
-
-            // Registration Route
-            <Route
-              exact path="/register"
-              render={() => (
-                this.state.loggedIn && this.state.user
-                ? ( <Redirect to='/main' /> )
-                : (<RegisterPage updateAuthStatus={this.updateAuthStatus} />)
-              )}
-            />
-
-
-            // Logout Route
-            <Route
-              exact path="/logout"
-              render={() => (
-                <LogoutPage
-                  loggedIn={this.state.loggedIn}
-                  handleLogout={this.handleLogout}
-                /> 
-              )}
-            />
-
-
-            // Access user page only if logged in, else redirect to login
-            <PrivateRoute
-              allowRedirects={this.state.allowRedirects}
-              exact path="/user"
-              component={UserPage}
-              loggedIn={this.state.loggedIn}
-            />
-
-
-            // Main page route 
-            <Route exact path="/main" render={() => (
-              <Main loggedIn={this.state.loggedIn} />
-            )} />
-
-
-            // Redirect to Main page for now
-            <Route exact path="/" render={() => (
-              <Redirect to='/main' />
-            )} />
-
-
-            // 404 Page not found Route
-            <Route render={(props) => (
-              <h1>404 Page not found</h1>
-            )} />
-
-          </Switch>
-        </div>
+        <Routes
+          {...this.state}
+          handleLogout={this.handleLogout}
+          updateAuthStatus={this.updateAuthStatus}
+        />
       </div>
     )
   }

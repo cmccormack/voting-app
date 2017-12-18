@@ -26,7 +26,7 @@ module.exports = (passport, models) => {
 
         if (!isMatch) {
           return done(null, false, {
-            message: 'Invalid Password'
+            message: 'Incorrect Password'
           })
         }
 

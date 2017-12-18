@@ -8,7 +8,6 @@ module.exports = (app, passport) => {
 
   app.use((req, res, next) => {
     const { user, sessionID } = req
-    console.log(`${req.method} request to ${req.path}`)
     console.log(`user: ${user ? user.username : 'null'}, ` +
       `sessionID: ${sessionID ? sessionID : 'null'}, ` +
       `isAuthenticated: ${user ? req.isAuthenticated() : 'null'}`)

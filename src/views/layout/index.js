@@ -4,6 +4,7 @@ import Footer from './Footer'
 import FormCard from './FormCard'
 import FormSubmitButton from './FormSubmitButton'
 import FormInput from './FormInput'
+import GraphCard from './GraphCard'
 
 export {
   Alerts,
@@ -11,5 +12,6 @@ export {
   Footer,
   FormCard,
   FormSubmitButton,
-  FormInput
+  FormInput,
+  GraphCard
 }

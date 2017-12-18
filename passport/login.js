@@ -13,7 +13,8 @@ module.exports = (passport, models) => {
       username = username.trim()
       password = password.trim()
 
-      User.findOne({ username }, (err, user) => {
+      // Case insensitive username lookup
+      User.findOne({ username: { $regex: new RegExp(`^${username}$`, 'i')} }, (err, user) => {
 
         // Handle error when querying user
         if (err) return done(err)

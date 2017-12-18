@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+
 import { LoginForm } from '../components'
 
 class LoginPage extends Component {
@@ -15,6 +16,7 @@ class LoginPage extends Component {
     this.handleInputChange = this.handleInputChange.bind(this)
   }
 
+
   handleInputChange(e) {
     let newState = {
       [e.target.name]: e.target.value
@@ -24,6 +26,7 @@ class LoginPage extends Component {
     }
     this.setState(newState)
   }
+
 
   handleSubmit(event) {
     event.preventDefault()
@@ -42,11 +45,15 @@ class LoginPage extends Component {
       body: JSON.stringify(body)
     })
       .then(res => res.json()).then(data => {
-        // Response from login attempt
+        // Response from registration attempt
         console.log(data)
-        this.props.updateLoggedIn(data.success)
+        this.props.updateAuthStatus(response => {
+          if (!response.isAuthenticated || !data.success) {
+            this.setState({ error: data.message })
+          }
+        })
       })
-      .catch(err => { console.error(err) })
+      .catch(console.error)
   }
 
   render() {

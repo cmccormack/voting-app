@@ -14,8 +14,8 @@ module.exports = mongoose => {
     },
   })
 
-  userSchema.methods.comparePasswords = function(password, callback) {
-    bcrypt.compare(this.password, password, callback)
+  userSchema.methods.comparePasswords = function(password) {
+    return bcrypt.compareSync(password, this.password)
   }
 
   return mongoose.model('User', userSchema, 'users')

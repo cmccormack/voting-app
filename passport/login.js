@@ -22,16 +22,15 @@ module.exports = (passport, models) => {
           return done(null, false, {message: 'Username not found.'})
         }
 
-        return user.comparePasswords(password, (err, isMatch) => {
+        const isMatch = user.comparePasswords(password)
 
-          // Handle error when checking password hash
-          if (err) return done(err)
+        if (!isMatch) {
+          return done(null, false, {
+            message: 'Invalid Password'
+          })
+        }
 
-          if (!isMatch) {
-            return done(new Error('Invalid Password'))
-          }
-
-        })
+        return done(null, user)
 
       })
     }

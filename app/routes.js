@@ -7,7 +7,11 @@ module.exports = (app, passport) => {
   const public = path.join(root, 'public')
 
   app.use((req, res, next) => {
-    // console.log(req.headers)
+    const { user, sessionID } = req
+    console.log(`${req.method} request to ${req.path}`)
+    console.log(`user: ${user ? user.username : 'null'}, ` +
+      `sessionID: ${sessionID ? sessionID : 'null'}, ` +
+      `isAuthenticated: ${user ? req.isAuthenticated() : 'null'}`)
     next()
   })
 
@@ -27,8 +31,6 @@ module.exports = (app, passport) => {
   // User Authentication Verification
   ///////////////////////////////////////////////////////////
   app.get('/isauthenticated', (req, res) => {
-    console.log('GET request to /isauthenticated')
-    console.log(`sessionID: ${req.sessionID}`)
     res.type('json').send({
       isAuthenticated: req.isAuthenticated(),
       user: req.user ? req.user.username : '',
@@ -41,14 +43,14 @@ module.exports = (app, passport) => {
   // User Login and Create New Session
   ///////////////////////////////////////////////////////////
   app.post('/login', (req, res, next) => {
-    console.log('POST request to /login')
     passport.authenticate('login', (err, user, info) => {
 
+      const { message='' } = info ? info : {}
       if (err) return next(err)
       if (!user) {
         return res.type('json').send({
+          message,
           success: false,
-          message: info.message,
           username: user.username
         })
       }
@@ -58,8 +60,8 @@ module.exports = (app, passport) => {
         if (err) return next(err)
         console.log(`New session created for user ${user.username}`)
         res.type('json').send({
+          message,
           success: true,
-          message: info.message,
           username: user.username
         })
       })
@@ -72,7 +74,6 @@ module.exports = (app, passport) => {
   // User Logout
   ///////////////////////////////////////////////////////////
   app.post('/logout', (req, res) => {
-    console.log('POST request to /logout')
     const { username } = req.user
     req.logout()
     res.type('json').send({
@@ -86,14 +87,14 @@ module.exports = (app, passport) => {
   // User Registration, Login, and Create New Session
   ///////////////////////////////////////////////////////////
   app.post('/register', (req, res, next) => {
-    console.log('POST request to /register')
     passport.authenticate('register', (err, user, info) => {
-
+      
+      const { message='' } = info ? info : {}
       if (err) return next(err)
       if (!user) {
         return res.type('json').send({
+          message,
           success: false,
-          message: info.message,
           username: user.username
         })
       }
@@ -103,8 +104,8 @@ module.exports = (app, passport) => {
         if (err) return next(err)
         console.log(`New session created for user ${user.username} sessionID: ${req.sessionID}`)
         res.type('json').send({
+          message,
           success: true,
-          message: info.message,
           username: user.username
         })
       })
@@ -135,8 +136,7 @@ module.exports = (app, passport) => {
   // Error Handler
   ///////////////////////////////////////////////////////////
   app.use((err, req, res, next) => {
-    console.log('Error Handler Route')
-    console.log(err)
+    console.log(`Error Handler Middleware: ${err.message}`)
   })
 
 }

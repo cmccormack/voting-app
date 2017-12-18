@@ -52,7 +52,7 @@ const Footer = props => (
         </div>
         <div className="col l4 offset-l2 s12">
           { socialIcons.map((item) => (
-            <Link href={item.href}>
+            <Link href={item.href} key={item.icon}>
               <i className={`fa fa-lg fa-${item.icon}`}></i>
             </Link>
           ))}

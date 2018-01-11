@@ -11,10 +11,13 @@ const Link = styled.a.attrs({
   target: "_blank"
 })`
   color: #DEE;
-  margin: 0 7px 0 7px;
   :hover {
     color: #FFF;
   }
+`
+
+const LinkSocial = Link.extend`
+  margin: 0 7px 0 7px;
 `
 
 const socialIcons = [
@@ -52,9 +55,9 @@ const Footer = props => (
         </div>
         <div className="col l4 offset-l2 s12">
           { socialIcons.map((item) => (
-            <Link href={item.href} key={item.icon}>
+            <LinkSocial href={item.href} key={item.icon}>
               <i className={`fa fa-lg fa-${item.icon}`}></i>
-            </Link>
+            </LinkSocial>
           ))}
         </div>
       </div>

@@ -45,7 +45,7 @@ class LoginPage extends Component {
       body: JSON.stringify(body)
     })
       .then(res => res.json()).then(data => {
-        // Response from registration attempt
+        // Response from login attempt
         console.log(data)
         this.props.updateAuthStatus(response => {
           if (!response.isAuthenticated || !data.success) {

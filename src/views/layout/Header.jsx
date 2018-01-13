@@ -39,23 +39,22 @@ class Header extends Component {
     )
 
 
-    const sidenav = (
-      <ul className="side-nav" id="sideNav">
-        <li hidden={!loggedIn}><Link to="/user">{`Hello, ${user}!`}</Link></li>
-        <li><Link to="/main">Main</Link></li>
-        <li><div className="divider"></div></li>
-        <li hidden={loggedIn}><Link to="/login">Login</Link></li>
-        <li hidden={loggedIn}><Link to="/register">Register</Link></li>
-        <li hidden={!loggedIn}><a onClick={handleLogout}>Logout</a></li>
-      </ul>
-    )
-
-
+    // const sidenav = (
+    //   <ul className="side-nav" id="sideNav">
+    //     <li hidden={!loggedIn}><Link to="/user">{`Hello, ${user}!`}</Link></li>
+    //     <li><Link to="/main">Main</Link></li>
+    //     <li><div className="divider"></div></li>
+    //     <li hidden={loggedIn}><Link to="/login">Login</Link></li>
+    //     <li hidden={loggedIn}><Link to="/register">Register</Link></li>
+    //     <li hidden={!loggedIn}><a onClick={handleLogout}>Logout</a></li>
+    //   </ul>
+    // )
 
 
     const links = [
       { hidden: !loggedIn, to: '/user', content: `Hello, ${user}!` },
       { hidden: false, to: '/main', content: 'Main' },
+      { hidden: !loggedIn, to: '/new', content: 'New Poll' },
       { hidden: loggedIn, to: '/login', content: 'Login' },
       { hidden: loggedIn, to: '/register', content: 'Register' },
       { hidden: !loggedIn, to: '/logout', content: 'Logout' }

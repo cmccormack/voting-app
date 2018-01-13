@@ -27,26 +27,25 @@ class NewPollForm extends Component {
 
     return (
       <FormCard {...props}>
-        <form id="login_form" onSubmit={this.props.handleSubmit}>
+        <form id="new_poll_form" onSubmit={this.props.handleSubmit}>
 
           <FormInput
-            icon="account_circle"
-            label="Username"
-            name="username"
+            icon=""
+            label="Title (e.g. Favorite Superhero)"
+            name="title"
             onChange={this.props.handleInputChange}
             required
-            value={this.props.username}
+            value={this.props.title}
           >
           </FormInput>
 
           <FormInput
-            icon="lock"
-            label="Password"
-            name="password"
+            icon=""
+            label="Short Title (e.g. fav_superhero, optional)"
+            name="shortname"
             onChange={this.props.handleInputChange}
-            required
-            type="password"
-            value={this.props.password}
+            value={this.props.shortname}
+            maxLength={16}
           >
           </FormInput>
 
@@ -62,4 +61,4 @@ class NewPollForm extends Component {
   }
 }
 
-export default LoginForm
+export default NewPollForm

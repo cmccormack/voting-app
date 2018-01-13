@@ -6,7 +6,8 @@ import {
   RegisterPage,
   LoginPage,
   LogoutPage,
-  UserPage
+  UserPage,
+  NewPollPage
 } from './views/containers'
 import Main from './views/Main'
 
@@ -56,6 +57,14 @@ const Routes = ({ loggedIn, allowRedirects, user, ...props}) => (
         loggedIn={loggedIn}
       />
 
+
+      // Create New Poll Route
+      <PrivateRoute
+        allowRedirects={allowRedirects}
+        exact path="/new"
+        component={NewPollPage}
+        loggedIn={loggedIn}
+      />
 
       // Main page route 
       <Route exact path="/main" render={() => (

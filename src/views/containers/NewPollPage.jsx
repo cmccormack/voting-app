@@ -10,6 +10,7 @@ class NewPollPage extends Component {
     this.state = {
       title: "",
       shortname: "",
+      choices: ['choice1', 'choice2'],
       error: ""
     }
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -17,14 +18,22 @@ class NewPollPage extends Component {
   }
 
 
-  handleInputChange(e) {
-    console.log(e.target)
-    let newState = {
-      [e.target.name]: e.target.value
+  handleInputChange(e, choice, iter){
+
+    let newState = {}
+    if (e.target.name.startsWith('choice')) {
+      const choices = [...this.state.choices]
+      choices[iter] = choice
+      newState = {choices}
+    } else {
+      newState = {
+        [e.target.name]: e.target.value
+      }
     }
     this.setState(newState)
     console.log(this.state)
   }
+
 
 
   handleSubmit(event) {

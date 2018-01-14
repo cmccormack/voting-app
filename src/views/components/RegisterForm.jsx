@@ -36,6 +36,7 @@ class RegisterForm extends Component {
             name="username"
             onChange={this.props.handleInputChange}
             required
+            size="s12 m12 l8 offset-l2"
             value={this.props.username}
           >
           </FormInput>
@@ -46,6 +47,7 @@ class RegisterForm extends Component {
             name="password"
             onChange={this.props.handleInputChange}
             required
+            size="s12 m12 l8 offset-l2"
             type="password"
             value={this.props.password}
           >

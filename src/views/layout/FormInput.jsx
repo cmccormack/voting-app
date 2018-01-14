@@ -5,7 +5,7 @@ const FormInput = props => {
 
   return (
     <div className="row">
-      <div className="input-field col s12 m12 l8 offset-l2">
+      <div className={`input-field col ${props.size}`}>
         { props.icon && (
             <i className="material-icons prefix">
               {props.icon}

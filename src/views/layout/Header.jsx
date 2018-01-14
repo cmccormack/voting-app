@@ -28,29 +28,6 @@ class Header extends Component {
 
     const {loggedIn, user, handleLogout} = this.props
 
-    const linksold = (
-      <ul className="right hide-on-med-and-down">
-        <li hidden={!loggedIn}><Link to="/user">{`Hello, ${user}!`}</Link></li>
-        <li><Link to="/main">Main</Link></li>
-        <li hidden={loggedIn}><Link to="/login">Login</Link></li>
-        <li hidden={loggedIn}><Link to="/register">Register</Link></li>
-        <li hidden={!loggedIn}><Link to="/logout">Logout</Link></li>
-      </ul>
-    )
-
-
-    // const sidenav = (
-    //   <ul className="side-nav" id="sideNav">
-    //     <li hidden={!loggedIn}><Link to="/user">{`Hello, ${user}!`}</Link></li>
-    //     <li><Link to="/main">Main</Link></li>
-    //     <li><div className="divider"></div></li>
-    //     <li hidden={loggedIn}><Link to="/login">Login</Link></li>
-    //     <li hidden={loggedIn}><Link to="/register">Register</Link></li>
-    //     <li hidden={!loggedIn}><a onClick={handleLogout}>Logout</a></li>
-    //   </ul>
-    // )
-
-
     const links = [
       { hidden: !loggedIn, to: '/user', content: `Hello, ${user}!` },
       { hidden: false, to: '/main', content: 'Main' },

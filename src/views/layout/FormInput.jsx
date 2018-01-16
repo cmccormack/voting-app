@@ -1,29 +1,39 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
-const FormInput = props => {
+const FormInput = ({
+    name,
+    icon,
+    label,
+    size = "s12",
+    type = "text",
+    value = "",
+    maxLength = 80,
+    disabled,
+    ...props
+  }) => {
 
   return (
     <div className="row">
-      <div className={`input-field col ${props.size}`}>
-        { props.icon && (
+      <div className={`input-field col ${size}`}>
+        { icon && (
             <i className="material-icons prefix">
-              {props.icon}
+              {icon}
             </i>
           )
         }
         <input
           className="validate"
-          id={`input_${props.name}`}
-          name={props.name}
+          disabled={disabled}
+          id={`input_${name}`}
+          maxLength={maxLength}
+          name={name}
           onChange={props.onChange}
-          required={props.required}
-          type={props.type || 'text'}
-          value={props.value || ''}
-          maxLength={props.maxLength || 80}
+          type={type}
+          value={value}
         />
-        { props.label && 
-          ( <label htmlFor={props.name}>{props.label}</label> )
+        { label && 
+          ( <label htmlFor={name}>{label}</label> )
         }
       </div>
     </div>

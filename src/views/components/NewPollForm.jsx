@@ -13,18 +13,17 @@ import {
 
 const PollChoices = ({choices, ...props}) => (
   choices.map((choice, iter) => (
-    <FormRow>
-      <FormInput 
+    <FormRow key={`choice_${iter}`}>
+      <FormInput
+        actionIcon="close"
         choice={choice}
         iter={iter}
-        key={`choice_${iter}`}
         label={`Choice ${iter + 1}`}
         name={`choice_${iter}`}
         onChange={e => props.handleInputChange(e, e.target.value, iter)}
         value={choice}
         {...props}
       />
-      <div className="btn">Delete</div>
     </FormRow>
   ))
 )
@@ -86,6 +85,7 @@ class NewPollForm extends Component {
             <FormSubmitButton
               onClick={this.props.handleSubmit}
               position="right"
+              size="s12 l8 offset-l2"
             />
           </FormRow>
 

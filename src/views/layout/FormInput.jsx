@@ -1,9 +1,23 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
+const InputAction = styled.a.attrs({
+  href: "#"
+})`
+  color: initial;
+  position: absolute;
+  right: 12px;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  line-height: 3;
+`
+
+
 const FormInput = ({
     name,
     icon,
+    actionIcon,
     label,
     size = "s12",
     type = "text",
@@ -21,6 +35,14 @@ const FormInput = ({
           </i>
         )
       }
+      <InputAction className="action">
+        { actionIcon && (
+          <i className="material-icons tiny">
+            { actionIcon }
+          </i>
+        )
+      }
+      </InputAction>
       <input
         className="validate"
         disabled={disabled}

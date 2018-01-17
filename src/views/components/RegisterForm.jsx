@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom'
 import {
   FormCard,
   FormSubmitButton,
-  FormInput
+  FormInput,
+  FormRow
 } from '../layout'
 
 class RegisterForm extends Component {
@@ -30,33 +31,40 @@ class RegisterForm extends Component {
       <FormCard {...props}>
         <form id="register_form" onSubmit={this.props.handleSubmit}>
 
-          <FormInput
-            icon="account_circle"
-            label="Username"
-            name="username"
-            onChange={this.props.handleInputChange}
-            required
-            size="s12 m12 l8 offset-l2"
-            value={this.props.username}
-          >
-          </FormInput>
+          <FormRow>
+            <FormInput
+              icon="account_circle"
+              label="Username"
+              name="username"
+              onChange={this.props.handleInputChange}
+              required
+              size="s12 l8 offset-l2"
+              value={this.props.username}
+            >
+            </FormInput>
+          </FormRow>
 
-          <FormInput
-            icon="lock"
-            label="Password"
-            name="password"
-            onChange={this.props.handleInputChange}
-            required
-            size="s12 m12 l8 offset-l2"
-            type="password"
-            value={this.props.password}
-          >
-          </FormInput>
+          <FormRow>
+            <FormInput
+              icon="lock"
+              label="Password"
+              name="password"
+              onChange={this.props.handleInputChange}
+              required
+              size="s12 l8 offset-l2"
+              type="password"
+              value={this.props.password}
+            >
+            </FormInput>
+          </FormRow>
 
-          <FormSubmitButton 
-            onClick={this.props.handleSubmit}
-            position="right"
-          />
+          <FormRow>
+            <FormSubmitButton 
+              onClick={this.props.handleSubmit}
+              position="right"
+              size="s12 l8 offset-l2"
+            />
+          </FormRow>
 
         </form>
         

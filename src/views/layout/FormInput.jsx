@@ -14,28 +14,26 @@ const FormInput = ({
   }) => {
 
   return (
-    <div className="row">
-      <div className={`input-field col ${size}`}>
-        { icon && (
-            <i className="material-icons prefix">
-              {icon}
-            </i>
-          )
-        }
-        <input
-          className="validate"
-          disabled={disabled}
-          id={`input_${name}`}
-          maxLength={maxLength}
-          name={name}
-          onChange={props.onChange}
-          type={type}
-          value={value}
-        />
-        { label && 
-          ( <label htmlFor={name}>{label}</label> )
-        }
-      </div>
+    <div className={`input-field col ${size}`}>
+      { icon && (
+          <i className="material-icons prefix">
+            {icon}
+          </i>
+        )
+      }
+      <input
+        className="validate"
+        disabled={disabled}
+        id={`input_${name}`}
+        maxLength={maxLength}
+        name={name}
+        onChange={props.onChange}
+        type={type}
+        value={value}
+      />
+      { label && 
+        ( <label htmlFor={name}>{label}</label> )
+      }
     </div>
   )
 }

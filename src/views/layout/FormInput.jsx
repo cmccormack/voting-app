@@ -13,6 +13,10 @@ const InputAction = styled.a.attrs({
   line-height: 3;
 `
 
+const Icon = styled.i`
+  font-size: ${props => props.fontSize};
+`
+
 
 const FormInput = ({
     name,
@@ -37,9 +41,12 @@ const FormInput = ({
       }
       <InputAction className="action">
         { actionIcon && (
-          <i className="material-icons tiny">
+          <Icon 
+            className="material-icons"
+            fontSize={'18px'}
+          >
             { actionIcon }
-          </i>
+          </Icon>
         )
       }
       </InputAction>

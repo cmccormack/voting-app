@@ -21,7 +21,9 @@ const Icon = styled.i`
 const FormInput = ({
     name,
     icon,
-    actionIcon,
+    index,
+    action,
+    actionIcon="close",
     label,
     size = "s12",
     type = "text",
@@ -37,19 +39,21 @@ const FormInput = ({
           <i className="material-icons prefix">
             {icon}
           </i>
-        )
-      }
-      <InputAction className="action">
-        { actionIcon && (
+      )}
+      { action && (
+        <InputAction
+          id={`${name}_action`}
+          data-index={index}
+          onClick={action}
+        >
           <Icon 
             className="material-icons"
             fontSize={'18px'}
           >
             { actionIcon }
           </Icon>
-        )
-      }
-      </InputAction>
+        </InputAction>
+      )}
       <input
         className="validate"
         disabled={disabled}

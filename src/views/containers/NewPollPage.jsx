@@ -36,9 +36,13 @@ class NewPollPage extends Component {
   }
 
   handleChoiceDelete(e) {
-    this.setState({choices: this.state.choices.filter((_, i)=>
-        +e.currentTarget.dataset['index'] !== i
-    )})
+    const newChoices = this.state.choices.length === 1
+      ? ['']
+      : this.state.choices.filter((_, i) =>
+      +e.currentTarget.dataset['index'] !== i
+    )
+
+    this.setState({choices: newChoices})
   }
 
 

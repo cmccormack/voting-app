@@ -16,10 +16,11 @@ class NewPollPage extends Component {
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleChoiceDelete = this.handleChoiceDelete.bind(this)
   }
 
 
-  handleInputChange(e, choice, iter, newState={}){
+  handleInputChange(e, choice, iter, newState={}) {
 
     if (e.target.name.startsWith('choice')) {
       const choices = [...this.state.choices]
@@ -32,6 +33,12 @@ class NewPollPage extends Component {
     }
     this.setState(newState)
     console.log(this.state)
+  }
+
+  handleChoiceDelete(e) {
+    this.setState({choices: this.state.choices.filter((_, i)=>
+        +e.currentTarget.dataset['index'] !== i
+    )})
   }
 
 
@@ -66,6 +73,7 @@ class NewPollPage extends Component {
           <div className="col s12 m10 offset-m1 xl8 offset-xl2">
             <NewPollForm
               handleInputChange={this.handleInputChange}
+              handleChoiceDelete={this.handleChoiceDelete}
               handleSubmit={this.handleSubmit}
               { ...this.state }
             />

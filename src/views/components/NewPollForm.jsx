@@ -15,9 +15,8 @@ const PollChoices = ({choices, ...props}) => (
   choices.map((choice, i) => (
     <FormRow key={`choice_${i}`}>
       <FormInput
-        actionIcon="close"
         choice={choice}
-        seq={i}
+        index={i}
         label={`Choice ${i + 1}`}
         name={`choice_${i}`}
         onChange={e => props.handleInputChange(e, e.target.value, i)}
@@ -74,7 +73,10 @@ class NewPollForm extends Component {
           </FormRow>
 
           <PollChoices 
+            action={this.props.handleChoiceDelete}
+            actionIcon="close"
             choices={choices}
+            handleChoiceDelete={this.props.handleChoiceDelete}
             handleInputChange={this.props.handleInputChange}
             icon=""
             maxLength={32}

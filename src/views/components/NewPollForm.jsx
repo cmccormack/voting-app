@@ -10,17 +10,24 @@ import {
   FormRow
 } from '../layout'
 
+const PollChoice = ({ index=-1, choice='', ...props }) => (
+  <FormInput
+    index={ index }
+    onChange={ e => props.handleInputChange(e, e.target.value, index) }
+    value={ choice }
+    { ...props }
+  />
+)
+
 
 const PollChoices = ({choices, ...props}) => (
   choices.map((choice, i) => (
     <FormRow key={`choice_${i}`}>
-      <FormInput
-        choice={choice}
+      <PollChoice
         index={i}
+        choice={choice}
         label={`Choice ${i + 1}`}
         name={`choice_${i}`}
-        onChange={e => props.handleInputChange(e, e.target.value, i)}
-        value={choice}
         {...props}
       />
     </FormRow>
@@ -34,7 +41,7 @@ class NewPollForm extends Component {
 
     const { error, choices } = this.props
 
-    const props = {
+    const layout = {
       title: "Create New Poll",
       error: error,
       footer: (
@@ -45,7 +52,7 @@ class NewPollForm extends Component {
     }
 
     return (
-      <FormCard {...props}>
+      <FormCard {...layout}>
         <form id="new_poll_form" onSubmit={this.props.handleSubmit}>
 
           <FormRow>
@@ -82,6 +89,20 @@ class NewPollForm extends Component {
             maxLength={32}
             size="s6 offset-s3"
           />
+
+          <FormRow>
+            <PollChoice
+              action={ e => e.target.value = '' }
+              actionIcon='close'
+              handleInputChange={this.props.handleInputChange}
+              name="new_choice"
+              label="New Choice"
+              size="s6 offset-s3"
+              choice={this.props.newChoice}
+            />
+          </FormRow>
+
+          
 
           <FormRow>
             <FormSubmitButton

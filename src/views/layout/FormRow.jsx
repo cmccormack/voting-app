@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import styled from 'styled-components'
 
-const FormRow = ({ children }) => (
-  <div className="row">
-    { children }
-  </div>
-)
+const FormRow = styled.div.attrs({
+  className: 'row'
+})`
+  position: relative;
+`
 
 export default FormRow

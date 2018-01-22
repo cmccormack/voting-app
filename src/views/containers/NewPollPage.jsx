@@ -11,18 +11,19 @@ class NewPollPage extends Component {
       title: "",
       shortname: "",
       choices: ['choice1', 'choice2'],
-      newChoice: "aaa",
+      newChoice: "",
       error: ""
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleChoiceDelete = this.handleChoiceDelete.bind(this)
+    this.handleChoiceAdd = this.handleChoiceAdd.bind(this)
   }
 
 
   handleInputChange(e, choice, iter, newState={}) {
 
-    if (e.target.name.startsWith('choice')) {
+    if (choice || choice === '') {
       const choices = [...this.state.choices]
       choices[iter] = choice
       newState = {choices}
@@ -35,14 +36,21 @@ class NewPollPage extends Component {
     console.log(this.state)
   }
 
-  handleChoiceDelete(e) {
-    const newChoices = this.state.choices.length === 1
-      ? ['']
-      : this.state.choices.filter((_, i) =>
-      +e.currentTarget.dataset['index'] !== i
+  handleChoiceDelete(index) {
+    const newChoices = this.state.choices.filter((_, i) =>
+      index !== i
     )
 
     this.setState({choices: newChoices})
+  }
+
+  handleChoiceAdd(choice) {
+
+    if (choice){
+      const choices = [...this.state.choices].concat(choice)
+      this.setState({choices, newChoice: ""})
+    }
+
   }
 
 
@@ -78,6 +86,7 @@ class NewPollPage extends Component {
             <NewPollForm
               handleInputChange={this.handleInputChange}
               handleChoiceDelete={this.handleChoiceDelete}
+              handleChoiceAdd={this.handleChoiceAdd}
               handleSubmit={this.handleSubmit}
               { ...this.state }
             />

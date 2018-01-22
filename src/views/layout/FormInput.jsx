@@ -65,7 +65,14 @@ const FormInput = ({
         value={value}
       />
       { label && 
-        ( <label htmlFor={name}>{label}</label> )
+        ( 
+          <label 
+            className={ value ? 'active' : '' }
+            htmlFor={name}
+          >
+            {label}
+          </label> 
+        )
       }
     </div>
   )

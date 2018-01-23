@@ -6,6 +6,8 @@ import FormSubmitButton from './FormSubmitButton'
 import FormInput from './FormInput'
 import FormRow from './FormRow'
 import GraphCard from './GraphCard'
+import IconLink from './IconLink'
+import Icon from './Icon'
 
 export {
   Alerts,
@@ -15,5 +17,7 @@ export {
   FormSubmitButton,
   FormInput,
   FormRow,
-  GraphCard
+  GraphCard,
+  IconLink,
+  Icon
 }

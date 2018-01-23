@@ -7,20 +7,27 @@ import {
   FormCard,
   FormSubmitButton,
   FormInput,
-  FormRow
+  FormRow,
+  IconLink,
+  Icon
 } from '../layout'
 
-const Icon = styled.i`
-  font-size: ${props => props.fontSize};
-`
-const AddChoiceIcon = Icon.extend.attrs({
-  className: "teal-text text-darken-1"
 
-})`
-  font-size: ${props => props.fontSize};
+const AddChoiceIconStyled = styled(Icon)`
   position: absolute;
   line-height: 4.2rem;
 `
+
+const AddChoiceIcon = props => (
+  <AddChoiceIconStyled
+    className="material-icons"
+    fontSize="48px"
+    color="teal-text text-darken-1"
+  >
+    {"add_circle_outline"}
+  </AddChoiceIconStyled>
+
+)
 
 
 const PollChoice = ({ action, index = -1, choice = '', ...props }) => {
@@ -132,7 +139,6 @@ class NewPollForm extends Component {
 
           <FormRow>
             <PollChoice
-
               onChange={this.props.handleInputChange}
               name="newChoice"
               label="New Choice"
@@ -140,17 +146,19 @@ class NewPollForm extends Component {
               choice={this.props.newChoice}
             />
             <div className={"col s3"}>
-              <a
+              <IconLink
+                title="Click"
                 href="#"
                 onClick={this.handleChoiceAdd}
-              >
-                <AddChoiceIcon 
+                Icon={<AddChoiceIconStyled
                   className="material-icons"
                   fontSize="48px"
+                  color="teal-text text-darken-1"
                 >
                   {"add_circle_outline"}
-                </AddChoiceIcon>
-              </a>
+                </AddChoiceIconStyled>}
+              >
+              </IconLink>
             </div>
           </FormRow>
 

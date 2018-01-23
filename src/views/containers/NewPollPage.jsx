@@ -57,7 +57,8 @@ class NewPollPage extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
-
+    console.log(this.state)
+      return
     const body = {
       title: this.state.title
     }

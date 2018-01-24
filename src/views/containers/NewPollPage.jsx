@@ -9,7 +9,7 @@ class NewPollPage extends Component {
     super(props)
     this.state = {
       title: "",
-      shortname: "",
+      shortName: "",
       choices: ['choice1', 'choice2'],
       newChoice: "",
       error: ""
@@ -57,19 +57,17 @@ class NewPollPage extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    console.log(this.state)
-      return
-    const body = {
-      title: this.state.title
-    }
+
+    const { title, shortName, choices } = this.state
     const myHeaders = new Headers()
     myHeaders.append("Content-Type", "application/json")
-    fetch("/createnewpoll", {
+
+    fetch("/submit_new_poll", {
       method: "POST",
       headers: myHeaders,
       cache: "default",
       credentials: "same-origin",
-      body: JSON.stringify(body)
+      body: JSON.stringify({ title, shortName, choices })
     })
       .then(res => res.json()).then(data => {
         // Response from poll submission

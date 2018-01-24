@@ -121,10 +121,10 @@ class NewPollForm extends Component {
               icon=""
               label="Short Title (e.g. fav_superhero, optional)"
               maxLength={16}
-              name="shortname"
+              name="shortName"
               onChange={this.props.handleInputChange}
               size="s12 m12 l8 offset-l2"
-              value={this.props.shortname}
+              value={this.props.shortName}
             />
           </FormRow>
 

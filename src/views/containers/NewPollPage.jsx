@@ -32,8 +32,9 @@ class NewPollPage extends Component {
         [e.target.name]: e.target.value
       }
     }
+    newState.error = ''
     this.setState(newState)
-    console.log(this.state)
+    // console.log(this.state)
   }
 
   handleChoiceDelete(index) {
@@ -72,6 +73,7 @@ class NewPollPage extends Component {
       .then(res => res.json()).then(data => {
         // Response from poll submission
         console.log(data)
+        this.setState({error: data.success ? '' : data.message})
       })
       .catch(console.error)
   }

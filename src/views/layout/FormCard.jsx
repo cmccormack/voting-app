@@ -42,7 +42,7 @@ const FormCard = ({title, footer, error, children}) => {
             className="col s8 offset-s2"
             show={error ? true : false}
           >
-            <strong>Warning!  </strong>{error}
+            <strong>Warning!&nbsp;&nbsp;</strong>{error}
           </WarningAlert>
         </div>
 

@@ -35,6 +35,7 @@ const FormInput = ({
 
   return (
     <div className={`input-field col ${size}`}>
+      { props.children }
       { icon && (
           <i className="material-icons prefix">
             {icon}

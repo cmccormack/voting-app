@@ -30,6 +30,28 @@ const AddChoiceIcon = props => (
 )
 
 
+const LetterCountStyled = styled.span.attrs({
+
+})`
+  color: ${props => props.color};
+  display: ${props => props.isVisible ? 'block' : 'none'};
+  position: absolute;
+  right: -10px;
+  line-height: 4;
+`
+
+const LetterCount = ({count, max}) => { 
+
+  return (
+  <LetterCountStyled
+    color={ count > max * .8 ? 'red' : count > max * .5 ? 'orange' : 'green' }
+    isVisible={ count > max * .5 }
+  >
+    { count }
+  </LetterCountStyled>
+)
+}
+
 const PollChoice = ({ action, index = -1, choice = '', ...props }) => {
   
   const handleAction = e => {
@@ -119,13 +141,18 @@ class NewPollForm extends Component {
           <FormRow>
             <FormInput
               icon=""
-              label="Short Title (e.g. fav_superhero, optional)"
+              label="Short Title (e.g. fav_superhero) (optional)"
               maxLength={16}
               name="shortName"
               onChange={this.props.handleInputChange}
               size="s12 m12 l8 offset-l2"
               value={this.props.shortName}
-            />
+            >
+              <LetterCount
+                count={this.props.shortName.length}
+                max={16}
+              />
+            </FormInput>
           </FormRow>
 
           <PollChoices

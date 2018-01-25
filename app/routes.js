@@ -117,7 +117,24 @@ module.exports = (app, passport) => {
   // Handle New Poll Submission
   ///////////////////////////////////////////////////////////
   app.post('/submit_new_poll', (req, res) => {
+    console.log(req.user.username)
     console.log(req.body)
+    const { title, shortName, choices } = req.body
+    const response = {
+      success: false,
+      message: ''
+    }
+    // Validate poll fields
+    if (!title) {
+      response.message = "Title cannot be blank"
+    } 
+    else if (choices.includes('')){
+      response.message = "Choices cannot be blank"
+    } else {
+      response.success = true
+    }
+
+    res.type('json').send(response)
 
   })
 

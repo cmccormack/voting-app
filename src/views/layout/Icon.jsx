@@ -5,7 +5,7 @@ const IconStyled = styled.i`
   font-size: ${props => props.fontSize};
 `
 
-const Icon = ({children, className, color, ...props}) => (
+const Icon = ({children, className='', color='', ...props}) => (
 
   <IconStyled
     className={`${className} ${color}`}

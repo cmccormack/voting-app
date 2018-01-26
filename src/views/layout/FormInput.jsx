@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
+import { Icon } from './'
+
 const InputAction = styled.a.attrs({
   href: "#"
 })`
@@ -13,10 +15,22 @@ const InputAction = styled.a.attrs({
   line-height: 3;
 `
 
-const Icon = styled.i`
-  font-size: ${props => props.fontSize};
+const CharacterCountStyled = styled.span`
+  color: ${props => props.color};
+  display: ${props => props.isVisible ? 'block' : 'none'};
+  position: absolute;
+  right: -10px;
+  line-height: 4;
 `
 
+const CharacterCount = ({ count, max }) => (
+  <CharacterCountStyled
+    color={count > max * .8 ? 'red' : count > max * .5 ? 'orange' : 'green'}
+    isVisible={count > max * .5}
+  >
+    {count}
+  </CharacterCountStyled>
+)
 
 const FormInput = ({
     name,
@@ -35,7 +49,10 @@ const FormInput = ({
 
   return (
     <div className={`input-field col ${size}`}>
-      { props.children }
+      <CharacterCount
+        count={value.length}
+        max={maxLength}
+      />
       { icon && (
           <i className="material-icons prefix">
             {icon}

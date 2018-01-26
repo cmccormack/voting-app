@@ -13,44 +13,10 @@ import {
 } from '../layout'
 
 
-const AddChoiceIconStyled = styled(Icon)`
+const StyledNewChoiceIcon = styled(Icon)`
   position: absolute;
   line-height: 4.2rem;
 `
-
-const AddChoiceIcon = props => (
-  <AddChoiceIconStyled
-    className="material-icons"
-    fontSize="48px"
-    color="teal-text text-darken-1"
-  >
-    {"add_circle_outline"}
-  </AddChoiceIconStyled>
-
-)
-
-
-const LetterCountStyled = styled.span.attrs({
-
-})`
-  color: ${props => props.color};
-  display: ${props => props.isVisible ? 'block' : 'none'};
-  position: absolute;
-  right: -10px;
-  line-height: 4;
-`
-
-const LetterCount = ({count, max}) => { 
-
-  return (
-  <LetterCountStyled
-    color={ count > max * .8 ? 'red' : count > max * .5 ? 'orange' : 'green' }
-    isVisible={ count > max * .5 }
-  >
-    { count }
-  </LetterCountStyled>
-)
-}
 
 const PollChoice = ({ action, index = -1, choice = '', ...props }) => {
   
@@ -130,6 +96,7 @@ class NewPollForm extends Component {
             <FormInput
               icon=""
               label="Title (e.g. Favorite Superhero)"
+              maxLength={64}
               name="title"
               onChange={this.props.handleInputChange}
               required
@@ -147,12 +114,7 @@ class NewPollForm extends Component {
               onChange={this.props.handleInputChange}
               size="s12 m12 l8 offset-l2"
               value={this.props.shortName}
-            >
-              <LetterCount
-                count={this.props.shortName.length}
-                max={16}
-              />
-            </FormInput>
+            />
           </FormRow>
 
           <PollChoices
@@ -166,8 +128,9 @@ class NewPollForm extends Component {
 
           <FormRow>
             <PollChoice
-              onChange={this.props.handleInputChange}
+              maxLength={32}
               name="newChoice"
+              onChange={this.props.handleInputChange}
               label="New Choice"
               size="s6 offset-s3"
               choice={this.props.newChoice}
@@ -177,19 +140,17 @@ class NewPollForm extends Component {
                 title="Click"
                 href="#"
                 onClick={this.handleChoiceAdd}
-                Icon={<AddChoiceIconStyled
+                Icon={<StyledNewChoiceIcon
                   className="material-icons"
                   fontSize="48px"
                   color="teal-text text-darken-1"
                 >
                   {"add_circle_outline"}
-                </AddChoiceIconStyled>}
+                </StyledNewChoiceIcon>}
               >
               </IconLink>
             </div>
           </FormRow>
-
-          
 
           <FormRow>
             <FormSubmitButton

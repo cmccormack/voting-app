@@ -1,5 +1,7 @@
 const path = require('path')
 const User = require('../models/user')
+const { body, validationResult } = require('express-validator/check')
+const { matchedData, sanitize } = require('express-validator/filter')
 
 module.exports = (app, passport) => {
 
@@ -116,22 +118,22 @@ module.exports = (app, passport) => {
   ///////////////////////////////////////////////////////////
   // Handle New Poll Submission
   ///////////////////////////////////////////////////////////
-  app.post('/submit_new_poll', (req, res) => {
-    console.log(req.user.username)
-    console.log(req.body)
-    const { title, shortName, choices } = req.body
+
+  app.post('/submit_new_poll', [
+    
+    body('title').isLength({ min: 5 }).trim()
+      .withMessage('Title should be at least 5 characters'),
+
+    body('shortName').isLength({ min: 4 }).trim()
+      .withMessage('Short name should be at least 4 characters')
+
+  ], (req, res) => {
+
+    const errors = validationResult(req) 
+    
     const response = {
-      success: false,
-      message: ''
-    }
-    // Validate poll fields
-    if (!title) {
-      response.message = "Title cannot be blank"
-    } 
-    else if (choices.includes('')){
-      response.message = "Choices cannot be blank"
-    } else {
-      response.success = true
+      success: errors.isEmpty(),
+      message: !errors.isEmpty() ? errors.array()[0].msg : ''
     }
 
     res.type('json').send(response)

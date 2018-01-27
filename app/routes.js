@@ -121,14 +121,19 @@ module.exports = (app, passport) => {
 
   app.post('/submit_new_poll', [
     
-    body('title').isLength({ min: 5 }).trim()
-      .withMessage('Title should be at least 5 characters'),
+    body('title').isLength({ min: 4 }).trim()
+      .withMessage('Title should be at least 4 characters')
+      .isAscii()
+      .withMessage('Title should include only valid ascii characters'),
 
-    body('shortName').isLength({ min: 4 }).trim()
-      .withMessage('Short name should be at least 4 characters')
+    body('shortName').optional({checkFalsy: true}).isAscii().trim()
+      .withMessage('Short Name should include only valid ascii characters'),
+
+    body('choices').isLength({min: 1})
+      .withMessage('Must include at least one choice')
 
   ], (req, res) => {
-
+    console.log(req.body.choices)
     const errors = validationResult(req) 
     
     const response = {

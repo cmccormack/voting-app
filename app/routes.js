@@ -121,20 +121,36 @@ module.exports = (app, passport) => {
 
   app.post('/submit_new_poll', [
     
-    body('title').isLength({ min: 4 }).trim()
+    body('title')
+      .trim()
+      .isLength({ min: 4 })
       .withMessage('Title should be at least 4 characters')
       .isAscii()
       .withMessage('Title should include only valid ascii characters'),
 
-    body('shortName').optional({checkFalsy: true}).isAscii().trim()
+    body('shortName')
+      .trim()
+      .optional({checkFalsy: true}).isAscii()
       .withMessage('Short Name should include only valid ascii characters'),
 
-    body('choices').isLength({min: 1})
-      .withMessage('Must include at least one choice')
+    body('choices')
+      .custom(array => array.length >= 2)
+      .withMessage('Must include at least two choices'),
+
+    body('choices.*')
+      .trim()
+      .isLength({ min: 1 })
+      .withMessage('Choices cannot be blank')
+      .isAscii()
+      .withMessage('Choices should include only valid ascii characters'),
+
+    sanitize('title').trim(),
+    sanitize('shortName').trim(),
+    sanitize('choices.*').trim(),
 
   ], (req, res) => {
-    console.log(req.body.choices)
-    const errors = validationResult(req) 
+    console.log(req.body)
+    const errors = validationResult(req)
     
     const response = {
       success: errors.isEmpty(),

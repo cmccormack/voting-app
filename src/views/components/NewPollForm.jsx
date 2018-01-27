@@ -58,6 +58,13 @@ const PollChoices = ({choices, ...props}) => {
   ))
 }
 
+const inputLengths = {
+  title: { min: 4, max: 64 },
+  shortName: { min: 0, max: 16 },
+  choices: { min: 2, max: undefined },
+  choice: { min: 1, max: 32 }
+}
+
 
 class NewPollForm extends Component {
 
@@ -96,7 +103,7 @@ class NewPollForm extends Component {
             <FormInput
               icon=""
               label="Title (e.g. Favorite Superhero)"
-              maxLength={64}
+              maxLength={inputLengths.title.max}
               name="title"
               onChange={this.props.handleInputChange}
               required
@@ -109,7 +116,7 @@ class NewPollForm extends Component {
             <FormInput
               icon=""
               label="Short Title (e.g. fav_superhero) (optional)"
-              maxLength={16}
+              maxLength={inputLengths.shortName.max}
               name="shortName"
               onChange={this.props.handleInputChange}
               size="s12 m12 l8 offset-l2"
@@ -122,13 +129,13 @@ class NewPollForm extends Component {
             handleChoiceDelete={this.props.handleChoiceDelete}
             handleInputChange={this.props.handleInputChange}
             icon=""
-            maxLength={32}
+            maxLength={inputLengths.choice.max}
             size="s6 offset-s3"
           />
 
           <FormRow>
             <PollChoice
-              maxLength={32}
+              maxLength={inputLengths.choice.max}
               name="newChoice"
               onChange={this.props.handleInputChange}
               label="New Choice"

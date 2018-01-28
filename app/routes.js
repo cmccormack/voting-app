@@ -1,18 +1,20 @@
 const path = require('path')
-const User = require('../models/user')
 const Poll = require('../models/poll')
 const { body, validationResult } = require('express-validator/check')
 const { matchedData, sanitize } = require('express-validator/filter')
 
-// const testPoll = new Poll({
-//   createTime: Date.now()
-// })
-
-module.exports = (app, passport) => {
+module.exports = (app, passport, models) => {
 
   const root = path.resolve(__dirname, '..')
   const public = path.join(root, 'public')
 
+  const { User, Poll } = models
+
+
+
+  ///////////////////////////////////////////////////////////
+  // Testing/Debug Middleware, DELETE LATER
+  ///////////////////////////////////////////////////////////
   app.use((req, res, next) => {
     const { user, sessionID } = req
     console.log(`user: ${user ? user.username : 'null'}, ` +
@@ -22,12 +24,12 @@ module.exports = (app, passport) => {
   })
 
   ///////////////////////////////////////////////////////////
-  // Test API is Availability
+  // Test API is Availabile
   ///////////////////////////////////////////////////////////
   app.get('/api_test', (req, res) => {
     res.type('json').send(JSON.stringify(
       {
-        'result': 'success'
+        'apiAvailable': 'success'
       }
     ))
   })

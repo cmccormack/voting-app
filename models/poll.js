@@ -2,6 +2,10 @@
 module.exports = mongoose => {
   
   const pollSchema = new mongoose.Schema({
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
     createTime: {
       type: String,
       required: true

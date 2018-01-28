@@ -1,11 +1,7 @@
-const signup = require('./register')
+const register = require('./register')
 const login = require('./login')
 
-module.exports = (mongoose, passport) => {
-
-  const models = {
-    User: require('../models/user')(mongoose)
-  }
+module.exports = (passport, models) => {
 
   const User = models.User
 
@@ -26,7 +22,7 @@ module.exports = (mongoose, passport) => {
     })
   })
 
-  signup(passport, models)
+  register(passport, models)
   login(passport, models)
 
 }

@@ -13,8 +13,6 @@ const logger = require('morgan')
 const favicon = require('serve-favicon')
 require('dotenv').config({path: path.resolve(__dirname, '.env')})
 
-const passportInit = require('./passport/init')
-
 ///////////////////////////////////////////////////////////
 //  Configure and connect to MongoDB database
 ///////////////////////////////////////////////////////////
@@ -30,6 +28,11 @@ db.on('error', err => {
 db.once('open', () => {
   console.log(`Mongoose default connection opened [${dbconf.db}]`)
 })
+
+const models = {
+  User: require('./models/user')(mongoose),
+  Poll: require('./models/poll')(mongoose)
+}
 
 
 ///////////////////////////////////////////////////////////
@@ -59,13 +62,14 @@ const sessionOptions = {
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false },
-  store: new MongoStore({ mongooseConnection: mongoose.connection})
+  store: new MongoStore({ mongooseConnection: db })
 }
 app.use(session(sessionOptions))
 app.use(passport.initialize())
 app.use(passport.session())
 
-passportInit(mongoose, passport)
+const passportInit = require('./passport/init')
+passportInit(passport, models)
 
 
 ///////////////////////////////////////////////////////////

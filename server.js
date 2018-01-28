@@ -34,7 +34,6 @@ const models = {
   Poll: require('./models/poll')(mongoose)
 }
 
-
 ///////////////////////////////////////////////////////////
 //  Initialize Express and configure Middleware
 ///////////////////////////////////////////////////////////
@@ -76,7 +75,7 @@ passportInit(passport, models)
 //  Import Express Routes and call with Express app
 ///////////////////////////////////////////////////////////
 const routes = require('./app/routes.js')
-routes(app, passport)
+routes(app, passport, models)
 
 
 

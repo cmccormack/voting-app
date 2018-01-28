@@ -1,7 +1,12 @@
 const path = require('path')
 const User = require('../models/user')
+const Poll = require('../models/poll')
 const { body, validationResult } = require('express-validator/check')
 const { matchedData, sanitize } = require('express-validator/filter')
+
+// const testPoll = new Poll({
+//   createTime: Date.now()
+// })
 
 module.exports = (app, passport) => {
 

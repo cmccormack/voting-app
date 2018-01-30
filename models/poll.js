@@ -6,7 +6,7 @@ module.exports = mongoose => {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
-    createTime: {
+    createdTime: {
       type: String,
       required: true
     },

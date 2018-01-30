@@ -44,9 +44,9 @@ module.exports = (app, passport, models) => {
       ]
     })
 
-    poll.save( err => {
-      if (err) console.log(err.message)
-    })
+    // poll.save( err => {
+    //   if (err) console.log(err.message)
+    // })
   })
 
   // End Testing
@@ -214,20 +214,23 @@ module.exports = (app, passport, models) => {
   ///////////////////////////////////////////////////////////
   app.get('/polls', (req, res) => {
     console.log(`New Request for ${req.hostname + req.path}`)
-    Poll.find({}, (err, docs) => {
-      if (err) {
-        console.log(err)
-        res.type('json').send({
-          success: false,
-          message: 'Error retrieving polls from database'
-        })
-        return
-      }
 
-      const polls = docs.map(({title, choices, createdBy}) => (
-        { title, choices, createdBy }
-      ))
-      res.type('json').send(polls)
+    Poll.find()
+      .populate('createdBy')
+      .exec((err, docs) => {
+        if (err) {
+          console.log(err)
+          res.type('json').send({
+            success: false,
+            message: 'Error retrieving polls from database'
+          })
+          return
+        }
+
+        const polls = docs.map(({title, shortName, choices, createdBy}) => (
+          { title, shortName, choices, user: createdBy.username }
+        ))
+        res.type('json').send(polls)
     })
   })
 

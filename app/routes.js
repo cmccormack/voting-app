@@ -19,11 +19,29 @@ module.exports = (app, passport, models) => {
 
   User.findOne({'username': 'chris'}, (err, user) => {
     console.log(user)
+    const title = `Test Poll ${Math.floor(Math.random() * 1000)}`
     const poll = new Poll({
       createdBy: user._id,
-      title: 'Test Poll 3',
-      shortName: 'Test_Poll_3',
-      createTime: Date.now()
+      title: title,
+      shortName: title.replace(/\s/g, '_'),
+      createdTime: Date.now(),
+      choices: [
+        {
+          index: 0,
+          choice: 'Choice 1',
+          votes: 0
+        },
+        {
+          index: 1,
+          choice: 'Choice 2',
+          votes: 0
+        },
+        {
+          index: 2,
+          choice: 'Choice 3',
+          votes: 0
+        }
+      ]
     })
 
     poll.save( err => {
@@ -189,6 +207,29 @@ module.exports = (app, passport, models) => {
 
   })
 
+
+
+  ///////////////////////////////////////////////////////////
+  // Handle Get Requests for Polls
+  ///////////////////////////////////////////////////////////
+  app.get('/polls', (req, res) => {
+    console.log(`New Request for ${req.hostname + req.path}`)
+    Poll.find({}, (err, docs) => {
+      if (err) {
+        console.log(err)
+        res.type('json').send({
+          success: false,
+          message: 'Error retrieving polls from database'
+        })
+        return
+      }
+
+      const polls = docs.map(({title, choices, createdBy}) => (
+        { title, choices, createdBy }
+      ))
+      res.type('json').send(polls)
+    })
+  })
 
   ///////////////////////////////////////////////////////////
   // Handle Invalid Routes that React Router Does Not

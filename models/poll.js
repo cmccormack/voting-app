@@ -18,7 +18,7 @@ module.exports = mongoose => {
     shortName: {
       type: String,
       unique: true,
-      required: false
+      required: true
     },
     choices: [{
       index: Number,

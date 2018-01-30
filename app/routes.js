@@ -10,7 +10,28 @@ module.exports = (app, passport, models) => {
 
   const { User, Poll } = models
 
+  // Testing
 
+
+  Poll.find({}, (err, doc) => {
+    console.log(doc)
+  })
+
+  User.findOne({'username': 'chris'}, (err, user) => {
+    console.log(user)
+    const poll = new Poll({
+      createdBy: user._id,
+      title: 'Test Poll 3',
+      shortName: 'Test_Poll_3',
+      createTime: Date.now()
+    })
+
+    poll.save( err => {
+      if (err) console.log(err.message)
+    })
+  })
+
+  // End Testing
 
   ///////////////////////////////////////////////////////////
   // Testing/Debug Middleware, DELETE LATER

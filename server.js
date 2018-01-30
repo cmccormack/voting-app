@@ -26,6 +26,8 @@ db.on('error', err => {
   console.error(`Mongoose default connection error: ${err}`) 
 })
 db.once('open', () => {
+  // db.dropCollection('users')
+  // db.dropCollection('polls')
   console.log(`Mongoose default connection opened [${dbconf.db}]`)
 })
 
@@ -86,3 +88,6 @@ const server = app.listen(app.get('port'), () => {
   const {port, address} = server.address()
   console.log(`Express server started on ${address}:${port}`)
 })
+
+
+

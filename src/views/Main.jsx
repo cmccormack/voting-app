@@ -40,45 +40,79 @@ class Main extends Component {
 
   constructor(props) {
     super(props)
+
+    this.state = {
+      loading: true,
+      polls: []
+    }
   }
 
+  componentDidMount() {
+    fetch('/polls', {
+      method: 'GET',
+      credentials: 'include'
+    })
+      .then(res => res.json()).then((polls) => {
+        // console.log(`polls: ${JSON.stringify(data)}`)
+        this.setState({ polls, loading: false })
+      })
+  }
+
+
   render() {
+
+    const title = (
+      <Row>
+        <Col size="s12" color="teal-text text-darken-3">
+          <Header>Welcome to Votery!</Header>
+        </Col>
+
+        <Col size="s12" color="teal-text text-darken-1">
+          <SubHeader>
+            {'Check out some of the great user-submitted ' +
+              'polls below, or create your own.'}
+          </SubHeader>
+          <SubHeader>
+            {'See if the thing you like is better then ' +
+              'the thing that other person likes!'}
+          </SubHeader>
+        </Col>
+      </Row>
+    )
+
+    const loadingDisplay = (
+        <h1 className="teal-text text-darken-3">Loading...</h1>
+    )
+
+    const body = (
+      <Row>
+        { this.state.polls.map(({title, shortName, user}) => (
+          <Col size="s12 m6" key={shortName}>
+            <GraphCard
+              title={title}
+              content={
+                <img
+                  className="responsive-img"
+                  src="../images/graph-placeholder.png"
+                />
+              }
+              actions={`Created by ${user}`}
+            />
+          </Col>
+        ))}
+      </Row>
+    )
+
     return (
       <MainWrapper>
-        
-        <Row>
-          <Col size="s12" color="teal-text text-darken-3">
-            <Header>Welcome to Votery!</Header>
-          </Col>
-
-          <Col size="s12" color="teal-text text-darken-1">
-            <SubHeader>
-              {'Check out some of the great user-submitted ' +
-                'polls below, or create your own.'}
-            </SubHeader>
-            <SubHeader>
-              {'See if the thing you like is better then ' + 
-              'the thing that other person likes!'}
-            </SubHeader>
-          </Col>
-        </Row>
-
-        <Row>
-          { Array(10).fill(1).map((v,i)=> (
-            <Col size="s12 m6" key={v*i}>
-              <GraphCard 
-                title={'Card Title ' + i}
-                content={
-                  <img
-                    className="responsive-img"
-                    src="../images/graph-placeholder.png"
-                  />
-                }
-                actions={'Some actions will go here'}
-              />
-            </Col>
-          ))}
-        </Row>
+        { title }
+        {
+          this.state.loading 
+            ? loadingDisplay 
+            : this.state.polls
+              ? body
+              : (<h1>No polls found.  Be the first to create one!</h1>)
+        }
       </MainWrapper>
     )
   }

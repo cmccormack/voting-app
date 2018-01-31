@@ -212,7 +212,7 @@ module.exports = (app, passport, models) => {
   ///////////////////////////////////////////////////////////
   // Handle Get Requests for Polls
   ///////////////////////////////////////////////////////////
-  app.get('/polls', (req, res) => {
+  app.post('/polls', (req, res) => {
     console.log(`New Request for ${req.hostname + req.path}`)
 
     Poll.find()

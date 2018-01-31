@@ -28,9 +28,9 @@ const Header = styled.h1`
   margin-bottom: '10px';
 `
 const SubHeaderWrapper = styled.div.attrs({
-  className: "col s12 teal-text text-darken-1"
+  className: props => props.color
 })`
-
+  margin: 40px 0;
 `
 
 const SubHeader = styled.h6`
@@ -49,7 +49,7 @@ class Main extends Component {
 
   componentDidMount() {
     fetch('/polls', {
-      method: 'GET',
+      method: 'POST',
       credentials: 'include'
     })
       .then(res => res.json()).then((polls) => {
@@ -67,15 +67,17 @@ class Main extends Component {
           <Header>Welcome to Votery!</Header>
         </Col>
 
-        <Col size="s12" color="teal-text text-darken-1">
-          <SubHeader>
-            {'Check out some of the great user-submitted ' +
-              'polls below, or create your own.'}
-          </SubHeader>
-          <SubHeader>
-            {'See if the thing you like is better then ' +
-              'the thing that other person likes!'}
-          </SubHeader>
+        <Col size="s12">
+          <SubHeaderWrapper color="teal-text text-darken-1">
+            <SubHeader>
+              {'Check out some of the great user-submitted ' +
+                'polls below, or create your own.'}
+            </SubHeader>
+            <SubHeader>
+              {'See if the thing you like is better then ' +
+                'the thing that other person likes!'}
+            </SubHeader>
+          </SubHeaderWrapper>
         </Col>
       </Row>
     )

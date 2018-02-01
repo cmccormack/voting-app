@@ -4,6 +4,13 @@ import styled from 'styled-components'
 import { GraphCard } from './layout'
 import '../images/graph-placeholder.png'
 
+
+const Container = ({ className="", children }) => (
+  <div className={`container ${className}`}>
+    {children}
+  </div>
+)
+
 const Row = ({ children }) => (
   <div className="row">
     { children }
@@ -16,24 +23,35 @@ const Col = ({ size='s12', color='', children }) => (
   </div>
 )
 
-const MainWrapper = styled.div.attrs({
-  className: "container center teal lighten-5 z-depth-4"
-})`
+const MainWrapper = styled(Container)`
   border-radius: 5px;
   margin-top: 80px;
   padding: 20px;
 `
 
-const Header = styled.h1`
-  margin-bottom: '10px';
-`
-const SubHeaderWrapper = styled.div.attrs({
-  className: props => props.color
-})`
-  margin: 40px 0;
+const SectionWrapper = styled.div`
+  box-shadow: inset 1px 1px 3px #6aa;
+  border-radius: 5px;
+  padding: 20px;
 `
 
-const SubHeader = styled.h6`
+const TitleWrapper = SectionWrapper.extend`
+
+`
+
+const BodyWrapper = SectionWrapper.extend`
+  padding-top: 40px;
+  margin-top: 20px;
+`
+
+
+
+const Header = styled.p.attrs({
+  className: ({color}) => color,
+})`
+  margin: ${({ margin }) => margin || '0'};
+  padding: ${({ padding }) => padding || '0'};
+  font-size: ${({ fontSize }) => fontSize};
 `
 
 class Main extends Component {
@@ -53,7 +71,7 @@ class Main extends Component {
       credentials: 'include'
     })
       .then(res => res.json()).then((polls) => {
-        // console.log(`polls: ${JSON.stringify(data)}`)
+        console.log(`polls: ${JSON.stringify(polls)}`)
         this.setState({ polls, loading: false })
       })
   }
@@ -63,21 +81,33 @@ class Main extends Component {
 
     const title = (
       <Row>
-        <Col size="s12" color="teal-text text-darken-3">
-          <Header>Welcome to Votery!</Header>
+        <Col size="s12">
+          <Header
+            className="teal-text text-darken-3"
+            fontSize="4rem"
+            padding="3rem 0"
+          >
+            {'Welcome to Votery!'}
+          </Header>
         </Col>
 
         <Col size="s12">
-          <SubHeaderWrapper color="teal-text text-darken-1">
-            <SubHeader>
-              {'Check out some of the great user-submitted ' +
-                'polls below, or create your own.'}
-            </SubHeader>
-            <SubHeader>
-              {'See if the thing you like is better then ' +
-                'the thing that other person likes!'}
-            </SubHeader>
-          </SubHeaderWrapper>
+          <Header
+            className="teal-text text-darken-1"
+            fontSize="1.2rem"
+            padding=".2rem 0"
+          >
+            {'Check out some of the great user-submitted ' +
+            'polls below, or create your own.'}
+          </Header>
+          <Header
+            className="teal-text text-darken-1"
+            fontSize="1.2rem"
+            padding=".2rem 0"
+          >
+            {'See if the thing you like is better then ' +
+            'the thing that other person likes!'}
+          </Header>
         </Col>
       </Row>
     )
@@ -105,16 +135,45 @@ class Main extends Component {
       </Row>
     )
 
+    const pollsEmpty = (
+      <Row>
+        <Col size="s12">
+          <Header
+            className="teal-text text-darken-2"
+            fontSize="24px"
+          >
+            {'No polls found.  '}
+            <a
+              className="teal-text text-accent-4"
+              href="/new"
+            >
+              {'Be the first to create one!'}
+            </a>
+          </Header>
+        </Col>
+      </Row>
+    )
+
     return (
-      <MainWrapper>
-        { title }
+      <MainWrapper
+        className="center teal lighten-4 z-depth-2"
+      >
+        <TitleWrapper
+          className="teal lighten-5"
+        >
+          { title }
+        </TitleWrapper>
+        <BodyWrapper
+          className="teal lighten-5"
+        >
         {
           this.state.loading 
             ? loadingDisplay 
-            : this.state.polls
+            : this.state.polls.length > 0
               ? body
-              : (<h1>No polls found.  Be the first to create one!</h1>)
+              : pollsEmpty
         }
+        </BodyWrapper>
       </MainWrapper>
     )
   }

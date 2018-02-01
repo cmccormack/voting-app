@@ -196,14 +196,25 @@ module.exports = (app, passport, models) => {
 
   ], (req, res) => {
     console.log(req.body)
+    console.log(req.user)
+
     const errors = validationResult(req)
     
     const response = {
       success: errors.isEmpty(),
-      message: !errors.isEmpty() ? errors.array()[0].msg : ''
+      message: !errors.isEmpty() ? errors.array()[0].msg : '',
+      redirect: false
+    }
+
+    if (!req.user) {
+      response.redirect = '/'
     }
 
     res.type('json').send(response)
+
+    const poll = req.body
+    console.log(poll)
+    console.log(req.user)
 
   })
 

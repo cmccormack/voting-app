@@ -10,14 +10,13 @@ const PrivateRoute = (props) => {
   <Route
       {...rest}
       render={routeProps => {
-        console.log(props)
         return (
           !loggedIn && allowRedirects
-          ? <Redirect to={{
-            pathname: '/login',
-            state: { referrer: props.location }
-          }} />
-          : <Component {...props} {...routeProps} />
+            ? <Redirect to={{
+                pathname: '/login',
+                state: { referrer: props.location }
+              }} />
+            : <Component {...props} {...routeProps} />
         )
       }}
     />

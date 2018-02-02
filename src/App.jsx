@@ -31,7 +31,8 @@ class App extends Component {
     this.state = {
       loggedIn: false,
       user: '',
-      allowRedirects: false
+      allowRedirects: false,
+      loading: true
     }
     this.getAuthStatus = this.getAuthStatus.bind(this)
     this.updateAuthStatus = this.updateAuthStatus.bind(this)
@@ -64,12 +65,14 @@ class App extends Component {
   }
 
   updateAuthStatus(callback) {
+    
     const cb = callback || function() {}
 
     this.getAuthStatus(data => {
+      const { user, isAuthenticated: loggedIn } = data
       this.setState({
-        loggedIn: data.isAuthenticated,
-        user: data.user,
+        loggedIn,
+        user,
         allowRedirects: true
       })
       cb(data)
@@ -78,7 +81,16 @@ class App extends Component {
 
 
   componentDidMount() {
-    this.updateAuthStatus(console.log)
+    const intervalId = setTimeout(
+      () => this.setState({ loading: false }),
+      2000
+    )
+    this.updateAuthStatus(
+      () => {
+        clearInterval(intervalId)
+        this.setState({loading: false})
+      }
+    )
   }
 
 
@@ -89,16 +101,21 @@ class App extends Component {
         <Route render={routeProps => (
           <Header
             handleLogout={this.handleLogout}
+            updateAuth={this.updateAuthStatus}
             {...this.state}
             {...routeProps}
           /> 
         )} />
         <Main>
-          <Routes
-            {...this.state}
-            handleLogout={this.handleLogout}
-            updateAuthStatus={this.updateAuthStatus}
-          />
+          { this.state.loading
+            ? <div className="center teal-text darken-2"><h1>Loading...</h1></div>
+            : <Routes
+                {...this.state}
+                handleLogout={this.handleLogout}
+                updateAuthStatus={this.updateAuthStatus}
+              />
+            
+          }
         </Main>
         <Footer />
       </Wrapper>

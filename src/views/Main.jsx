@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-
+import { Link } from 'react-router-dom'
 import { GraphCard } from './layout'
 import '../images/graph-placeholder.png'
 
@@ -143,12 +143,12 @@ class Main extends Component {
             fontSize="24px"
           >
             {'No polls found.  '}
-            <a
+            <Link
               className="teal-text text-accent-4"
-              href="/new"
+              to="/new"
             >
               {'Be the first to create one!'}
-            </a>
+            </Link>
           </Header>
         </Col>
       </Row>

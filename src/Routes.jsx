@@ -80,7 +80,9 @@ const Routes = ({ loggedIn, allowRedirects, user, ...props}) => (
 
       // 404 Page not found Route
       <Route render={(props) => (
-        <h1>404 Page not found</h1>
+        <div className="center teal-text darken-3">
+          <h1>404 Page not found</h1>
+        </div>
       )} />
     </Switch> 
   )

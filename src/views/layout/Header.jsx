@@ -6,7 +6,7 @@ const NavItem = ({ hidden, to, content }) => (
   <li hidden={hidden}><Link to={to}>{content}</Link></li>
 )
 
-const Nav = ({ className, id, items }) => (
+const NavItems = ({ className, id, items }) => (
   <ul className={className} id={id}>
     {items.map((item, i) => (
       <NavItem {...item} key={item.content} />
@@ -45,7 +45,7 @@ class Header extends Component {
             <div className="nav-wrapper">
               <div className="col s12">
                 <Link to='/main' className="brand-logo">Votery</Link>
-                <Nav
+                <NavItems
                   className="right hide-on-med-and-down"
                   id="top-nav"
                   items={links}

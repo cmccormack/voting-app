@@ -2,14 +2,25 @@ import React, { Component } from 'react'
 import { Redirect, Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-const NavItem = ({ hidden, to, content }) => (
-  <li hidden={hidden}><Link to={to}>{content}</Link></li>
+const NavItem = ({ hidden, to, content, updateAuth }) => (
+  <li hidden={hidden}>
+    <Link
+      onClick={ updateAuth }
+      to={to}
+    >
+      {content}
+    </Link>
+  </li>
 )
 
-const NavItems = ({ className, id, items }) => (
+const NavItems = ({ className, id, items, updateAuth }) => (
   <ul className={className} id={id}>
     {items.map((item, i) => (
-      <NavItem {...item} key={item.content} />
+      <NavItem 
+        {...item}
+        key={item.content}
+        updateAuth={updateAuth}
+      />
     ))}
   </ul>
 )
@@ -18,6 +29,11 @@ class Header extends Component {
 
   constructor(props) {
     super(props)
+    this.updateAuth = this.updateAuth.bind(this)
+  }
+
+  updateAuth() {
+    this.props.updateAuth()
   }
 
   componentDidMount() {
@@ -39,7 +55,7 @@ class Header extends Component {
 
     return (
       <header>
-        <Nav className="side-nav" id="side-nav" items={links} />
+        <NavItems className="side-nav" id="side-nav" items={links} />
         <div className="navbar-fixed row">
           <nav className="teal lighten-1">
             <div className="nav-wrapper">
@@ -49,6 +65,7 @@ class Header extends Component {
                   className="right hide-on-med-and-down"
                   id="top-nav"
                   items={links}
+                  updateAuth={this.updateAuth}
                 />
                 <a
                   className="button-collapse right hide-on-large"

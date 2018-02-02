@@ -4,7 +4,8 @@ import styled from 'styled-components'
 import { Icon } from './'
 
 const InputAction = styled.a.attrs({
-  href: "#"
+  href: "#",
+  tabIndex: -1
 })`
   color: initial;
   position: absolute;

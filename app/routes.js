@@ -63,7 +63,7 @@ module.exports = (app, passport, models) => {
   })
 
   ///////////////////////////////////////////////////////////
-  // Test API is Availabile
+  // Test if API is Availabile
   ///////////////////////////////////////////////////////////
   app.get('/api_test', (req, res) => {
     res.type('json').send(JSON.stringify(
@@ -195,19 +195,20 @@ module.exports = (app, passport, models) => {
     sanitize('choices.*').trim(),
 
   ], (req, res) => {
-    console.log(req.body)
-    console.log(req.user)
 
     const errors = validationResult(req)
     
     const response = {
       success: errors.isEmpty(),
-      message: !errors.isEmpty() ? errors.array()[0].msg : '',
-      redirect: false
+      message: !errors.isEmpty() ? errors.array()[0].msg : ''
     }
 
     if (!req.user) {
-      response.redirect = '/'
+      res.type('json').send({
+        success: false,
+        message: "Must be logged in to add new poll."
+      })
+      return
     }
 
     res.type('json').send(response)
@@ -223,7 +224,7 @@ module.exports = (app, passport, models) => {
   ///////////////////////////////////////////////////////////
   // Handle Get Requests for Polls
   ///////////////////////////////////////////////////////////
-  app.post('/polls', (req, res) => {
+  app.get('/polls', (req, res) => {
     console.log(`New Request for ${req.hostname + req.path}`)
 
     Poll.find()

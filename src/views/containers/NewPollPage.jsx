@@ -62,10 +62,7 @@ class NewPollPage extends Component {
     this.props.updateAuthStatus(data => {
 
       // Return early if user is no longer logged in
-      if (!data.loggedIn) {
-        console.log("No user logged in, redirecting to Login page")
-        return
-      }
+      if (!data.loggedIn) return
 
       const { title, shortName, choices } = this.state
       const myHeaders = new Headers()
@@ -79,8 +76,6 @@ class NewPollPage extends Component {
         body: JSON.stringify({ title, shortName, choices })
       })
         .then(res => res.json()).then(data => {
-          // Response from poll submission
-          console.log(data)
           this.setState({error: data.success ? '' : data.message})
         })
         .catch(console.error)

@@ -67,7 +67,7 @@ class Main extends Component {
 
   componentDidMount() {
     fetch('/polls', {
-      method: 'POST',
+      method: 'GET',
       credentials: 'include'
     })
       .then(res => res.json()).then((polls) => {

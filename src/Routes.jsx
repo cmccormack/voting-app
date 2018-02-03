@@ -64,6 +64,7 @@ const Routes = ({ loggedIn, allowRedirects, user, ...props}) => (
         exact path="/new"
         component={NewPollPage}
         loggedIn={loggedIn}
+        updateAuthStatus={props.updateAuthStatus}
       />
 
       // Main page route 

@@ -59,23 +59,33 @@ class NewPollPage extends Component {
   handleSubmit(event) {
     event.preventDefault()
 
-    const { title, shortName, choices } = this.state
-    const myHeaders = new Headers()
-    myHeaders.append("Content-Type", "application/json")
+    this.props.updateAuthStatus(data => {
 
-    fetch("/submit_new_poll", {
-      method: "POST",
-      headers: myHeaders,
-      cache: "default",
-      credentials: "same-origin",
-      body: JSON.stringify({ title, shortName, choices })
-    })
-      .then(res => res.json()).then(data => {
-        // Response from poll submission
-        console.log(data)
-        this.setState({error: data.success ? '' : data.message})
+      // Return early if user is no longer logged in
+      if (!data.loggedIn) {
+        console.log("No user logged in, redirecting to Login page")
+        return
+      }
+
+      const { title, shortName, choices } = this.state
+      const myHeaders = new Headers()
+      myHeaders.append("Content-Type", "application/json")
+  
+      fetch("/submit_new_poll", {
+        method: "POST",
+        headers: myHeaders,
+        cache: "default",
+        credentials: "same-origin",
+        body: JSON.stringify({ title, shortName, choices })
       })
-      .catch(console.error)
+        .then(res => res.json()).then(data => {
+          // Response from poll submission
+          console.log(data)
+          this.setState({error: data.success ? '' : data.message})
+        })
+        .catch(console.error)
+    })
+
   }
 
   render() {

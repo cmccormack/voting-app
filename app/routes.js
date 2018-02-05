@@ -1,5 +1,4 @@
 const path = require('path')
-const Poll = require('../models/poll')
 const { body, validationResult } = require('express-validator/check')
 const { matchedData, sanitize } = require('express-validator/filter')
 
@@ -176,6 +175,8 @@ module.exports = (app, passport, models) => {
 
     body('shortName')
       .trim()
+      .isLength({ max: 16 })
+      .withMessage('Short Name should be max 16 characters')
       .optional({checkFalsy: true}).isAscii()
       .withMessage('Short Name should include only valid ascii characters'),
 
@@ -194,29 +195,56 @@ module.exports = (app, passport, models) => {
     sanitize('shortName').trim(),
     sanitize('choices.*').trim(),
 
-  ], (req, res) => {
+  ], (req, res, next) => {
 
     const errors = validationResult(req)
     
-    const response = {
-      success: errors.isEmpty(),
-      message: !errors.isEmpty() ? errors.array()[0].msg : ''
+    if (!errors.isEmpty()) {
+      return next( Error(errors.array()[0].msg) )
     }
 
     if (!req.user) {
-      res.type('json').send({
-        success: false,
-        message: "Must be logged in to add new poll."
-      })
-      return
+      return next( new Error("Must be logged in to add new poll.") )
     }
 
-    res.type('json').send(response)
+    // console.log(`req.body: ${JSON.stringify(req.body, null, 2)}`)
+    // console.log(`req.user: ${JSON.stringify(req.user, null, 2)}`)
 
-    const poll = req.body
-    console.log(poll)
-    console.log(req.user)
+    const { title, shortName, choices } = req.body
+    User.findOne({'_id': req.user._id}, (err, user) => {
+      // console.log(`User: ${JSON.stringify(user, null, 2)}`)
+      if (err) next( new Error(`User ${user} not found in database`) )
 
+      const poll = new Poll({
+        choices: choices.map((choice, index) => {
+          return {
+            index,
+            choice,
+            votes: 0
+          }
+        }),
+        createdTime: Date.now(),
+        createdBy: user._id,
+        shortName: shortName ? shortName : title.replace(/\s/g, '_'),
+        title: title,
+        voters: []
+      })
+
+      console.log(`New Poll: ${JSON.stringify(poll, null, 2)}`)
+
+      poll.save(err => {
+        if (err) {
+          return next( new Error(err) )
+        }
+
+        res.type('json').send({
+          success: true,
+          message: `Successfully submitted new poll ${req.body.title}`
+        })
+
+      })
+
+    })
   })
 
 
@@ -269,6 +297,10 @@ module.exports = (app, passport, models) => {
   ///////////////////////////////////////////////////////////
   app.use((err, req, res, next) => {
     console.log(`Error Handler Middleware: ${err.message}`)
+    res.type('json').send({
+      success: false,
+      message: err.message ? err.message : err
+    })
   })
 
 }

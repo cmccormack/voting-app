@@ -1,6 +1,6 @@
 const path = require('path')
 const { body, validationResult } = require('express-validator/check')
-const { matchedData, sanitize } = require('express-validator/filter')
+const { matchedData, sanitizeBody } = require('express-validator/filter')
 
 module.exports = (app, passport, models) => {
 
@@ -181,8 +181,8 @@ module.exports = (app, passport, models) => {
       .withMessage('Short Name should include only valid ascii characters'),
 
     body('choices')
-      .custom(array => array.length >= 2)
-      .withMessage('Must include at least two choices'),
+      .custom(array => Array.from(new Set(array)).length >= 2)
+      .withMessage('Must include at least two unique choices'),
 
     body('choices.*')
       .trim()
@@ -191,9 +191,9 @@ module.exports = (app, passport, models) => {
       .isAscii()
       .withMessage('Choices should include only valid ascii characters'),
 
-    sanitize('title').trim(),
-    sanitize('shortName').trim(),
-    sanitize('choices.*').trim(),
+    sanitizeBody('title').trim(),
+    sanitizeBody('shortName').trim(),
+    sanitizeBody('choices.*').trim(),
 
   ], (req, res, next) => {
 
@@ -207,13 +207,14 @@ module.exports = (app, passport, models) => {
       return next( new Error("Must be logged in to add new poll.") )
     }
 
-    // console.log(`req.body: ${JSON.stringify(req.body, null, 2)}`)
-    // console.log(`req.user: ${JSON.stringify(req.user, null, 2)}`)
-
     const { title, shortName, choices } = req.body
+    // Ensure choices are unique
+    if (!Array.from(new Set(choices)).length >= 2) {
+      return next (new Error('Must include at least 2 unique choices'))
+    }
     User.findOne({'_id': req.user._id}, (err, user) => {
       // console.log(`User: ${JSON.stringify(user, null, 2)}`)
-      if (err) next( new Error(`User ${user} not found in database`) )
+      if (err) return next( new Error(`User ${user} not found in database`) )
 
       const poll = new Poll({
         choices: choices.map((choice, index) => {
@@ -234,7 +235,7 @@ module.exports = (app, passport, models) => {
 
       poll.save(err => {
         if (err) {
-          return next( new Error(err) )
+          return next( new Error(err.message) )
         }
 
         res.type('json').send({
@@ -296,10 +297,13 @@ module.exports = (app, passport, models) => {
   // Error Handler
   ///////////////////////////////////////////////////////////
   app.use((err, req, res, next) => {
-    console.log(`Error Handler Middleware: ${err.message}`)
+    console.log(err)
+    // Remove preceeding error warning
+    const errmsg = err.message ? err.message : err
+    console.log(`Error Handler Middleware: ${errmsg}`)
     res.type('json').send({
       success: false,
-      message: err.message ? err.message : err
+      message: errmsg
     })
   })
 

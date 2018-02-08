@@ -52,6 +52,7 @@ module.exports = (app, passport, models) => {
     })
   })
 
+
   ///////////////////////////////////////////////////////////
   // User Authentication Verification
   ///////////////////////////////////////////////////////////
@@ -183,17 +184,17 @@ module.exports = (app, passport, models) => {
     }
 
     if (!req.user) {
-      return next( new Error("Must be logged in to add new poll.") )
+      return next( Error("Must be logged in to add new poll.") )
     }
 
     const { title, shortName, choices } = req.body
     // Ensure choices are unique
     if (!Array.from(new Set(choices)).length >= 2) {
-      return next (new Error('Must include at least 2 unique choices'))
+      return next ( Error('Must include at least 2 unique choices!') )
     }
     User.findOne({'_id': req.user._id}, (err, user) => {
       // console.log(`User: ${JSON.stringify(user, null, 2)}`)
-      if (err) return next( new Error(`User ${user} not found in database`) )
+      if (err) return next( Error(`User ${user} not found in database`) )
 
       const poll = new Poll({
         choices: choices.map((choice, index) => {

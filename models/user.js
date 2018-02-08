@@ -15,11 +15,7 @@ module.exports = mongoose => {
     polls: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Poll'
-    }],
-    pollCount: {
-      type: Number,
-      required: true
-    }
+    }]
   })
 
   userSchema.methods.comparePasswords = function(password) {

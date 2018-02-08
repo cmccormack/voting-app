@@ -193,7 +193,7 @@ module.exports = (app, passport, models) => {
       return next ( Error('Must include at least 2 unique choices!') )
     }
     User.findOne({'_id': req.user._id}, (err, user) => {
-      // console.log(`User: ${JSON.stringify(user, null, 2)}`)
+
       if (err) return next( Error(`User ${user} not found in database`) )
 
       const poll = new Poll({
@@ -206,7 +206,7 @@ module.exports = (app, passport, models) => {
         }),
         createdTime: Date.now(),
         createdBy: user._id,
-        shortName: shortName ? shortName : title.replace(/\s/g, '_'),
+        shortName: shortName ? shortName : user.polls.length,
         title: title,
         voters: []
       })
@@ -236,7 +236,6 @@ module.exports = (app, passport, models) => {
   })
 
 
-
   ///////////////////////////////////////////////////////////
   // Handle Get Requests for Polls
   ///////////////////////////////////////////////////////////
@@ -261,6 +260,7 @@ module.exports = (app, passport, models) => {
         res.type('json').send(polls)
     })
   })
+
 
   ///////////////////////////////////////////////////////////
   // Handle Invalid Routes that React Router Does Not

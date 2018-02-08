@@ -34,7 +34,8 @@ module.exports = (passport, models) => {
         console.log(`Mongoose: User [${username}] not found in db, adding...`)
         const newUser = new User({
           username: username,
-          password: hashPassword(password)
+          password: hashPassword(password),
+          polls: []
         })
 
         // Save new user to database

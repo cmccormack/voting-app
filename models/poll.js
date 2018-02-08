@@ -34,7 +34,6 @@ module.exports = mongoose => {
   })
 
   PollSchema.pre('save', function(next) {
-    console.log('Poll pre-save')
     Poll.find({})
       .where('createdBy').equals(this.createdBy)
       .or([ { title: this.title }, { shortName: this.shortName } ])

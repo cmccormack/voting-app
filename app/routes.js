@@ -178,6 +178,7 @@ module.exports = (app, passport, models) => {
   ], (req, res, next) => {
 
     const errors = validationResult(req)
+    const { title, shortName, choices } = req.body
     
     if (!errors.isEmpty()) {
       return next( Error(errors.array()[0].msg) )
@@ -187,47 +188,39 @@ module.exports = (app, passport, models) => {
       return next( Error("Must be logged in to add new poll.") )
     }
 
-    const { title, shortName, choices } = req.body
-    // Ensure choices are unique
     if (!Array.from(new Set(choices)).length >= 2) {
       return next ( Error('Must include at least 2 unique choices!') )
     }
-    User.findOne({'_id': req.user._id}, (err, user) => {
 
+    User.findOne({'_id': req.user._id}, (err, user) => {
+      
       if (err) return next( Error(`User ${user} not found in database`) )
+      
 
       const poll = new Poll({
-        choices: choices.map((choice, index) => {
-          return {
-            index,
-            choice,
-            votes: 0
-          }
-        }),
+        choices: choices.map((choice, index) => ({ index, choice, votes: 0 })),
         createdTime: Date.now(),
         createdBy: user._id,
-        shortName: shortName ? shortName : user.polls.length,
-        title: title,
+        shortName: shortName || user.polls.length,
+        title,
         voters: []
       })
 
-      console.log(`New Poll: ${JSON.stringify(poll, null, 2)}`)
+      // console.log(`New Poll: ${JSON.stringify(poll, null, 2)}`)
 
       poll.save(err => {
 
-        if (err) {
-          return next( new Error(err.message) )
-        }
+        if (err) return next( new Error(err) )
 
         User.findOneAndUpdate(
           { _id: user._id },
           { $push: { polls: poll._id }},
-          (err, doc) => { console.log(doc) }
+          err => err && next(Error(err))
         )
 
         res.type('json').send({
           success: true,
-          message: `Successfully submitted new poll ${req.body.title}`
+          message: `Successfully submitted new poll ${title}`
         })
 
       })
@@ -284,8 +277,8 @@ module.exports = (app, passport, models) => {
   // Error Handler
   ///////////////////////////////////////////////////////////
   app.use((err, req, res, next) => {
-    console.log(err)
-    // Remove preceeding error warning
+    console.log(err.message)
+
     const errmsg = err.message ? err.message : err
     console.log(`Error Handler Middleware: ${errmsg}`)
     res.type('json').send({

@@ -12,12 +12,10 @@ module.exports = mongoose => {
     },
     title: {
       type: String,
-      unique: true,
       required: true
     },
     shortName: {
       type: String,
-      unique: true,
       required: true
     },
     choices: [{
@@ -36,18 +34,19 @@ module.exports = mongoose => {
   })
 
   PollSchema.pre('save', function(next) {
-
+    console.log('Poll pre-save')
     Poll.find({})
       .where('createdBy').equals(this.createdBy)
       .or([ { title: this.title }, { shortName: this.shortName } ])
       .exec((err, docs) => {
-        console.log(err)
-        console.log(docs)
         if (docs.length > 0) {
-          return next( new Error('Poll with that title already exists!') )
-        } else {
-          return next()
+          if (this.title === docs[0].title) {
+            return next( Error('Poll with that title already exists!') )
+          } else {
+            return next( Error('Poll with that short name already exists!') )
+          }
         }
+        return next()
       })
   })
 

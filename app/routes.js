@@ -9,47 +9,6 @@ module.exports = (app, passport, models) => {
 
   const { User, Poll } = models
 
-  // Testing
-
-
-  Poll.find({}, (err, doc) => {
-    console.log(doc)
-  })
-
-  User.findOne({'username': 'chris'}, (err, user) => {
-    console.log(user)
-    const title = `Test Poll ${Math.floor(Math.random() * 1000)}`
-    const poll = new Poll({
-      createdBy: user._id,
-      title: title,
-      shortName: title.replace(/\s/g, '_'),
-      createdTime: Date.now(),
-      choices: [
-        {
-          index: 0,
-          choice: 'Choice 1',
-          votes: 0
-        },
-        {
-          index: 1,
-          choice: 'Choice 2',
-          votes: 0
-        },
-        {
-          index: 2,
-          choice: 'Choice 3',
-          votes: 0
-        }
-      ]
-    })
-
-    // poll.save( err => {
-    //   if (err) console.log(err.message)
-    // })
-  })
-
-  // End Testing
-
   ///////////////////////////////////////////////////////////
   // Testing/Debug Middleware, DELETE LATER
   ///////////////////////////////////////////////////////////
@@ -62,16 +21,36 @@ module.exports = (app, passport, models) => {
   })
 
   ///////////////////////////////////////////////////////////
-  // Test if API is Availabile
+  // Calls to API
   ///////////////////////////////////////////////////////////
-  app.get('/api_test', (req, res) => {
-    res.type('json').send(JSON.stringify(
-      {
-        'apiAvailable': 'success'
-      }
-    ))
-  })
 
+  app.get('/api/:param', (req, res, next) => {
+    
+    if (req.params.param === 'test') {
+      return res.type('json').send(JSON.stringify({
+        'api_available': 'success'
+      }))
+    }
+    const collections = {
+      users: User,
+      polls: Poll
+    }
+    const collection = collections[req.params.param]
+
+    if (!collection) return next()
+
+    collection.find({}, (err, docs) => {
+      if (err) {
+        const errmsg = `Could not access ${param} collection`
+        res.type('json').send({
+          success: false,
+          message: errmsg
+        })
+        return next(Error(errmsg))
+      }
+      res.type('json').send(JSON.stringify(docs))
+    })
+  })
 
   ///////////////////////////////////////////////////////////
   // User Authentication Verification
@@ -234,9 +213,16 @@ module.exports = (app, passport, models) => {
       console.log(`New Poll: ${JSON.stringify(poll, null, 2)}`)
 
       poll.save(err => {
+
         if (err) {
           return next( new Error(err.message) )
         }
+
+        User.findOneAndUpdate(
+          { _id: user._id },
+          { $push: { polls: poll._id }},
+          (err, doc) => { console.log(doc) }
+        )
 
         res.type('json').send({
           success: true,

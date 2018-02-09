@@ -232,25 +232,20 @@ module.exports = (app, passport, models) => {
   ///////////////////////////////////////////////////////////
   // Handle Get Requests for Polls
   ///////////////////////////////////////////////////////////
-  app.get('/polls', (req, res) => {
+  app.get('/polls', (req, res, next) => {
     console.log(`New Request for ${req.hostname + req.path}`)
 
     Poll.find()
       .populate('createdBy')
-      .exec((err, docs) => {
+      .exec((err, polls) => {
         if (err) {
-          console.log(err)
-          res.type('json').send({
-            success: false,
-            message: 'Error retrieving polls from database'
-          })
-          return
+          return next( Error('Error retrieving polls from database') )
         }
 
-        const polls = docs.map(({title, shortName, choices, createdBy}) => (
-          { title, shortName, choices, user: createdBy.username }
-        ))
-        res.type('json').send(polls)
+        res.type('json').send(polls.map(
+          ({ title, shortName, choices, createdBy: { username } }) => (
+            { title, shortName, choices, createdBy: username }
+          )))
     })
   })
 
@@ -280,7 +275,7 @@ module.exports = (app, passport, models) => {
     console.log(err.message)
 
     const errmsg = err.message ? err.message : err
-    console.log(`Error Handler Middleware: ${errmsg}`)
+    console.log(`Error Middleware: ${errmsg}`)
     res.type('json').send({
       success: false,
       message: errmsg

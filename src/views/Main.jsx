@@ -71,7 +71,7 @@ class Main extends Component {
       credentials: 'include'
     })
       .then(res => res.json()).then((polls) => {
-        console.log(`polls: ${JSON.stringify(polls)}`)
+        // console.log(`polls: ${JSON.stringify(polls)}`)
         this.setState({ polls, loading: false })
       })
   }

@@ -8,6 +8,7 @@ import FormRow from './FormRow'
 import GraphCard from './GraphCard'
 import IconLink from './IconLink'
 import Icon from './Icon'
+import Tab from './Tab'
 import Tabs from './Tabs'
 
 export {
@@ -21,5 +22,6 @@ export {
   GraphCard,
   IconLink,
   Icon,
+  Tab,
   Tabs
 }

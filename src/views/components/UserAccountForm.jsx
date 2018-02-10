@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import {
   FormCard,
+  Tabs
 } from '../layout'
 
 class UserAccountForm extends Component {
@@ -17,6 +18,7 @@ class UserAccountForm extends Component {
         footer={footer}
         error={error}
       >
+      <Tabs color="teal-text darken-2"/>
 
       </FormCard>
     )

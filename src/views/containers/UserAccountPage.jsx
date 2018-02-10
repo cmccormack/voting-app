@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 
-import { FormCard } from '../layout'
+import { UserAccountForm } from '../components'
 
 class UserPage extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      title: "",
       error: ""
     }
   }
@@ -15,22 +14,14 @@ class UserPage extends Component {
 
   render() {
 
-    const layout = {
-      title: "My Account",
-      error: this.state.error,
-      footer: (
-        <div>
-          {'Some Footer Text Here'}
-        </div>
-      )
-    }
-
     return (
 
       <div className="container">
         <div className="row">
           <div className="col s12 m10 offset-m1 xl8 offset-xl2">
-            <FormCard
+            <UserAccountForm
+              title="My Account"
+              footer="Some Footer Text Here"
               { ...this.state }
             />
           </div>

@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
-import { Link } from 'react-router-dom'
-
 import {
   FormCard,
   FormSubmitButton,
@@ -14,21 +12,14 @@ class RegisterForm extends Component {
 
   render() {
 
-    const { error } = this.props
-
-    const props = {
-      title: "register an account with votery!",
-      error: error,
-      footer: (
-        <div>
-          {'Already have an account? '}
-          <Link to="/login">Login!</Link>
-        </div>
-      )
-    }
+    const { title, footer, error } = this.props
 
     return (
-      <FormCard {...props}>
+      <FormCard 
+        title={title}
+        footer={footer}
+        error={error}
+      >
         <form id="register_form" onSubmit={this.props.handleSubmit}>
 
           <FormRow>

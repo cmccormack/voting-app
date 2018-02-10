@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-
+import { Link } from 'react-router-dom'
 import { RegisterForm } from '../components'
 
 class RegisterPage extends Component {
@@ -70,6 +70,11 @@ class RegisterPage extends Component {
             <RegisterForm
               handleInputChange={ this.handleInputChange }
               handleSubmit={ this.handleSubmit }
+              title="register an account with votery!"
+              footer={<div>
+                {'Already have an account?  '}
+                <Link to="/login">Login!</Link> 
+              </div>}
               { ...this.state }
             />
           </div>

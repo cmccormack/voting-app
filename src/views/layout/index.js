@@ -8,6 +8,7 @@ import FormRow from './FormRow'
 import GraphCard from './GraphCard'
 import IconLink from './IconLink'
 import Icon from './Icon'
+import Tabs from './Tabs'
 
 export {
   Alerts,
@@ -19,5 +20,6 @@ export {
   FormRow,
   GraphCard,
   IconLink,
-  Icon
+  Icon,
+  Tabs
 }

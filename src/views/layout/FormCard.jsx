@@ -50,8 +50,10 @@ const FormCard = ({title, footer, error, children}) => {
           { children }
         </FormBody>
 
-        <div className="row center">
-          {footer}
+        <div className="row">
+          <div className="col-xs-12 center">
+            {footer}
+          </div>
         </div>
         
       </div>

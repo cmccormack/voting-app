@@ -13,22 +13,15 @@ import {
 class LoginForm extends Component {
 
   render() {
-
-    const { error } = this.props
-
-    const props = {
-      title: "Log in to Votery!",
-      error: error,
-      footer: (
-        <div>
-          {'Don\'t have an account?  '}
-          <Link to="/register">Register!</Link>
-        </div>
-      )
-    }
+    
+    const { title, footer, error } = this.props
 
     return (
-      <FormCard {...props}>
+      <FormCard
+        title={title}
+        footer={footer}
+        error={error}
+      >
         <form id="login_form" onSubmit={this.props.handleSubmit}>
 
           <FormRow>

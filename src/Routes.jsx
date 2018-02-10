@@ -6,7 +6,7 @@ import {
   RegisterPage,
   LoginPage,
   LogoutPage,
-  UserPage,
+  UserAccountPage,
   NewPollPage
 } from './views/containers'
 import Main from './views/Main'
@@ -53,7 +53,7 @@ const Routes = ({ loggedIn, allowRedirects, user, ...props}) => (
       <PrivateRoute
         allowRedirects={allowRedirects}
         exact path="/user"
-        component={UserPage}
+        component={UserAccountPage}
         loggedIn={loggedIn}
       />
 

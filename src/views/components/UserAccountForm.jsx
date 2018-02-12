@@ -13,8 +13,12 @@ import {
 
 
 const MyPolls = (props) => (
-  null
+  console.log('')
 )
+
+const StyledTabs = styled(Tabs)`
+  margin-bottom: 40px;
+`
 
 class UserAccountForm extends Component {
 
@@ -57,24 +61,24 @@ class UserAccountForm extends Component {
         error={error}
       >
         <FormRow>
-          <Tabs color="teal-text darken-2" indicatorColor="#00897b">
+          <StyledTabs color="teal-text darken-2" indicatorColor="#00897b">
             <Tab
               color="teal-text"
-              disabled={false}
               disabledColor="teal-text text-lighten-3"
               target="#polls"
-              size="s6">
+              size="s6"
+            >
               {'My Polls'}
             </Tab>
             <Tab
               color="teal-text"
-              disabled={false}
               disabledColor="teal-text text-lighten-3"
               target="#settings"
-              size="s6">
+              size="s6"
+            >
               {'Settings'}
             </Tab>
-          </Tabs>
+          </StyledTabs>
         </FormRow>
 
         { loaded 

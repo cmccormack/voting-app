@@ -23,7 +23,7 @@ class Tabs extends Component {
     } = this.props
 
     return(
-      <div className="col s12">
+      <div className={`col s12 ${className}`}>
         <TabGroup className="tabs" indicatorColor={indicatorColor}>
           { children }
         </TabGroup>

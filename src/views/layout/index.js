@@ -10,6 +10,9 @@ import IconLink from './IconLink'
 import Icon from './Icon'
 import Tab from './Tab'
 import Tabs from './Tabs'
+import TabBody from './TabBody'
+import Collection from './Collection'
+import CollectionItem from './CollectionItem'
 
 export {
   Alerts,
@@ -23,5 +26,8 @@ export {
   IconLink,
   Icon,
   Tab,
-  Tabs
+  Tabs,
+  TabBody,
+  Collection,
+  CollectionItem
 }

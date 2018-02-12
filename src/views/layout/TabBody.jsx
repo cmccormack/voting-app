@@ -1,15 +1,10 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
-const TabBodyStyled = styled.div`
-  padding-top: 20px !important;
-  background-color: lightgreen;
-`
-
-const TabBody = ({children, id, size="s12"}) => (
-    <TabBodyStyled id={id} className={`col ${size}`}>
+const TabBody = ({children, className="", id, size="s12"}) => (
+    <div id={id} className={`col ${size} ${className}`}>
       { children } 
-    </TabBodyStyled>
+    </div>
   )
 
 export default TabBody

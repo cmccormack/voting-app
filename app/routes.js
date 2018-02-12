@@ -24,6 +24,7 @@ module.exports = (app, passport, models) => {
   // Calls to API
   ///////////////////////////////////////////////////////////
 
+  // General request to view collections
   app.get('/api/:param', (req, res, next) => {
     
     if (req.params.param === 'test') {
@@ -50,6 +51,29 @@ module.exports = (app, passport, models) => {
       }
       res.type('json').send(JSON.stringify(docs))
     })
+  })
+
+
+  // Get User-Specific Polls
+  app.get('/api/:user/polls', (req, res, next) => {
+    User
+      .findOne({ username: req.params.user })
+      .exec((err, {id}) => {
+        if (err) return next( Error(err) )
+        
+        Poll
+          .find({ createdBy: id})
+          .select('-_id createdTime title choices')
+          .exec((err, polls) => {
+            if (err) return next( Error(err) )
+            res.type('json').send({
+              success: true,
+              message: '',
+              polls: [...polls]
+            })
+          })
+
+      })
   })
 
 
@@ -253,17 +277,17 @@ module.exports = (app, passport, models) => {
   ///////////////////////////////////////////////////////////
   // Handle Invalid Routes that React Router Does Not
   ///////////////////////////////////////////////////////////
-  app.get('/:path/*', (req, res) => {
-    console.log(`New Request for ${req.hostname + req.path}`)
-    res.redirect('/')
-  })
+  // app.get('/:path/*', (req, res) => {
+  //   console.log(`New Request for ${req.hostname + req.path}`)
+  //   res.redirect('/')
+  // })
 
 
   ///////////////////////////////////////////////////////////
   // Default Route Handler, Loads React App
   ///////////////////////////////////////////////////////////
   app.get('*', (req, res) => {
-    console.log(`New Request for ${req.hostname + req.path}`)
+    console.log(`Default Route Handler for ${req.hostname + req.path}`)
     res.sendFile(path.join(public, 'index.html'))
   })
 

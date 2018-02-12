@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-
+import { Link } from 'react-router-dom'
 import {
   FormCard,
   FormRow,
@@ -12,9 +12,7 @@ import {
 } from '../layout'
 
 
-const MyPolls = (props) => (
-  console.log('')
-)
+
 
 const StyledTabs = styled(Tabs)`
   margin-bottom: 40px;
@@ -24,19 +22,38 @@ class UserAccountForm extends Component {
 
   render() {
 
-    const { title, footer, error, loaded } = this.props
+    const { title, footer, error, loaded, polls } = this.props
+
+    const pollsCollection = (
+      <Collection>
+        {
+          polls.map(({ _id: id, title }) => (
+            <CollectionItem
+              action={{ icon: 'send', target: "#" }}
+              key={id}
+              title={title}
+            />
+          ))
+        }
+      </Collection>
+    )
+
+    const pollsEmpty = (
+      <h5 className="center teal-text text-lighten-2">
+        {"No Polls Found.  "}
+        <Link to="/new">Create a New Poll!</Link>
+      </h5>
+    )
 
     const body = (
       <div>
         <FormRow>
           <TabBody id="polls" size="s10 offset-s1">
-            <Collection>
-              <CollectionItem
-                action={{ icon: 'send', target: '#' }}
-                title="My Polls"
-              >
-              </CollectionItem>
-            </Collection>
+            { 
+              polls.length > 0
+              ? pollsCollection
+              : pollsEmpty
+            }
           </TabBody>
         </FormRow>
 
@@ -48,7 +65,7 @@ class UserAccountForm extends Component {
       </div>
     )
 
-    const loading = (
+    const loadingPolls = (
       <FormRow align="center">
         <h4 className="teal-text text-darken-1">Loading Polls...</h4>
       </FormRow>
@@ -83,7 +100,7 @@ class UserAccountForm extends Component {
 
         { loaded 
           ? body 
-          : loading
+          : loadingPolls
         }
 
       </FormCard>

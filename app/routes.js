@@ -63,7 +63,7 @@ module.exports = (app, passport, models) => {
         
         Poll
           .find({ createdBy: id})
-          .select('-_id createdTime title choices')
+          .select('createdTime title choices')
           .exec((err, polls) => {
             if (err) return next( Error(err) )
             res.type('json').send({

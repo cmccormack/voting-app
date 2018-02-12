@@ -11,12 +11,7 @@ const TabGroup = styled.ul`
 `
 
 class Tabs extends Component {
-  
-  componentDidMount(){
-    $(document).ready(function () {
-      $('ul.tabs').tabs();
-    });
-  }
+
   render(){
 
     const {

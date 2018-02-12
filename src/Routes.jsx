@@ -52,9 +52,11 @@ const Routes = ({ loggedIn, allowRedirects, user, ...props}) => (
       // Access user page only if logged in, else redirect to login
       <PrivateRoute
         allowRedirects={allowRedirects}
-        exact path="/user"
         component={UserAccountPage}
+        exact path="/user/:user"
         loggedIn={loggedIn}
+        updateAuthStatus={props.updateAuthStatus}
+        user={user}
       />
 
 

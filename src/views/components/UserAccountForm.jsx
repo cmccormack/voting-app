@@ -20,7 +20,35 @@ class UserAccountForm extends Component {
 
   render() {
 
-    const { title, footer, error } = this.props
+    const { title, footer, error, loaded } = this.props
+
+    const body = (
+      <div>
+        <FormRow>
+          <TabBody id="polls" size="s10 offset-s1">
+            <Collection>
+              <CollectionItem
+                action={{ icon: 'send', target: '#' }}
+                title="My Polls"
+              >
+              </CollectionItem>
+            </Collection>
+          </TabBody>
+        </FormRow>
+
+        <FormRow className="center">
+          <TabBody id="settings" size="s12">
+            {'My Settings'}
+          </TabBody>
+        </FormRow>
+      </div>
+    )
+
+    const loading = (
+      <FormRow align="center">
+        <h4 className="teal-text text-darken-1">Loading Polls...</h4>
+      </FormRow>
+    )
 
     return (
       <FormCard
@@ -49,18 +77,11 @@ class UserAccountForm extends Component {
           </Tabs>
         </FormRow>
 
-        <FormRow>
-          <TabBody id="polls" size="s10 offset-s1">
-            <Collection>
-              <CollectionItem
-                action={{ icon: 'send', target: '#' }}
-                title="My Polls"
-              >
-              </CollectionItem>
-            </Collection>
-          </TabBody>
-        </FormRow>
-        <TabBody id="settings" className="col s12">My Settings</TabBody>
+        { loaded 
+          ? body 
+          : loading
+        }
+
       </FormCard>
     )
   }

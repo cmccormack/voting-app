@@ -45,7 +45,7 @@ class Header extends Component {
     const {loggedIn, user, handleLogout} = this.props
 
     const links = [
-      { hidden: !loggedIn, to: '/user', content: `Hello, ${user}!` },
+      { hidden: !loggedIn, to: `/user/${user}`, content: `Hello, ${user}!` },
       { hidden: false, to: '/main', content: 'Main' },
       { hidden: !loggedIn, to: '/new', content: 'New Poll' },
       { hidden: loggedIn, to: '/login', content: 'Login' },

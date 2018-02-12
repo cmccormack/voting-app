@@ -5,8 +5,8 @@ const FormRowStyled = styled.div`
   position: relative;
 `
 
-const FormRow = ({ align="", children }) => (
-  <FormRowStyled className={`row ${align}`}>
+const FormRow = ({ align="", children, className }) => (
+  <FormRowStyled className={`row ${align} ${className}`}>
     { children }
   </FormRowStyled>
 )

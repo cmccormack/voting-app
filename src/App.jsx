@@ -88,7 +88,7 @@ class App extends Component {
     this.updateAuthStatus(
       () => {
         clearInterval(intervalId)
-        this.setState({loading: false})
+        this.setState({ loading: false })
       }
     )
   }

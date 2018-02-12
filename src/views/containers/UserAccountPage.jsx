@@ -39,7 +39,9 @@ class UserPage extends Component {
 
   render() {
 
-    const { loaded, ...state } = this.state
+    const { loaded, polls, error } = this.state
+    const title = "My Account"
+    const footer = "Some Footer Text Here"
 
     return (
 
@@ -47,11 +49,12 @@ class UserPage extends Component {
         <div className="row">
           <div className="col s12 m10 offset-m1 xl8 offset-xl2">
             <UserAccountForm
-              footer="Some Footer Text Here"
+              error={ error }
+              footer={ footer }
               loaded={ loaded }
-              title="My Account"
-              updateTabs={this.updateTabs}
-              { ...state }
+              polls={ polls }
+              title={ title }
+              updateTabs={ this.updateTabs }
             />
           </div>
         </div>

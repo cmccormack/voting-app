@@ -22,6 +22,15 @@ module.exports = mongoose => {
     return bcrypt.compareSync(password, this.password)
   }
 
+  userSchema.statics.getUsers = function() {
+    return new Promise((resolve, reject) => {
+      this.find((err, docs) => {
+        if (err) return reject(err)
+        resolve(docs)
+      })
+    })
+  }
+
   return mongoose.model('User', userSchema, 'users')
 
 }

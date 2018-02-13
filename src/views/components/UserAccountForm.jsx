@@ -22,7 +22,7 @@ class UserAccountForm extends Component {
 
   render() {
 
-    const { title, footer, error, loaded, polls } = this.props
+    const { title, footer, error, loaded, polls, user } = this.props
 
     const pollsCollection = (
       <Collection>
@@ -44,7 +44,7 @@ class UserAccountForm extends Component {
     const pollsEmpty = (
       <h5 className="center teal-text text-lighten-2">
         {"No Polls Found.  "}
-        <Link to="/new">Create a New Poll!</Link>
+        <Link to={`/user/${user}/new`}>Create a New Poll!</Link>
       </h5>
     )
 

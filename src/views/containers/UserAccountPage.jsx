@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import { UserAccountForm } from '../components'
 
-class UserPage extends Component {
+class UserAccountPage extends Component {
 
   constructor(props) {
     super(props)
@@ -18,7 +18,7 @@ class UserPage extends Component {
   }
 
   componentDidMount() {
-
+    this.updateTabs()
     fetch(`/api/${this.props.user}/polls`, {
       method: "GET",
       cache: "default",
@@ -31,15 +31,19 @@ class UserPage extends Component {
           return this.setState({ error: message})
         }
 
-        this.setState({ polls, loaded: true }, this.updateTabs)
+        this.setState({ polls, loaded: true })
         
       })
       .catch(console.error)
   }
 
+  componentDidUpdate() {
+    this.updateTabs()
+  }
+
   render() {
 
-    const { loaded, polls, error } = this.state
+    const { loaded, polls, error, user } = this.state
     const title = "My Account"
     const footer = "Some Footer Text Here"
 
@@ -55,6 +59,7 @@ class UserPage extends Component {
               polls={ polls }
               title={ title }
               updateTabs={ this.updateTabs }
+              user= { user }
             />
           </div>
         </div>
@@ -65,4 +70,4 @@ class UserPage extends Component {
 
 }
 
-export default UserPage
+export default UserAccountPage

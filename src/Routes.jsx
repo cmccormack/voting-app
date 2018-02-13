@@ -7,12 +7,17 @@ import {
   LoginPage,
   LogoutPage,
   UserAccountPage,
-  NewPollPage
+  NewPollPage,
+  ViewPollPage,
 } from './views/containers'
 import Main from './views/Main'
 
-const Routes = ({ loggedIn, allowRedirects, user, ...props}) => (
-
+const Routes = ({
+  loggedIn,
+  allowRedirects,
+  user,
+  ...props
+}) => (
     <Switch>
 
       // Login Route
@@ -21,7 +26,7 @@ const Routes = ({ loggedIn, allowRedirects, user, ...props}) => (
         render={() => (
           loggedIn
             ? (<Redirect to='/main' />)
-            : (<LoginPage updateAuthStatus={props.updateAuthStatus} />)
+            : (<LoginPage updateAuthStatus={ props.updateAuthStatus } />)
         )}
       />
 
@@ -32,7 +37,7 @@ const Routes = ({ loggedIn, allowRedirects, user, ...props}) => (
         render={() => (
           loggedIn
             ? (<Redirect to='/main' />)
-            : (<RegisterPage updateAuthStatus={props.updateAuthStatus} />)
+            : (<RegisterPage updateAuthStatus={ props.updateAuthStatus } />)
         )}
       />
 
@@ -42,8 +47,8 @@ const Routes = ({ loggedIn, allowRedirects, user, ...props}) => (
         exact path="/logout"
         render={() => (
           <LogoutPage
-            loggedIn={loggedIn}
-            handleLogout={props.handleLogout}
+            loggedIn={ loggedIn }
+            handleLogout={ props.handleLogout }
           />
         )}
       />
@@ -54,24 +59,31 @@ const Routes = ({ loggedIn, allowRedirects, user, ...props}) => (
         allowRedirects={allowRedirects}
         component={UserAccountPage}
         exact path="/user/:user"
-        loggedIn={loggedIn}
-        updateAuthStatus={props.updateAuthStatus}
-        user={user}
+        loggedIn={ loggedIn }
+        updateAuthStatus={ props.updateAuthStatus }
+        user={ user }
       />
 
 
       // Create New Poll Route
       <PrivateRoute
-        allowRedirects={allowRedirects}
-        exact path="/new"
-        component={NewPollPage}
-        loggedIn={loggedIn}
-        updateAuthStatus={props.updateAuthStatus}
+        allowRedirects={ allowRedirects }
+        exact path="/user/:user/new"
+        component={ NewPollPage }
+        loggedIn={ loggedIn }
+        updateAuthStatus={ props.updateAuthStatus }
       />
+
+      <Route
+        exact path="/user/:user/polls/:poll"
+        component={ ViewPollPage }
+        user={ user }
+      />
+
 
       // Main page route 
       <Route exact path="/main" render={() => (
-        <Main loggedIn={loggedIn} />
+        <Main loggedIn={ loggedIn } />
       )} />
 
 
@@ -82,7 +94,7 @@ const Routes = ({ loggedIn, allowRedirects, user, ...props}) => (
 
 
       // 404 Page not found Route
-      <Route render={(props) => (
+      <Route render={() => (
         <div className="center teal-text darken-3">
           <h1>404 Page not found</h1>
         </div>

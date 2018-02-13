@@ -28,6 +28,7 @@ module.exports = (env={}) => {
     },
     output: {
       path: path.resolve(__dirname, 'public'),
+      publicPath: '/',
       filename: '[name].bundle.js',
     },
     resolve: {

@@ -44,8 +44,6 @@ const BodyWrapper = SectionWrapper.extend`
   margin-top: 20px;
 `
 
-
-
 const Header = styled.p.attrs({
   className: ({color}) => color,
 })`
@@ -54,25 +52,28 @@ const Header = styled.p.attrs({
   font-size: ${({ fontSize }) => fontSize};
 `
 
+
 class Main extends Component {
 
   constructor(props) {
     super(props)
 
     this.state = {
-      loading: true,
+      loaded: false,
       polls: []
     }
   }
 
   componentDidMount() {
+    console.log(`Main loaded? ${this.state.loaded}`)
+    if (this.state.loaded) return
     fetch('/polls', {
       method: 'GET',
       credentials: 'include'
     })
       .then(res => res.json()).then((polls) => {
-        // console.log(`polls: ${JSON.stringify(polls)}`)
-        this.setState({ polls, loading: false })
+        console.log(`polls: ${JSON.stringify(polls)}`)
+        this.setState({ polls, loaded: true })
       })
   }
 
@@ -118,7 +119,7 @@ class Main extends Component {
 
     const body = (
       <Row>
-        { this.state.polls.map(({title, shortName, user}) => (
+        { this.state.polls.map(({title, shortName, createdBy: user}) => (
           <Col size="s12 m6" key={shortName}>
             <GraphCard
               title={title}
@@ -167,7 +168,7 @@ class Main extends Component {
           className="teal lighten-5"
         >
         {
-          this.state.loading 
+          !this.state.loaded 
             ? loadingDisplay 
             : this.state.polls.length > 0
               ? body

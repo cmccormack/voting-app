@@ -76,6 +76,28 @@ module.exports = (app, passport, models) => {
       })
   })
 
+  // Get Single Poll
+  app.get('/api/:user/polls/:poll', (req, res, next) => {
+    User
+      .findOne({ shortName: req.params.user })
+      .exec((err, { id }) => {
+        if (err) return next(Error(err))
+
+        Poll
+          .find({ createdBy: id })
+          .select('createdTime title choices')
+          .exec((err, polls) => {
+            if (err) return next(Error(err))
+            res.type('json').send({
+              success: true,
+              message: '',
+              polls: [...polls]
+            })
+          })
+
+      })
+  })
+
 
   ///////////////////////////////////////////////////////////
   // User Authentication Verification

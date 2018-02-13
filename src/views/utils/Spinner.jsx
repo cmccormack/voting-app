@@ -18,8 +18,8 @@ const SpinnerBody = ({color}) => (
   </div>
 )
 
-const Spinner = props => (
-  <SpinnerWrapper size="big">
+const Spinner = ({ size='big' }) => (
+  <SpinnerWrapper size={ size }>
     <SpinnerBody color="blue" />
     <SpinnerBody color="red" />
     <SpinnerBody color="yellow" />

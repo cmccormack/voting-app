@@ -12,7 +12,7 @@ class LogoutPage extends Component {
   componentDidMount() {
     document.title = 'Votery | Logout'
     // Set slight delay so user can process a logout is occuring
-    setTimeout(this.props.handleLogout, 1000)
+    setTimeout(this.props.handleLogout, 500)
   }
 
   render() {

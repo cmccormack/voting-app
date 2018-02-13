@@ -25,7 +25,6 @@ class UserAccountPage extends Component {
       credentials: "same-origin"
     })
       .then(res => res.json()).then(({success, polls, message}) => {
-        console.log(polls)
 
         if (!success) {
           return this.setState({ error: message})

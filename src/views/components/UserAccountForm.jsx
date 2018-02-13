@@ -29,7 +29,10 @@ class UserAccountForm extends Component {
         {
           polls.map(({ _id: id, title }) => (
             <CollectionItem
-              action={{ icon: 'send', target: "#" }}
+              actions={[
+                { icon: 'edit', target: "#" },
+                { icon: 'delete', target: "#"}
+              ]}
               key={id}
               title={title}
             />

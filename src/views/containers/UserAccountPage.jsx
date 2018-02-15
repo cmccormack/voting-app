@@ -31,7 +31,6 @@ class UserAccountPage extends Component {
         }
 
         this.setState({ polls, loaded: true })
-        
       })
       .catch(console.error)
   }
@@ -43,6 +42,8 @@ class UserAccountPage extends Component {
   render() {
 
     const { loaded, polls, error, user } = this.state
+    const { location } = this.props
+
     const title = "My Account"
     const footer = "Some Footer Text Here"
 
@@ -55,6 +56,7 @@ class UserAccountPage extends Component {
               error={ error }
               footer={ footer }
               loaded={ loaded }
+              location={ location }
               polls={ polls }
               title={ title }
               updateTabs={ this.updateTabs }

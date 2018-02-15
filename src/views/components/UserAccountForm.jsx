@@ -22,18 +22,19 @@ class UserAccountForm extends Component {
 
   render() {
 
-    const { title, footer, error, loaded, polls, user } = this.props
+    const { title, footer, error, loaded, polls, user, location } = this.props
 
     const pollsCollection = (
       <Collection>
         {
-          polls.map(({ _id: id, title }) => (
+          polls.map(({ _id: id, title, shortName }) => (
             <CollectionItem
               actions={[
                 { icon: 'edit', target: "#" },
                 { icon: 'delete', target: "#"}
               ]}
               key={id}
+              target={`${location.pathname}/polls/${shortName}`}
               title={title}
             />
           ))

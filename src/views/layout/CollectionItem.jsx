@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-
+import { Link } from 'react-router-dom'
 
 const ActionItemLink = styled.a`
   margin-left: 10px;
@@ -39,10 +39,13 @@ const ActionGroup = styled.div`
   float: right;
 `
 
-const CollectionItem = ({ title, props, actions, header=false }) => (
+const CollectionItem = ({ target, title, props, actions, header=false }) => (
   <li className={`collection-${header ? 'header' : 'item'}`}>
     <div>
-      {title}
+      { target
+        ? <Link to={target}>{title}</Link>
+        : {title}
+      }
       <ActionGroup>
         <ActionItems
           actions={actions}

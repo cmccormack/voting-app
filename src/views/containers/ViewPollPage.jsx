@@ -28,8 +28,8 @@ class ViewPollPage extends Component {
         if (!success) {
           return this.setState({ error: message })
         }
-
-        this.setState({ polls, loaded: true })
+        
+        this.setState({ poll, loaded: true })
 
       })
       .catch(console.error)

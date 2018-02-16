@@ -78,22 +78,29 @@ module.exports = (app, passport, models) => {
   // Get a single poll for a single user
   app.get('/api/:user/polls/:poll', (req, res, next) => {
 
+    const { user, poll } = req.params
     User
-    .findOne({ username: { $regex: new RegExp(`^${req.params.user}$`, 'i') } })
-    .exec((err, user) => {
+    .findOne({ username: { $regex: new RegExp(`^${user}$`, 'i') } })
+    .exec((err, doc) => {
       if (err) return next(Error(err))
-      if (!user) return next(Error('Page Not Found'))
+
+      if (!doc) {
+        return res.type('json').send({
+          success: false,
+          message: `Username [${user}] not found.`
+        })
+      }
 
       Poll
-      .find({ createdBy: user.id })
+      .findOne({ createdBy: user.id, shortName: req.params.poll })
       .select('createdTime title choices')
-      .exec((err, polls) => {
+      .exec((err, poll) => {
         if (err) return next(Error(err))
-
+        console.log(poll)
         res.type('json').send({
           success: true,
           message: '',
-          polls: polls
+          poll: poll
         })
       })
     })

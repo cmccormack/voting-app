@@ -7,7 +7,7 @@ class ViewPollPage extends Component {
   render() {
 
     const { title, footer } = this.props
-    console.log(this.props)
+    
     return (
       <FormCard 
         footer={ footer }

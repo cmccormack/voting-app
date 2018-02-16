@@ -12,7 +12,10 @@ class ViewPollPage extends Component {
     this.state = {
       error: "",
       loaded: false,
-      poll: {}
+      poll: {
+        title: '',
+        user: ''
+      }
     }
   }
 
@@ -25,9 +28,7 @@ class ViewPollPage extends Component {
     })
       .then(res => res.json()).then(({ success, poll, message }) => {
 
-        if (!success) {
-          return this.setState({ error: message })
-        }
+        if (!success) return this.setState({ error: message })
         
         this.setState({ poll, loaded: true })
 
@@ -37,10 +38,10 @@ class ViewPollPage extends Component {
 
   render() {
 
-    const { match, error, user } = this.props
+    const { match, user } = this.props
     const { params } = match
+    const { title, error } = this.state.poll
 
-    const title = params.poll
     const footer = `Created by ${params.user}`
 
     const loadingPoll = (

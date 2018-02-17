@@ -9,28 +9,33 @@ class ViewPollPage extends Component {
 
   constructor(props) {
     super(props)
+
     this.state = {
       error: "",
       loaded: false,
-      poll: {
-        title: '',
-        user: ''
-      }
+      poll: {},
+      createdBy: ''
     }
   }
 
   componentDidMount() {
+
     const { user, poll } = this.props.match.params
+
     fetch(`/api/${user}/polls/${poll}`, {
       method: "GET",
       cache: "default",
       credentials: "same-origin"
     })
-      .then(res => res.json()).then(({ success, poll, message }) => {
-
-        if (!success) return this.setState({ error: message })
-        
-        this.setState({ poll, loaded: true })
+      .then(res => res.json()).then(({ success, poll, message, username }) => {
+        console.log(poll)
+        console.log(username)
+        if (!success) return this.setState({ loaded: true, error: message })
+        this.setState({
+          poll,
+          loaded: true,
+          createdBy: username
+        })
 
       })
       .catch(console.error)
@@ -38,45 +43,14 @@ class ViewPollPage extends Component {
 
   render() {
 
-    const { match, user } = this.props
-    const { params } = match
-    const { title, error } = this.state.poll
-
-    const footer = `Created by ${params.user}`
-
-    const loadingPoll = (
-      <FormCard
-        footer={'Please wait while the data is being accessed.'}
-        title={'Loading Poll...'}
-      >
-        <FormRow>
-          <div className="col s8 offset-s2">
-            <IndeterminateProgressBar />
-          </div>
-        </FormRow>
-      </FormCard>
-    )
-
-    const body = (
-      <ViewPollForm
-        error={error}
-        footer={footer}
-        title={title}
-        user={user}
-      />
-    )
+    const { createdBy } = this.state
 
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col s12 m10 offset-m1 xl8 offset-xl2">
-            { !this.state.loaded
-              ? loadingPoll
-              : body
-            }
-          </div>
-        </div>
-      </div>
+      <ViewPollForm
+        { ...this.state }
+        footer={`Created by ${createdBy}`}
+      >
+      </ViewPollForm>
     )
   }
 }

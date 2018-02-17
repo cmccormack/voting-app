@@ -13,43 +13,39 @@ const ActionItem = ({ icon, target, color }) => (
 )
 
 
-const ActionItems = ({ actions, color }) => {
-
-  if (Array.isArray(actions)) {
-    return actions.map(action => (
-      <ActionItem
-        color={ color }
-        icon={ action.icon }
-        key={ action.target + action.icon }
-        target={ action.target }
-      />
-    ))
-  }
-
-  return (
+const ActionItems = ({ actions }) => (
+  actions.map(({ icon, target, color }) => (
     <ActionItem
       color={ color }
-      icon={ actions.icon }
-      target={ actions.target }
+      icon={ icon }
+      key={ target + icon }
+      target={ target }
     />
-  )
-}
+  ))
+)
+
 
 const ActionGroup = styled.div`
   float: right;
 `
 
-const CollectionItem = ({ target, title, props, actions, header=false }) => (
+const CollectionItem = ({
+  color,
+  target,
+  title,
+  props,
+  actions,
+  header=false
+}) => (
   <li className={`collection-${header ? 'header' : 'item'}`}>
     <div>
       { target
-        ? <Link to={target}>{title}</Link>
-        : {title}
+        ? <Link className={ color } to={target}>{title}</Link>
+        : <span className={ color }>{title}</span>
       }
       <ActionGroup>
         <ActionItems
-          actions={actions}
-          color={'teal-text text-lighten-1'}
+          actions={ Array.isArray(actions) ? actions : [ actions ] }
         />
       </ActionGroup>
     </div>

@@ -30,9 +30,10 @@ class UserAccountForm extends Component {
           polls.map(({ _id: id, title, shortName }) => (
             <CollectionItem
               actions={[
-                { icon: 'edit', target: "#" },
-                { icon: 'delete', target: "#"}
+                { icon: 'edit', target: "#", color: "teal-text text-lighten-2"},
+                { icon: 'delete', target: "#", color: "deep-orange-text text-accent-2"}
               ]}
+              color="teal-text text-darken-1"
               key={id}
               target={`${location.pathname}/polls/${shortName}`}
               title={title}

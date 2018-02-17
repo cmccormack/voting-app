@@ -79,29 +79,16 @@ module.exports = (app, passport, models) => {
   app.get('/api/:user/polls/:poll', (req, res, next) => {
 
     const { user, poll } = req.params
-    User
-    .findOne({ username: { $regex: new RegExp(`^${user}$`, 'i') } })
-    .exec((err, doc) => {
-      if (err) return next(Error(err))
 
-      if (!doc) {
-        return res.type('json').send({
-          success: false,
-          message: `Username [${user}] not found.`
-        })
-      }
-
-      Poll
-      .findOne({ createdBy: user.id, shortName: req.params.poll })
-      .select('createdTime title choices')
-      .exec((err, poll) => {
-        if (err) return next(Error(err))
-        console.log(poll)
-        res.type('json').send({
-          success: true,
-          message: '',
-          poll: poll
-        })
+    Poll.findOne({ shortName: poll })
+    .populate('createdBy', 'username')
+    .exec((err, poll) => {
+      if (err) return next( Error(err))
+      if (!poll) return next(Error('Poll Not Found.'))
+      res.type('json').send({
+        success: true,
+        poll: poll,
+        username: poll.createdBy.username
       })
     })
   })

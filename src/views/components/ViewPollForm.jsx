@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { VictoryPie, VictoryChart } from 'victory'
+import { VictoryPie, VictoryChart, VictoryTheme } from 'victory'
 
 import { FormCard, FormRow } from '../layout'
 import { IndeterminateProgressBar } from '../utils'
@@ -38,26 +38,32 @@ class ViewPollPage extends Component {
             poll.choices && poll.choices.map(({choice, votes}) => {
             return {
               x: choice,
-              y: votes ? votes : 1
+              y: votes + 1
             }
           })}
           height={250}
           innerRadius={40}
-          events={[{
-            target: "data",
-            eventHandlers: {
-              onClick: () => [
-                {
-                  target: "data",
-                  mutation: (props) => {
-                    return props.style && props.style.fill === 'red'
-                      ? { style: { fill: 'green'}}
-                      : { style: { fill: 'red'}}
+          theme={VictoryTheme.material}
+          style={{
+            data: {
+              fill: (props) => {
+                props.color = Math.floor(Math.random() * 360)
+                return `hsl(${props.color}, 60%, 60%)`
+              }
+            }
+          }}
+          events={
+            [
+              {
+                target: "data",
+                eventHandlers: {
+                  onMouseOver: (props) => {
+                    console.log(props)
                   }
                 }
-              ]
-            }
-          }]}
+              }
+            ]
+          }
         />
       </FormCard>
     )

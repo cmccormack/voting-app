@@ -255,7 +255,12 @@ module.exports = (app, passport, models) => {
 
         res.type('json').send({
           success: true,
-          message: `Successfully submitted new poll ${title}`
+          message: `Successfully submitted new poll ${title}`,
+          poll: {
+            shortName: poll.shortName,
+            user: user.username,
+            title: poll.tile
+          }
         })
 
       })

@@ -86,19 +86,13 @@ class NewPollPage extends Component {
   render() {
 
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col s12 m10 offset-m1 xl8 offset-xl2">
-            <NewPollForm
-              handleInputChange={this.handleInputChange}
-              handleChoiceDelete={this.handleChoiceDelete}
-              handleChoiceAdd={this.handleChoiceAdd}
-              handleSubmit={this.handleSubmit}
-              { ...this.state }
-            />
-          </div>
-        </div>
-      </div>
+      <NewPollForm
+        handleInputChange={this.handleInputChange}
+        handleChoiceDelete={this.handleChoiceDelete}
+        handleChoiceAdd={this.handleChoiceAdd}
+        handleSubmit={this.handleSubmit}
+        { ...this.state }
+      />
     )
   }
 }

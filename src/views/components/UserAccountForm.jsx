@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import path from 'path'
+
 import {
   FormCard,
   FormRow,
@@ -10,9 +12,6 @@ import {
   Collection,
   CollectionItem
 } from '../layout'
-
-
-
 
 const StyledTabs = styled(Tabs)`
   margin-bottom: 40px;
@@ -33,10 +32,9 @@ class UserAccountForm extends Component {
                 { icon: 'edit', target: "#", color: "teal-text text-lighten-2"},
                 { icon: 'delete', target: "#", color: "deep-orange-text text-accent-2"}
               ]}
-              color="teal-text text-darken-1"
               key={id}
-              target={`${location.pathname}/polls/${shortName}`}
-              title={title}
+              target={path.join(location.pathname, `polls/${shortName}`)}
+              title={{ title, color: "teal-text text-darken-1" }}
             />
           ))
         }
@@ -77,38 +75,47 @@ class UserAccountForm extends Component {
     )
 
     return (
-      <FormCard
-        title={title}
-        footer={footer}
-        error={error}
-      >
-        <FormRow>
-          <StyledTabs color="teal-text darken-2" indicatorColor="#00897b">
-            <Tab
-              color="teal-text"
-              disabledColor="teal-text text-lighten-3"
-              target="#polls"
-              size="s6"
+      <div className="container">
+        <div className="row">
+          <div className="col s12 m10 offset-m1 xl8 offset-xl2">
+            <FormCard
+              title={title}
+              footer={footer}
+              error={error}
             >
-              {'My Polls'}
-            </Tab>
-            <Tab
-              color="teal-text"
-              disabledColor="teal-text text-lighten-3"
-              target="#settings"
-              size="s6"
-            >
-              {'Settings'}
-            </Tab>
-          </StyledTabs>
-        </FormRow>
+              <FormRow>
+                <StyledTabs
+                  color="teal-text darken-2"
+                  indicatorColor="#00897b"
+                >
+                  <Tab
+                    color="teal-text"
+                    disabledColor="teal-text text-lighten-3"
+                    target="#polls"
+                    size="s6"
+                  >
+                    {'My Polls'}
+                  </Tab>
+                  <Tab
+                    color="teal-text"
+                    disabledColor="teal-text text-lighten-3"
+                    target="#settings"
+                    size="s6"
+                  >
+                    {'Settings'}
+                  </Tab>
+                </StyledTabs>
+              </FormRow>
 
-        { loaded 
-          ? body 
-          : loadingPolls
-        }
+              { loaded 
+                ? body 
+                : loadingPolls
+              }
 
-      </FormCard>
+            </FormCard>
+          </div>
+        </div>
+      </div>
     )
   }
 }

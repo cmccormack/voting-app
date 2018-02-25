@@ -48,24 +48,16 @@ class UserAccountPage extends Component {
     const footer = "Some Footer Text Here"
 
     return (
-
-      <div className="container">
-        <div className="row">
-          <div className="col s12 m10 offset-m1 xl8 offset-xl2">
-            <UserAccountForm
-              error={ error }
-              footer={ footer }
-              loaded={ loaded }
-              location={ location }
-              polls={ polls }
-              title={ title }
-              updateTabs={ this.updateTabs }
-              user= { user }
-            />
-          </div>
-        </div>
-      </div>
-
+      <UserAccountForm
+        error={ error }
+        footer={ footer }
+        loaded={ loaded }
+        location={ location }
+        polls={ polls }
+        title={ title }
+        updateTabs={ this.updateTabs }
+        user= { user }
+      />
     )
   }
 

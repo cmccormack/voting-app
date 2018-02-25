@@ -30,9 +30,8 @@ const ActionGroup = styled.div`
 `
 
 const CollectionItem = ({
-  color,
   target,
-  title,
+  title: { title, color },
   props,
   actions,
   header=false

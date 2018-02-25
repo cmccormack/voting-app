@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { Redirect } from 'react-router-dom'
 
 import { NewPollForm } from '../components'
 
@@ -12,7 +13,9 @@ class NewPollPage extends Component {
       shortName: "",
       choices: ['choice1', 'choice2'],
       newChoice: "",
-      error: ""
+      error: "",
+      submitted: false,
+      redirectpath: '#'
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -34,7 +37,6 @@ class NewPollPage extends Component {
     }
     newState.error = ''
     this.setState(newState)
-    // console.log(this.state)
   }
 
   handleChoiceDelete(index) {
@@ -75,8 +77,13 @@ class NewPollPage extends Component {
         body: JSON.stringify({ title, shortName, choices })
       })
         .then(res => res.json()).then(data => {
-          console.log(data)
-          this.setState({error: data.success ? '' : data.message})
+          console.log(`handleSubmit data: ${JSON.stringify(data, null, 2)}`)
+          const { success, message, poll: { username, shortName } } = data
+          this.setState({
+            error: success ? '' : message,
+            submitted: success ? true : false,
+            redirectpath: `/user/${username}/polls/${shortName}`
+          })
         })
         .catch(console.error)
     })
@@ -84,6 +91,11 @@ class NewPollPage extends Component {
   }
 
   render() {
+    const { submitted, redirectpath } = this.state
+    
+    if (submitted) {
+      return <Redirect to={redirectpath} />
+    }
 
     return (
       <NewPollForm

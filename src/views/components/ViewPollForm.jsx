@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { VictoryPie, VictoryChart, VictoryTheme } from 'victory'
+import { VictoryPie, VictoryChart, VictoryTheme, VictoryTooltip } from 'victory'
 
 import { FormCard, FormRow } from '../layout'
 import { IndeterminateProgressBar } from '../utils'
@@ -34,11 +34,13 @@ class ViewPollPage extends Component {
         user={createdBy}
       >
         <VictoryPie
+          // labelComponent={<VictoryTooltip />}
           data={
             poll.choices && poll.choices.map(({choice, votes}) => {
             return {
               x: choice,
-              y: votes + 1
+              y: votes + 1,
+              label: choice
             }
           })}
           height={250}
@@ -52,18 +54,18 @@ class ViewPollPage extends Component {
               }
             }
           }}
-          events={
-            [
-              {
-                target: "data",
-                eventHandlers: {
-                  onMouseOver: (props) => {
-                    console.log(props)
-                  }
-                }
-              }
-            ]
-          }
+          // events={
+          //   [
+          //     {
+          //       target: "data",
+          //       eventHandlers: {
+          //         onMouseOver: (props) => {
+          //           console.log(props)
+          //         }
+          //       }
+          //     }
+          //   ]
+          // }
         />
       </FormCard>
     )

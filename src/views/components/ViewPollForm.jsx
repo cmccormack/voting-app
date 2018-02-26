@@ -45,6 +45,7 @@ class ViewPollPage extends Component {
           })}
           height={250}
           innerRadius={40}
+          padAngle={3}
           theme={VictoryTheme.material}
           style={{
             data: {

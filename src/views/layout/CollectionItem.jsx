@@ -4,19 +4,21 @@ import { Link } from 'react-router-dom'
 
 const ActionItemLink = styled.a`
   margin-left: 10px;
+  cursor: pointer;
 `
 
-const ActionItem = ({ icon, target, color }) => (
-  <ActionItemLink href={ target } className={`${color}`}>
-    <i className="material-icons">{ icon }</i>
+const ActionItem = ({ icon, target, color, handler }) => (
+  <ActionItemLink className={`${color}`}>
+    <i className="material-icons" onClick={ handler }>{ icon }</i>
   </ActionItemLink>
 )
 
 
 const ActionItems = ({ actions }) => (
-  actions.map(({ icon, target, color }) => (
+  actions.map(({ icon, target, color, handler }) => (
     <ActionItem
       color={ color }
+      handler={ handler }
       icon={ icon }
       key={ target + icon }
       target={ target }

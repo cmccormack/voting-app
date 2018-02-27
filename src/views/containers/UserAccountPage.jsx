@@ -11,14 +11,42 @@ class UserAccountPage extends Component {
       loaded: false,
       polls: []
     }
+
+    this.deletePoll = this.deletePoll.bind(this)
   }
 
   updateTabs() {
     $(document).ready(() => { $('ul.tabs').tabs() })
   }
 
-  componentDidMount() {
-    this.updateTabs()
+  deletePoll({ id, title }) {
+    console.log(id, title)
+    const confirmDelete = confirm(
+      `Are you sure you want to delete the poll ${title}?`
+    )
+
+    if (!confirmDelete) return
+
+    const myHeaders = new Headers()
+    myHeaders.append("Content-Type", "application/json")
+    fetch(`/api/poll/delete`, {
+      method: "POST",
+      headers: myHeaders,
+      cache: "default",
+      credentials: "same-origin",
+      body: JSON.stringify({ id })
+    })
+      .then(res => res.json())
+      .then(({ success, message, poll }) => {
+        if (!success) {
+          return this.setState({ error: message })
+        }
+        this.getPolls()
+        console.log(`Poll "${title}" deleted.`)
+      })
+  }
+
+  getPolls() {
     fetch(`/api/${this.props.user}/polls`, {
       method: "GET",
       cache: "default",
@@ -35,6 +63,11 @@ class UserAccountPage extends Component {
       .catch(console.error)
   }
 
+  componentDidMount() {
+    this.updateTabs()
+    this.getPolls()
+  }
+
   componentDidUpdate() {
     this.updateTabs()
   }
@@ -49,6 +82,7 @@ class UserAccountPage extends Component {
 
     return (
       <UserAccountForm
+        deletePoll={ this.deletePoll }
         error={ error }
         footer={ footer }
         loaded={ loaded }

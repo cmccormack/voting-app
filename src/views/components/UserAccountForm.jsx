@@ -29,8 +29,18 @@ class UserAccountForm extends Component {
           polls.map(({ _id: id, title, shortName }) => (
             <CollectionItem
               actions={[
-                { icon: 'edit', target: "#", color: "teal-text text-lighten-2"},
-                { icon: 'delete', target: "#", color: "deep-orange-text text-accent-2"}
+                {
+                  icon: 'edit',
+                  target: "#",
+                  color: "teal-text text-lighten-2",
+                  handler: null
+                },
+                {
+                  icon: 'delete',
+                  target: "#",
+                  color: "deep-orange-text text-accent-2",
+                  handler: () => this.props.deletePoll({ id, title })
+                }
               ]}
               key={id}
               target={path.join(location.pathname, `polls/${shortName}`)}

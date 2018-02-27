@@ -77,13 +77,40 @@ module.exports = (app, passport, models) => {
     Poll.findOne({ shortName: poll })
     .populate('createdBy', 'username')
     .exec((err, poll) => {
-      if (err) return next( Error(err))
+      if (err) return next(Error(err))
       if (!poll) return next(Error('Poll Not Found.'))
       res.type('json').send({
         success: true,
         poll: poll,
         username: poll.createdBy.username
       })
+    })
+  })
+
+  // Delete a single poll for a single user
+  app.post('/api/poll/delete', (req, res, next) => {
+
+    const { id } = req.body
+    console.log(req.body)
+    Poll.findOne({ _id: id})
+    .populate('createdBy')
+    .exec((err, poll) => {
+      if (err) return next(Error(err))
+      if (!poll) return next(Error('Poll Not Found.'))
+      if (req.user.username !== poll.createdBy.username) {
+        return next(Error('Only the creater may delete a poll'))
+      }
+
+      Poll.remove({ _id: poll })
+      .exec(err => {
+        if (err) return next(Error('Error deleting poll'))
+
+        res.type('json').send({
+          success: true,
+          poll: { title: poll.title }
+        })
+      })
+
     })
   })
 

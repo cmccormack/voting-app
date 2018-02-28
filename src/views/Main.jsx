@@ -62,9 +62,12 @@ class Main extends Component {
       loaded: false,
       polls: []
     }
+
+    this._isMounted = false
   }
 
   componentDidMount() {
+    this._isMounted = true
     console.log(`Main loaded? ${this.state.loaded}`)
     if (this.state.loaded) return
     fetch('/polls', {
@@ -72,9 +75,13 @@ class Main extends Component {
       credentials: 'include'
     })
       .then(res => res.json()).then((polls) => {
-        console.log(`polls: ${JSON.stringify(polls)}`)
+        if (!this._isMounted) return
         this.setState({ polls, loaded: true })
       })
+  }
+
+  componentWillUnmount() {
+    this._isMounted = true
   }
 
 

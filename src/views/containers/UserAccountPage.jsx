@@ -11,7 +11,7 @@ class UserAccountPage extends Component {
       loaded: false,
       polls: []
     }
-
+    this._isMounted = false
     this.deletePoll = this.deletePoll.bind(this)
   }
 
@@ -54,6 +54,7 @@ class UserAccountPage extends Component {
     })
       .then(res => res.json()).then(({success, polls, message}) => {
 
+        if (!this._isMounted) return
         if (!success) {
           return this.setState({ error: message})
         }
@@ -64,12 +65,17 @@ class UserAccountPage extends Component {
   }
 
   componentDidMount() {
+    this._isMounted = true
     this.updateTabs()
     this.getPolls()
   }
 
   componentDidUpdate() {
     this.updateTabs()
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
   }
 
   render() {

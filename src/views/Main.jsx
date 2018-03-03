@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { VictoryPie, VictoryTheme } from 'victory'
 import { Link } from 'react-router-dom'
 import { GraphCard } from './layout'
 import '../images/graph-placeholder.png'
@@ -126,14 +127,32 @@ class Main extends Component {
 
     const body = (
       <Row>
-        { this.state.polls.map(({title, shortName, createdBy: user}) => (
-          <Col size="s12 m6" key={shortName}>
+        { this.state.polls.map(({title, shortName, createdBy: user, ...poll}) => (
+          <Col size="s12 m6" key={`${user}-${shortName}`}>
             <GraphCard
               title={title}
               content={
-                <img
-                  className="responsive-img"
-                  src="../images/graph-placeholder.png"
+                <VictoryPie
+                  data={
+                    poll.choices && poll.choices.map(({ choice, votes }) => {
+                      return {
+                        x: choice,
+                        y: votes + 1,
+                        label: choice
+                      }
+                    })}
+                  height={250}
+                  innerRadius={40}
+                  padAngle={3}
+                  theme={VictoryTheme.material}
+                  style={{
+                    data: {
+                      fill: (props) => {
+                        props.color = Math.floor(Math.random() * 360)
+                        return `hsl(${props.color}, 60%, 60%)`
+                      }
+                    }
+                  }}
                 />
               }
               actions={`Created by ${user}`}

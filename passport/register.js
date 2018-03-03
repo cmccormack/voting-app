@@ -19,7 +19,7 @@ module.exports = (passport, models) => {
       username = username.trim()
       password = password.trim()
 
-      User.findOne({username}, (err, user)=>{
+      User.findOne({ username: { $regex: new RegExp(`^${username}$`, 'i') } }, (err, user) => {
         
         // Handle error when querying user
         if (err) return done(err)
@@ -27,7 +27,7 @@ module.exports = (passport, models) => {
         // Return early if user already exists in database
         if (user) { 
           console.log(`Register: Username ${username} already exists`)
-          return done(null, false, {message: 'Username already exists.'})
+          return done(null, false, {message: 'Username already in use.'})
         }
         
         // Create new user

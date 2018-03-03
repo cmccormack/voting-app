@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
-import { WarningAlert } from './Alerts'
+import Alert from './Alert'
 
 const FormCardMain = styled.div.attrs({
   className: "card z-depth-4 hoverable"
@@ -38,12 +38,13 @@ const FormCard = ({title, footer, error, children}) => {
         </div>
 
         <div className="row">
-          <WarningAlert
+          <Alert
             className="col s8 offset-s2"
             show={error ? true : false}
+            type={'warning'}
           >
             <strong>Warning!&nbsp;&nbsp;</strong>{error}
-          </WarningAlert>
+          </Alert>
         </div>
 
         <FormBody slide={error ? true : false}>

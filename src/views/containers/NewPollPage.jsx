@@ -78,11 +78,12 @@ class NewPollPage extends Component {
       })
         .then(res => res.json()).then(data => {
           console.log(`handleSubmit data: ${JSON.stringify(data, null, 2)}`)
-          const { success, message, poll: { username, shortName } } = data
+          const { success, message, poll } = data
+
           this.setState({
             error: success ? '' : message,
             submitted: success ? true : false,
-            redirectpath: `/user/${username}/polls/${shortName}`
+            redirectpath: success ? `/user/${poll.username}/polls/${poll.shortName}` : ''
           })
         })
         .catch(console.error)

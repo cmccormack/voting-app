@@ -66,7 +66,8 @@ module.exports = (env={}) => {
         template: './src/index.html',
         title: 'Votery | Main',
         style: 'styles.css',
-        inject: 'body'
+        inject: 'body',
+        favicon: './src/images/favicon.ico',
       }),
       new ExtractTextPlugin({
         filename: './styles/styles.css',

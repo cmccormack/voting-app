@@ -6,7 +6,7 @@ const FormRowStyled = styled.div`
 `
 
 const FormRow = ({ align="", children, className="" }) => (
-  <FormRowStyled className={`row ${align} ${className}`}>
+  <FormRowStyled className={`row ${align} ${className}`.replace(/\s+/, ' ')}>
     { children }
   </FormRowStyled>
 )

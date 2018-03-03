@@ -7,7 +7,6 @@ const fadeIn = keyframes`
     transform: scale(.75)
   }
   50% {
-    /* opacity: .5; */
     transform: scale(1.25)
   }
   100% {

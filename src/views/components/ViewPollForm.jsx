@@ -47,7 +47,6 @@ class ViewPollPage extends Component {
         user={createdBy}
       >
         <VictoryPie
-          // labelComponent={<VictoryTooltip />}
           data={
             poll.choices && poll.choices.map(({choice, votes}) => {
             return {
@@ -68,18 +67,6 @@ class ViewPollPage extends Component {
               }
             }
           }}
-          // events={
-          //   [
-          //     {
-          //       target: "data",
-          //       eventHandlers: {
-          //         onMouseOver: (props) => {
-          //           console.log(props)
-          //         }
-          //       }
-          //     }
-          //   ]
-          // }
         />
       </FormCard>
     )

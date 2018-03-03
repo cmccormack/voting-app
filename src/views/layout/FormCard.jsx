@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 
 import Alert from './Alert'
+import FormRow from './FormRow'
 
 const FormCardMain = styled.div.attrs({
   className: "card z-depth-4 hoverable"
@@ -25,7 +26,7 @@ const FormBody = styled.div`
   transition: transform .2s linear;
 `
 
-const FormCard = ({title, footer, error, children}) => {
+const FormCard = ({title, footer, error, children, alert}) => {
 
   return (
     <FormCardMain>
@@ -37,15 +38,7 @@ const FormCard = ({title, footer, error, children}) => {
           </FormCardTitle>
         </div>
 
-        <div className="row">
-          <Alert
-            className="col s8 offset-s2"
-            show={error ? true : false}
-            type={'warning'}
-          >
-            <strong>Warning!&nbsp;&nbsp;</strong>{error}
-          </Alert>
-        </div>
+        { alert || <FormRow /> }
 
         <FormBody slide={error ? true : false}>
           { children }

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { VictoryPie, VictoryChart, VictoryTheme, VictoryTooltip } from 'victory'
 
-import { FormCard, FormRow } from '../layout'
+import { Alert, FormCard, FormRow } from '../layout'
 import { IndeterminateProgressBar } from '../utils'
 
 
@@ -13,10 +13,23 @@ class ViewPollPage extends Component {
     const { footer, loaded, poll, error, createdBy } = this.props
     const { title="Poll Not Found.", choices } = poll
 
+    const alert = (
+      <FormRow>
+        <Alert
+          className="col s8 offset-s2"
+          show={error ? true : false}
+          type={error ? 'warning' : 'success'}
+        >
+          {error}
+        </Alert>
+      </FormRow>
+    )
+
     const loadingPoll = (
       <FormCard
         footer={'Please wait while the data is being accessed.'}
         title={'Loading Poll...'}
+        alert={ alert }
       >
         <FormRow>
           <div className="col s8 offset-s2">

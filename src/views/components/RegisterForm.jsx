@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 
 import {
+  Alert,
   FormCard,
   FormSubmitButton,
   FormInput,
@@ -14,11 +15,24 @@ class RegisterForm extends Component {
 
     const { title, footer, error } = this.props
 
+    const alert = (
+      <FormRow>
+        <Alert
+          className="col s8 offset-s2"
+          show={error ? true : false}
+          type={error ? 'warning' : 'success'}
+        >
+          {error}
+        </Alert>
+      </FormRow>
+    )
+
     return (
       <FormCard 
-        title={title}
-        footer={footer}
-        error={error}
+        alert={ alert }
+        error={ error }
+        footer={ footer }
+        title={ title }
       >
         <form id="register_form" onSubmit={this.props.handleSubmit}>
 

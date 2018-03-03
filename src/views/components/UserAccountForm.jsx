@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import path from 'path'
 
 import {
+  Alert,
   FormCard,
   FormRow,
   Tabs,
@@ -84,6 +85,18 @@ class UserAccountForm extends Component {
       </FormRow>
     )
 
+    const alert = (
+      <FormRow>
+        <Alert
+          className="col s8 offset-s2"
+          show={error ? true : false}
+          type={error ? 'warning' : 'success'}
+        >
+          <strong>Warning!&nbsp;&nbsp;</strong>{error}
+        </Alert>
+      </FormRow>
+    )
+
     return (
       <div className="container">
         <div className="row">
@@ -92,6 +105,7 @@ class UserAccountForm extends Component {
               title={title}
               footer={footer}
               error={error}
+              alert={alert}
             >
               <FormRow>
                 <StyledTabs

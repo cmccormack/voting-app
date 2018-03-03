@@ -1,4 +1,3 @@
-import React, { Component } from 'react'
 import styled, {keyframes} from 'styled-components'
 import PropTypes from 'prop-types'
 
@@ -59,12 +58,13 @@ const Alert = styled.div`
 `
 
 Alert.propTypes = {
-  type: PropTypes.string
+  type: PropTypes.string,
+  hoverable: PropTypes.bool
 }
 
 Alert.defaultProps = {
   type: 'warning',
-  hoverable: true
+  hoverable: false
 }
 
 export default Alert

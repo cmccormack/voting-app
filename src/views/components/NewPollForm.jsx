@@ -7,7 +7,8 @@ import {
   FormInput,
   FormRow,
   IconLink,
-  Icon
+  Icon,
+  Alert
 } from '../layout'
 
 
@@ -93,11 +94,23 @@ class NewPollForm extends Component {
       )
     }
 
+    const alert = (
+      <FormRow>
+        <Alert
+          className="col s8 offset-s2"
+          show={error ? true : false}
+          type={error ? 'warning' : 'success' }
+        >
+          <strong>Warning!&nbsp;&nbsp;</strong>{error}
+        </Alert>
+      </FormRow>
+    )
+
     return (
       <div className="container">
         <div className="row">
           <div className="col s12 m10 offset-m1 xl8 offset-xl2">
-            <FormCard {...layout}>
+            <FormCard {...layout} alert={ alert }>
               <form id="new_poll_form" onSubmit={this.props.handleSubmit}>
 
                 <FormRow>

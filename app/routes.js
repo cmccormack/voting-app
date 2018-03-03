@@ -74,16 +74,22 @@ module.exports = (app, passport, models) => {
 
     const { user, poll } = req.params
 
-    Poll.findOne({ shortName: poll })
-    .populate('createdBy', 'username')
-    .exec((err, poll) => {
+    User.findOne({ username: user })
+    .exec((err, user) => {
       if (err) return next(Error(err))
-      if (!poll) return next(Error('Poll Not Found.'))
-      res.type('json').send({
-        success: true,
-        poll: poll,
-        username: poll.createdBy.username
+      if (!user) return next(Error('User Not Found.'))
+
+      Poll.findOne({ shortName: poll, createdBy: user._id })
+      .exec((err, poll) => {
+        if (err) return next(Error(err))
+        if (!poll) return next(Error('Poll Not Found.'))
+        res.type('json').send({
+          success: true,
+          poll: poll,
+          username: poll.createdBy.username
+        })
       })
+
     })
   })
 
@@ -267,8 +273,6 @@ module.exports = (app, passport, models) => {
         title,
         voters: []
       })
-
-      // console.log(`New Poll: ${JSON.stringify(poll, null, 2)}`)
 
       poll.save(err => {
 

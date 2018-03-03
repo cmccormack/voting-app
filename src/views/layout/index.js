@@ -1,4 +1,4 @@
-import Alerts from './Alerts'
+import Alert from './Alert'
 import Header from './Header'
 import Footer from './Footer'
 import FormCard from './FormCard'
@@ -15,7 +15,7 @@ import Collection from './Collection'
 import CollectionItem from './CollectionItem'
 
 export {
-  Alerts,
+  Alert,
   Header,
   Footer,
   FormCard,

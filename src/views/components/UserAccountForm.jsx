@@ -18,6 +18,12 @@ const StyledTabs = styled(Tabs)`
   margin-bottom: 40px;
 `
 
+const DeleteButton = styled.a.attrs({
+  className: "waves-effect red waves-light btn"
+})`
+  width: 100%;
+`
+
 class UserAccountForm extends Component {
 
   render() {
@@ -72,8 +78,12 @@ class UserAccountForm extends Component {
         </FormRow>
 
         <FormRow className="center">
-          <TabBody id="settings" size="s12">
-            {'My Settings'}
+          <TabBody id="settings" size="s10 m8 l6 offset-s1 offset-m2 offset-l3">
+            <DeleteButton
+              onClick={this.props.deleteAccount}
+            >
+              {'Delete My Account'}
+            </DeleteButton>
           </TabBody>
         </FormRow>
       </div>

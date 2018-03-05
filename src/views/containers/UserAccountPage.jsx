@@ -13,6 +13,7 @@ class UserAccountPage extends Component {
     }
     this._isMounted = false
     this.deletePoll = this.deletePoll.bind(this)
+    this.deleteAccount = this.deleteAccount.bind(this)
   }
 
   updateTabs() {
@@ -43,6 +44,33 @@ class UserAccountPage extends Component {
         }
         this.getPolls()
         console.log(`Poll "${title}" deleted.`)
+      })
+  }
+
+  deleteAccount() {
+    const confirmDelete = confirm(
+      `Are you sure you want to delete your account?`
+    )
+
+    if (!confirmDelete) return
+
+    const { user } = this.props
+    const myHeaders = new Headers()
+    myHeaders.append("Content-Type", "application/json")
+    fetch(`/api/user/delete`, {
+      method: "POST",
+      headers: myHeaders,
+      cache: "default",
+      credentials: "same-origin",
+      body: JSON.stringify({ user })
+    })
+      .then(res => res.json())
+      .then(({ success, message, username }) => {
+        if (!success) {
+          return this.setState({ error: message })
+        }
+        console.log(`User "${username}" deleted.`)
+        this.props.updateAuthStatus()
       })
   }
 
@@ -89,6 +117,7 @@ class UserAccountPage extends Component {
     return (
       <UserAccountForm
         deletePoll={ this.deletePoll }
+        deleteAccount={ this.deleteAccount }
         error={ error }
         footer={ footer }
         loaded={ loaded }

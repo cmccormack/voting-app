@@ -121,6 +121,39 @@ module.exports = (app, passport, models) => {
   })
 
 
+  // Delete a single user
+  app.post('/api/user/delete', (req, res, next) => {
+
+    const { user } = req.body
+
+    User.findOne({ username: user })
+      .populate('polls')
+      .exec((err, user) => {
+        if (err) return next(Error(err))
+        if (!user) return next(Error('User Not Found.'))
+        if (req.user.username !== user.username) {
+          return next(Error('You are not authorized to delete this account.'))
+        }
+
+        // Poll.remove({ _id: poll })
+        //   .exec(err => {
+        //     if (err) return next(Error('Error deleting poll'))
+
+        //     res.type('json').send({
+        //       success: true,
+        //       poll: { title: poll.title }
+        //     })
+        //   })
+
+        res.type('json').send({
+          success: true,
+          message: 'Reached bottom of /api/user/delete'
+        })
+
+      })
+  })
+
+
   ///////////////////////////////////////////////////////////
   // User Authentication Verification
   ///////////////////////////////////////////////////////////

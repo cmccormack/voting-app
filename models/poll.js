@@ -33,6 +33,15 @@ module.exports = mongoose => {
     }]
   })
 
+  PollSchema.statics.getPolls = function() {
+    return new Promise((resolve, reject) => {
+      this.find((err, docs) => {
+        if (err) return reject(err)
+        resolve(docs)
+      })
+    })
+  }
+
   PollSchema.pre('save', function(next) {
     Poll.find({})
       .where('createdBy').equals(this.createdBy)

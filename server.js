@@ -36,6 +36,12 @@ const models = {
   Poll: require('./models/poll')(mongoose)
 }
 
+// USED TO UPDATE MODELS, DELETE LATER
+// models.User.updateMany({}, { deleted: false }, (err, docs) => {
+//   if (err) return console.error(err)
+//   console.log(docs)
+// })
+
 ///////////////////////////////////////////////////////////
 //  Initialize Express and configure Middleware
 ///////////////////////////////////////////////////////////

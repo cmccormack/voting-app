@@ -24,32 +24,28 @@ module.exports = (app, passport, models) => {
   // Calls to API
   ///////////////////////////////////////////////////////////
 
-  // General request to view collections
+  // Get all Users
+  app.get('/api/users', (req, res, next) => {
+    User.getUsers()
+    .then(docs => {
+      res.type('json').send(docs)
+    })
+    .catch(next)
+  })
+
+  // Get all Polls
+  app.get('/api/polls', (req, res, next) => {
+    Poll.getPolls()
+    .then(docs => {
+      res.type('json').send(docs)
+    })
+    .catch(next)
+  })
+
+  // Test if API is available
   app.get('/api/:param', (req, res, next) => {
-    
-    if (req.params.param === 'test') {
-      return res.type('json').send(JSON.stringify({
-        'api_available': 'success'
-      }))
-    }
-    const collections = {
-      users: User,
-      polls: Poll
-    }
-    const collection = collections[req.params.param]
-
-    if (!collection) return next()
-
-    collection.find({}, (err, docs) => {
-      if (err) {
-        const errmsg = `Could not access ${param} collection`
-        res.type('json').send({
-          success: false,
-          message: errmsg
-        })
-        return next(Error(errmsg))
-      }
-      res.type('json').send(JSON.stringify(docs))
+    res.type('json').send({
+      'api_available': 'success'
     })
   })
 

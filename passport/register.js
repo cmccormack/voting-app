@@ -35,7 +35,9 @@ module.exports = (passport, models) => {
         const newUser = new User({
           username: username,
           password: hashPassword(password),
-          polls: []
+          polls: [],
+          locked: false,
+          deleted: false
         })
 
         // Save new user to database

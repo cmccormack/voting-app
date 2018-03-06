@@ -2,16 +2,20 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { VictoryPie, VictoryChart, VictoryTheme, VictoryTooltip } from 'victory'
 
+import { Doughnut, defaults } from 'react-chartjs-2'
+
 import { Alert, FormCard, FormRow } from '../layout'
 import { IndeterminateProgressBar } from '../utils'
 
+defaults.global.legend.position = 'bottom'
+defaults.global.layout.padding.top = 50;
 
 class ViewPollPage extends Component {
 
   render() {
 
     const { footer, loaded, poll, error, createdBy } = this.props
-    const { title="Poll Not Found.", choices } = poll
+    const { title="Poll Not Found.", choices=[] } = poll
 
     const alert = (
       <FormRow>
@@ -46,7 +50,7 @@ class ViewPollPage extends Component {
         title={title}
         user={createdBy}
       >
-        <VictoryPie
+        {/* <VictoryPie
           data={
             poll.choices && poll.choices.map(({choice, votes}) => {
             return {
@@ -67,7 +71,20 @@ class ViewPollPage extends Component {
               }
             }
           }}
-        />
+        /> */}
+        <FormRow>  
+          <Doughnut
+            data={{
+              datasets: [{
+                data: choices.map(choice => choice.votes + 1),
+                backgroundColor: Array(choices.length)
+                  .fill(0)
+                  .map(v => `hsl(${Math.floor(Math.random() * 360)}, 50%, 50%)`)
+              }],
+              labels: choices.map(choice => choice.choice)
+            }}
+          />
+        </FormRow>
       </FormCard>
     )
 

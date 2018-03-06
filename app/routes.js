@@ -123,30 +123,26 @@ module.exports = (app, passport, models) => {
     const { user } = req.body
 
     User.findOne({ username: user })
-      .populate('polls')
-      .exec((err, user) => {
+    .populate('polls')
+    .exec((err, user) => {
+      if (err) return next(Error(err))
+      if (!user) return next(Error('User Not Found.'))
+      if (req.user.username !== user.username) {
+        return next(Error('You are not authorized to delete this account.'))
+      }
+
+      console.log(user)
+      User.update({ _id: user._id }, { deleted: true }, (err, doc) => {
+        console.log(doc)
         if (err) return next(Error(err))
-        if (!user) return next(Error('User Not Found.'))
-        if (req.user.username !== user.username) {
-          return next(Error('You are not authorized to delete this account.'))
-        }
-
-        // Poll.remove({ _id: poll })
-        //   .exec(err => {
-        //     if (err) return next(Error('Error deleting poll'))
-
-        //     res.type('json').send({
-        //       success: true,
-        //       poll: { title: poll.title }
-        //     })
-        //   })
-
+        req.logout()
         res.type('json').send({
           success: true,
-          message: 'Reached bottom of /api/user/delete'
+          message: `Account '${user.username}' successfully deleted.`,
+          user: user
         })
-
       })
+    })
   })
 
 
@@ -166,6 +162,7 @@ module.exports = (app, passport, models) => {
   // User Login and Create New Session
   ///////////////////////////////////////////////////////////
   app.post('/login', (req, res, next) => {
+
     passport.authenticate('login', (err, user, info) => {
 
       const { message='' } = info ? info : {}

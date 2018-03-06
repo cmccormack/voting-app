@@ -37,10 +37,10 @@ const models = {
 }
 
 // USED TO UPDATE MODELS, DELETE LATER
-// models.User.updateMany({}, { deleted: false }, (err, docs) => {
-//   if (err) return console.error(err)
-//   console.log(docs)
-// })
+models.User.updateMany({}, { deleted: false, locked: false }, (err, docs) => {
+  if (err) return console.error(err)
+  console.log(docs)
+})
 
 ///////////////////////////////////////////////////////////
 //  Initialize Express and configure Middleware

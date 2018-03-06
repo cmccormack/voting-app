@@ -133,7 +133,6 @@ module.exports = (app, passport, models) => {
 
       console.log(user)
       User.update({ _id: user._id }, { deleted: true }, (err, doc) => {
-        console.log(doc)
         if (err) return next(Error(err))
         req.logout()
         res.type('json').send({

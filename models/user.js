@@ -10,7 +10,13 @@ module.exports = mongoose => {
     },
     password: {
       type: String,
-      required: true
+      required: false
+    },
+    locked: {
+      type: Boolean
+    },
+    deleted: {
+      type: Boolean
     },
     polls: [{
       type: mongoose.Schema.Types.ObjectId,

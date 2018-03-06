@@ -16,9 +16,11 @@ class UserAccountPage extends Component {
     this.deleteAccount = this.deleteAccount.bind(this)
   }
 
+
   updateTabs() {
     $(document).ready(() => { $('ul.tabs').tabs() })
   }
+
 
   deletePoll({ id, title }) {
     console.log(id, title)
@@ -65,11 +67,11 @@ class UserAccountPage extends Component {
       body: JSON.stringify({ user })
     })
       .then(res => res.json())
-      .then(({ success, message, username }) => {
+      .then(({ success, message, user }) => {
         if (!success) {
           return this.setState({ error: message })
         }
-        console.log(`User "${username}" deleted.`)
+        console.log(message)
         this.props.updateAuthStatus()
       })
   }

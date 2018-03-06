@@ -23,6 +23,10 @@ module.exports = (passport, models) => {
           return done(null, false, {message: 'Username not found.'})
         }
 
+        if (user.deleted) {
+          return done(null, false, {message: 'Account was deleted by creator.'})
+        }
+
         const isMatch = user.comparePasswords(password)
 
         if (!isMatch) {

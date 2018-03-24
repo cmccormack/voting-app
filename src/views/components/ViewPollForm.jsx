@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { VictoryPie, VictoryChart, VictoryTheme, VictoryTooltip } from 'victory'
 
 import { Doughnut, defaults } from 'react-chartjs-2'
 

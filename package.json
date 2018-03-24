@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "npm run build && node server.js",
-    "dev": "nodemon server.js",
+    "dev": "nodemon server.js --inspect",
     "build": "rimraf ./public && webpack --env.production --colors --progress",
     "webpack": "webpack -d --watch",
     "webpackdev": "webpack-dev-server --env.development --colors --progress"

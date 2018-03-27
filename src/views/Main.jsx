@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { VictoryPie, VictoryTheme } from 'victory'
 import { Link } from 'react-router-dom'
-import { GraphCard } from './layout'
-import '../images/graph-placeholder.png'
+
+import { Chart, GraphCard } from './layout'
 
 
 const Container = ({ className="", children }) => (
@@ -131,34 +131,12 @@ class Main extends Component {
           ({title, shortName, createdBy: user, ...poll}) => {
             const seed = Math.floor(Math.random() * 360)
             return (
-              <Col size="s12 m6" key={`${user}-${shortName}`}>
+              <Col size="s12" key={`${user}-${shortName}`}>
                 <GraphCard
                   title={title}
                   content={
-                    <VictoryPie
-                      data={
-                        poll.choices && poll.choices.map(
-                          ({ choice, votes }) => {
-                          return {
-                            x: choice,
-                            y: votes + 1,
-                            label: choice
-                          }
-                        })}
-                      endAngle={seed + 360}
-                      height={250}
-                      innerRadius={40}
-                      padAngle={3}
-                      startAngle={seed}
-                      style={{
-                        data: {
-                          fill: (props) => {
-                            props.color = Math.floor(Math.random() * 360)
-                            return `hsl(${props.color}, 60%, 60%)`
-                          }
-                        }
-                      }}
-                      theme={VictoryTheme.material}
+                    <Chart
+                      choices={ poll.choices }
                     />
                   }
                   actions={`Created by ${user}`}

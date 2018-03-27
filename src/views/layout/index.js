@@ -13,6 +13,7 @@ import Tabs from './Tabs'
 import TabBody from './TabBody'
 import Collection from './Collection'
 import CollectionItem from './CollectionItem'
+import Chart from './Chart'
 
 export {
   Alert,
@@ -29,5 +30,6 @@ export {
   Tabs,
   TabBody,
   Collection,
-  CollectionItem
+  CollectionItem,
+  Chart
 }

@@ -1,4 +1,10 @@
 import React, { Component } from 'react'
+import styled from 'styled-components'
+
+const GraphCardWrapper = styled.div`
+  margin: 10px auto;
+  max-width: 800px;
+`
 
 const GraphCardTitle = ({ title }) => (
   <span className="card-title">
@@ -8,10 +14,8 @@ const GraphCardTitle = ({ title }) => (
 
 const GraphCardContent = ({ content, children: title }) => (
   <div className="card-content">
-    <div>
-      { title }
-      { content }
-    </div>
+    { title }
+    { content }
   </div>
 )
 
@@ -22,12 +26,12 @@ const GraphCardActions = ({ actions }) => (
 )
 
 const GraphCard = ({ title, content, actions}) => (
-  <div className="card large hoverable">
+  <GraphCardWrapper className="card large hoverable">
     <GraphCardContent content={content}>
       <GraphCardTitle title={title} />
     </GraphCardContent>
     <GraphCardActions actions={actions} />
-  </div>
+  </GraphCardWrapper>
 )
 
 export default GraphCard

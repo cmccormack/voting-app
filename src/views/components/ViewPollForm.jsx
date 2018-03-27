@@ -1,13 +1,9 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
-import { Doughnut, defaults } from 'react-chartjs-2'
-
-import { Alert, FormCard, FormRow } from '../layout'
+import { Alert, Chart, FormCard, FormRow } from '../layout'
 import { IndeterminateProgressBar } from '../utils'
 
-defaults.global.legend.position = 'bottom'
-defaults.global.layout.padding.top = 50;
 
 class ViewPollPage extends Component {
 
@@ -49,39 +45,9 @@ class ViewPollPage extends Component {
         title={title}
         user={createdBy}
       >
-        {/* <VictoryPie
-          data={
-            poll.choices && poll.choices.map(({choice, votes}) => {
-            return {
-              x: choice,
-              y: votes + 1,
-              label: choice
-            }
-          })}
-          height={250}
-          innerRadius={40}
-          padAngle={3}
-          theme={VictoryTheme.material}
-          style={{
-            data: {
-              fill: (props) => {
-                props.color = Math.floor(Math.random() * 360)
-                return `hsl(${props.color}, 60%, 60%)`
-              }
-            }
-          }}
-        /> */}
         <FormRow>  
-          <Doughnut
-            data={{
-              datasets: [{
-                data: choices.map(choice => choice.votes + 1),
-                backgroundColor: Array(choices.length)
-                  .fill(0)
-                  .map(v => `hsl(${Math.floor(Math.random() * 360)}, 50%, 50%)`)
-              }],
-              labels: choices.map(choice => choice.choice)
-            }}
+          <Chart
+            choices={ choices }
           />
         </FormRow>
       </FormCard>

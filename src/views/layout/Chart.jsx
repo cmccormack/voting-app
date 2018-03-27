@@ -1,0 +1,34 @@
+import React, { Component } from 'react'
+import { Doughnut } from 'react-chartjs-2'
+
+const getColors = (length, inc=10, s, l) => {
+  const h = Math.floor(Math.random() * 360)
+  return Array(length).fill(0).map((v,i) => (
+    `hsl(${(h+(inc*i)) % 360}, ${s}%, ${l}%)`
+  ))
+}
+
+const Chart = ({ choices }) => (
+  <Doughnut
+    data={{
+      datasets: [{
+        data: choices.map(choice => choice.votes + 1),
+        backgroundColor: getColors(choices.length, 15, 60, 60)
+      }],
+      labels: choices.map(choice => choice.choice)
+    }}
+    options={{
+      legend: {
+        position: 'bottom',
+        padding: 10
+      },
+      layout: {
+        padding: {
+          top: 50
+        }
+      }
+    }}
+  />
+)
+
+export default Chart

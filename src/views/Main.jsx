@@ -28,6 +28,7 @@ const MainWrapper = styled(Container)`
   border-radius: 5px;
   margin-top: 80px;
   padding: 20px;
+  min-width: 420px;
 `
 
 const SectionWrapper = styled.div`
@@ -129,9 +130,8 @@ class Main extends Component {
       <Row>
         { this.state.polls.map(
           ({title, shortName, createdBy: user, ...poll}) => {
-            const seed = Math.floor(Math.random() * 360)
             return (
-              <Col size="s12" key={`${user}-${shortName}`}>
+              <Col size="s12 xl6" key={`${user}-${shortName}`}>
                 <GraphCard
                   title={title}
                   content={

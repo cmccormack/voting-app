@@ -4,6 +4,7 @@ import styled from 'styled-components'
 const GraphCardWrapper = styled.div`
   margin: 10px auto;
   max-width: 800px;
+  height: 100% !important;
 `
 
 const GraphCardTitle = ({ title }) => (
@@ -19,10 +20,14 @@ const GraphCardContent = ({ content, children: title }) => (
   </div>
 )
 
+const GraphCardActionsStyled = styled.div`
+  position: relative !important;
+`
+
 const GraphCardActions = ({ actions }) => (
-  <div className="card-action">
+  <GraphCardActionsStyled className="card-action">
     { actions }
-  </div>
+  </GraphCardActionsStyled>
 )
 
 const GraphCard = ({ title, content, actions}) => (

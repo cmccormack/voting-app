@@ -10,6 +10,7 @@ import {
 } from 'react-router-dom'
 
 import './images/favicon.ico'
+// import './styles/body.scss'
 import Routes from './Routes'
 import { Header, Footer } from './views/layout'
 
@@ -22,7 +23,12 @@ const Wrapper = styled.div`
 
 const Main = styled.main`
   flex: 1 0 auto;
-  `
+  min-width: 420px;
+`
+
+const HeaderStyled = styled(Header)`
+  min-width: 420px;
+`
 
 class App extends Component {
 
@@ -99,7 +105,7 @@ class App extends Component {
     return (
       <Wrapper>
         <Route render={routeProps => (
-          <Header
+          <HeaderStyled
             handleLogout={this.handleLogout}
             updateAuth={this.updateAuthStatus}
             {...this.state}

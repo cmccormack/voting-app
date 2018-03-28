@@ -8,27 +8,31 @@ const getColors = (length, inc=10, s, l) => {
   ))
 }
 
-const Chart = ({ choices }) => (
-  <Doughnut
-    data={{
-      datasets: [{
-        data: choices.map(choice => choice.votes + 1),
-        backgroundColor: getColors(choices.length, 15, 60, 60)
-      }],
-      labels: choices.map(choice => choice.choice)
-    }}
-    options={{
-      legend: {
-        position: 'bottom',
-        padding: 10
-      },
-      layout: {
-        padding: {
-          top: 50
-        }
-      }
-    }}
-  />
-)
+const Chart = ({ choices, width=300, height=200 }) => {
+
+  return (
+    <Doughnut
+      data={{
+        datasets: [{
+          data: choices.map(choice => choice.votes + 1),
+          backgroundColor: getColors(choices.length, 15, 60, 60)
+        }],
+        labels: choices.map(choice => choice.choice)
+      }}
+      options={{
+        legend: {
+          position: 'bottom',
+          padding: 10
+        },
+        layout: {
+          padding: {
+            top: 40
+          }
+        },
+        responsive: true
+      }}
+    />
+  )
+}
 
 export default Chart

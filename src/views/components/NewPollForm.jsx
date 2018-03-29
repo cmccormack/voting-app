@@ -24,14 +24,29 @@ const PollChoice = ({ action, index = -1, choice = '', ...props }) => {
   }
 
   return (
+    <div>
+    <input
+      className='with-gap'
+      type='radio'
+      name='choices'
+      id={`choice_${index}`}
+    />
+    <StyledChoiceLabel htmlFor={`choice_${index}`}></StyledChoiceLabel>
     <FormInput
       action={ action && handleAction }
       index={ index }
       value={ choice }
       { ...props }
     />
+    </div>
   )
 }
+
+const StyledChoiceLabel = styled.label`
+  position: absolute;
+  left: 0;
+  top: 0;
+`
 
 
 const PollChoices = ({choices, ...props}) => {

@@ -17,24 +17,49 @@ const StyledNewChoiceIcon = styled(Icon)`
   line-height: 4.2rem;
 `
 
-const PollChoice = ({ action, index = -1, choice = '', ...props }) => {
+
+const StyledChoiceLabel = styled.label`
+  right: 0;
+  top: 0;
+  bottom: 0;
+`
+
+const PollChoice = ({
+  action,
+  choice = '',
+  index = -1,
+  selectedChoice = 0,
+  ...props
+}) => {
   
   const handleAction = e => {
     action(e, index)
   }
 
+  const handleSelectedChoice = () => {
+    props.handleSelectedChoice(index)
+  }
+
   return (
     <div>
-    <input
-      className='with-gap'
-      type='radio'
-      name='choices'
-      id={`choice_${index}`}
-    />
-    <StyledChoiceLabel htmlFor={`choice_${index}`}></StyledChoiceLabel>
+      { index >= 0 &&
+      <div className="col s2 right-align">
+        <input
+          checked={ index===selectedChoice }
+          className='with-gap'
+          type='radio'
+          name='choices'
+          id={`choice_${ index }`}
+          onChange={handleSelectedChoice}
+          value={index}
+        />
+        <StyledChoiceLabel htmlFor={`choice_${ index }`}></StyledChoiceLabel>
+      </div>
+      }
     <FormInput
       action={ action && handleAction }
       index={ index }
+      size="s8"
       value={ choice }
       { ...props }
     />
@@ -42,14 +67,8 @@ const PollChoice = ({ action, index = -1, choice = '', ...props }) => {
   )
 }
 
-const StyledChoiceLabel = styled.label`
-  position: absolute;
-  left: 0;
-  top: 0;
-`
 
-
-const PollChoices = ({choices, ...props}) => {
+const PollChoices = ({choices, selectedChoice, ...props}) => {
 
   const handleChoiceDelete = (e, i) => {
     e.preventDefault()
@@ -57,16 +76,18 @@ const PollChoices = ({choices, ...props}) => {
   }
 
   return choices.map((choice, i) => (
-    <FormRow key={`choice_${i}`}>
+    <FormRow key={ `choice_${i}` }>
       <PollChoice
         action={ handleChoiceDelete }
         actionIcon="close"
-        index={i}
-        choice={choice}
-        label={`Choice ${i + 1}`}
-        onChange={e => props.handleInputChange(e, e.target.value, i)}
-        name={`choice_${i}`}
-        {...props}
+        choice={ choice }
+        handleSelectedChoice={ props.handleSelectedChoice }
+        index={ i }
+        label={ `Choice ${i + 1}` }
+        name={ `choice_${i}` }
+        onChange={ e => props.handleInputChange(e, e.target.value, i) }
+        selectedChoice={ selectedChoice }
+        { ...props }
       />
     </FormRow>
   ))
@@ -79,7 +100,6 @@ const inputLengths = {
   choice: { min: 1, max: 32 }
 }
 
-
 class NewPollForm extends Component {
 
   constructor(props) {
@@ -87,17 +107,17 @@ class NewPollForm extends Component {
     this.state = {
       newChoice: this.props.newChoice
     }
-    this.handleChoiceAdd = this.handleChoiceAdd.bind(this)
+    // this.handleChoiceAdd = this.handleChoiceAdd.bind(this)
   }
 
-  handleChoiceAdd(e) {
-    e.preventDefault()
-    this.props.handleChoiceAdd(this.props.newChoice)
-  }
+  // handleChoiceAdd(e) {
+  //   e.preventDefault()
+  //   this.props.handleChoiceAdd(this.props.newChoice)
+  // }
 
   render() {
 
-    const { error, choices } = this.props
+    const { error, choices, selectedChoice } = this.props
 
     const layout = {
       title: "Create New Poll",
@@ -126,7 +146,10 @@ class NewPollForm extends Component {
         <div className="row">
           <div className="col s12 m10 offset-m1 xl8 offset-xl2">
             <FormCard {...layout} alert={ alert }>
-              <form id="new_poll_form" onSubmit={this.props.handleSubmit}>
+              <form 
+                id="new_poll_form"
+                onSubmit={this.props.handleSubmit}
+              >
 
                 <FormRow>
                   <FormInput
@@ -153,29 +176,32 @@ class NewPollForm extends Component {
                   />
                 </FormRow>
 
+                {/* Iterate and display existing poll choices */}
                 <PollChoices
                   choices={choices}
                   handleChoiceDelete={this.props.handleChoiceDelete}
                   handleInputChange={this.props.handleInputChange}
+                  handleSelectedChoice={this.props.handleSelectedChoice}
                   icon=""
                   maxLength={inputLengths.choice.max}
-                  size="s6 offset-s3"
+                  selectedChoice={selectedChoice}
                 />
 
+                {/* Allow user to enter new poll choice */}
                 <FormRow>
                   <PollChoice
                     maxLength={inputLengths.choice.max}
                     name="newChoice"
                     onChange={this.props.handleInputChange}
                     label="New Choice"
-                    size="s6 offset-s3"
+                    size="s7 offset-s2"
                     choice={this.props.newChoice}
                   />
                   <div className={"col s3"}>
                     <IconLink
                       title="Click"
                       href="#"
-                      onClick={this.handleChoiceAdd}
+                      onClick={this.props.handleChoiceAdd}
                       Icon={<StyledNewChoiceIcon
                         className="material-icons"
                         fontSize="48px"
@@ -188,6 +214,7 @@ class NewPollForm extends Component {
                   </div>
                 </FormRow>
 
+                {/* Submit poll */}
                 <FormRow>
                   <FormSubmitButton
                     onClick={this.props.handleSubmit}

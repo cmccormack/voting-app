@@ -9,20 +9,21 @@ class NewPollPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      title: "",
-      shortName: "",
       choices: ['choice1', 'choice2'],
-      newChoice: "",
       error: "",
+      newChoice: "",
+      redirectpath: '#',
+      selectedChoice: 0,
+      shortName: "",
       submitted: false,
-      redirectpath: '#'
+      title: ""
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleChoiceDelete = this.handleChoiceDelete.bind(this)
     this.handleChoiceAdd = this.handleChoiceAdd.bind(this)
+    this.handleSelectedChoice = this.handleSelectedChoice.bind(this)
   }
-
 
   handleInputChange(e, choice, iter, newState={}) {
 
@@ -47,24 +48,35 @@ class NewPollPage extends Component {
     this.setState({choices: newChoices})
   }
 
-  handleChoiceAdd(choice) {
 
-    if (choice){
-      const choices = [...this.state.choices].concat(choice)
-      this.setState({choices, newChoice: ""})
+  handleChoiceAdd(e) {
+    e.preventDefault()
+
+    const { newChoice: choice } = this.state
+
+    if (choice) {
+      const choices = 
+      this.setState({
+        choices: [...this.state.choices].concat(choice),
+        newChoice: ""
+      })
     }
 
   }
 
+  handleSelectedChoice(index) {
+    this.setState({ selectedChoice: index })
+  }
 
-  handleSubmit(event) {
-    event.preventDefault()
+
+  handleSubmit(e) {
+    e.preventDefault()
 
     this.props.updateAuthStatus(user => {
 
       if (!user.isAuthenticated) return
 
-      const { title, shortName, choices } = this.state
+      const { title, shortName, choices, selectedChoice } = this.state
 
       const myHeaders = new Headers()
       myHeaders.append("Content-Type", "application/json")
@@ -74,23 +86,27 @@ class NewPollPage extends Component {
         headers: myHeaders,
         cache: "default",
         credentials: "same-origin",
-        body: JSON.stringify({ title, shortName, choices })
+        body: JSON.stringify({ title, shortName, choices, selectedChoice })
       })
         .then(res => res.json()).then(data => {
           console.log(`handleSubmit data: ${JSON.stringify(data, null, 2)}`)
-          const { success, message, poll } = data
+          const { success, message, poll={} } = data
           const { user='', shortName='' } = poll
+
+          const newPollPath = user && success 
+            ? `/user/${user}/polls/${shortName}` 
+            : ''
 
           this.setState({
             error: success ? '' : message,
             submitted: success ? true : false,
-            redirectpath: success ? `/user/${user}/polls/${shortName}` : ''
+            redirectpath: newPollPath
           })
         })
         .catch(console.error)
     })
-
   }
+
 
   render() {
     const { submitted, redirectpath } = this.state
@@ -101,10 +117,11 @@ class NewPollPage extends Component {
 
     return (
       <NewPollForm
-        handleInputChange={this.handleInputChange}
-        handleChoiceDelete={this.handleChoiceDelete}
-        handleChoiceAdd={this.handleChoiceAdd}
-        handleSubmit={this.handleSubmit}
+        handleInputChange={ this.handleInputChange }
+        handleChoiceDelete={ this.handleChoiceDelete }
+        handleChoiceAdd={ this.handleChoiceAdd }
+        handleSelectedChoice={ this.handleSelectedChoice }
+        handleSubmit={ this.handleSubmit }
         { ...this.state }
       />
     )

@@ -37,9 +37,13 @@ const models = {
 }
 
 // USED TO UPDATE MODELS, DELETE LATER
-models.User.updateMany({}, { deleted: false, locked: false }, (err, docs) => {
+// models.User.updateMany({}, { deleted: false, locked: false }, (err, docs) => {
+//   if (err) return console.error(err)
+//   console.log(docs)
+// })
+models.Poll.find({}, (err, docs) => {
   if (err) return console.error(err)
-  console.log(docs)
+  console.log(docs[docs.length-1])
 })
 
 ///////////////////////////////////////////////////////////

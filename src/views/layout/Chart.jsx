@@ -14,8 +14,8 @@ const Chart = ({ choices, width=300, height=200 }) => {
     <Doughnut
       data={{
         datasets: [{
-          data: choices.map(choice => choice.votes + 1),
-          backgroundColor: getColors(choices.length, 15, 60, 60)
+          data: choices.map(choice => choice.votes),
+          backgroundColor: getColors(choices.length, 360/choices.length, 75, 50)
         }],
         labels: choices.map(choice => choice.choice)
       }}

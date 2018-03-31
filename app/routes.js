@@ -264,14 +264,23 @@ module.exports = (app, passport, models) => {
       .isAscii()
       .withMessage('Choices should include only valid ascii characters'),
 
+    body('selectedChoice')
+      .isInt()
+      .withMessage('Selected choice should be integer value')
+      .custom((val, { req }) => (
+        +val >= 0 && +val < req.body.choices.length)
+      )
+      .withMessage('Selected choice not within the correct range'),
+
     sanitizeBody('title').trim(),
     sanitizeBody('shortName').trim(),
     sanitizeBody('choices.*').trim(),
+    sanitizeBody('selectedChoice').toInt()
 
   ], (req, res, next) => {
 
     const errors = validationResult(req)
-    const { title, shortName, choices } = req.body
+    const { title, shortName, choices, selectedChoice } = req.body
     
     if (!errors.isEmpty()) {
       return next( Error(errors.array()[0].msg) )
@@ -291,7 +300,10 @@ module.exports = (app, passport, models) => {
       
 
       const poll = new Poll({
-        choices: choices.map((choice, index) => ({ index, choice, votes: 0 })),
+        choices: choices.map((choice, i) => ({
+          choice,
+          votes: i===selectedChoice ? 1 : 0
+        })),
         createdTime: Date.now(),
         createdBy: user._id,
         shortName: shortName || user.polls.length,

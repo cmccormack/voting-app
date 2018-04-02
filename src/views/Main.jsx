@@ -133,7 +133,11 @@ class Main extends Component {
             return (
               <Col size="s12 xl6" key={`${user}-${shortName}`}>
                 <GraphCard
-                  title={title}
+                  title={
+                    <Link to={`user/${user}/polls/${shortName}`}>
+                      {title}
+                    </Link>
+                  }
                   content={
                     <Chart
                       choices={ poll.choices }

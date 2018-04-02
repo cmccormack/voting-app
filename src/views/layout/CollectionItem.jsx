@@ -32,23 +32,29 @@ const ActionGroup = styled.div`
 `
 
 const CollectionItem = ({
+  className,
   target,
-  title: { title, color },
+  title: { title='', color=''},
   props,
   actions,
   header=false
 }) => (
-  <li className={`collection-${header ? 'header' : 'item'}`}>
+  <li className={`${className} collection-${header ? 'header' : 'item'}`}>
     <div>
-      { target
-        ? <Link className={ color } to={target}>{title}</Link>
-        : <span className={ color }>{title}</span>
+      { 
+        title && (
+          target
+          ? <Link className={ color } to={target}>{title}</Link>
+          : <span className={ color }>{title}</span>
+        )
       }
-      <ActionGroup>
-        <ActionItems
-          actions={ Array.isArray(actions) ? actions : [ actions ] }
-        />
-      </ActionGroup>
+      { actions  &&
+        <ActionGroup>
+          <ActionItems
+            actions={ Array.isArray(actions) ? actions : [ actions ] }
+          />
+        </ActionGroup>
+      }
     </div>
   </li>
 )

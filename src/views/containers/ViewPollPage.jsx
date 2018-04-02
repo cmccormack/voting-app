@@ -28,8 +28,6 @@ class ViewPollPage extends Component {
       credentials: "same-origin"
     })
       .then(res => res.json()).then(({ success, poll, message, username }) => {
-        console.log(poll)
-        console.log(username)
         if (!success) return this.setState({ loaded: true, error: message })
         this.setState({
           poll,

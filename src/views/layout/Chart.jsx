@@ -15,7 +15,7 @@ const Chart = ({ choices, width=300, height=200 }) => {
       data={{
         datasets: [{
           data: choices.map(choice => choice.votes),
-          backgroundColor: getColors(choices.length, 360/choices.length, 75, 50)
+          backgroundColor: getColors(choices.length, 360/choices.length, 60, 50)
         }],
         labels: choices.map(choice => choice.choice)
       }}

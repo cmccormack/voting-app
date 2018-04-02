@@ -82,7 +82,7 @@ module.exports = (app, passport, models) => {
         res.type('json').send({
           success: true,
           poll: poll,
-          username: poll.createdBy.username
+          username: user.username
         })
       })
 
@@ -93,7 +93,6 @@ module.exports = (app, passport, models) => {
   app.post('/api/poll/delete', (req, res, next) => {
 
     const { id } = req.body
-    console.log(req.body)
     Poll.findOne({ _id: id})
     .populate('createdBy')
     .exec((err, poll) => {
@@ -131,7 +130,6 @@ module.exports = (app, passport, models) => {
         return next(Error('You are not authorized to delete this account.'))
       }
 
-      console.log(user)
       User.update({ _id: user._id }, { deleted: true }, (err, doc) => {
         if (err) return next(Error(err))
         req.logout()

@@ -72,6 +72,7 @@ const Routes = ({
         component={ NewPollPage }
         loggedIn={ loggedIn }
         updateAuthStatus={ props.updateAuthStatus }
+        user={ user }
       />
 
       <Route
@@ -83,7 +84,10 @@ const Routes = ({
 
       // Main page route 
       <Route exact path="/main" render={() => (
-        <Main loggedIn={ loggedIn } />
+        <Main 
+          loggedIn={ loggedIn }
+          user={user}
+        />
       )} />
 
 

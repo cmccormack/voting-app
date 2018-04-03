@@ -110,8 +110,8 @@ class UserAccountPage extends Component {
 
   render() {
 
-    const { loaded, polls, error, user } = this.state
-    const { location } = this.props
+    const { loaded, polls, error } = this.state
+    const { location, user } = this.props
 
     const title = "My Account"
     const footer = "Some Footer Text Here"
@@ -127,7 +127,7 @@ class UserAccountPage extends Component {
         polls={ polls }
         title={ title }
         updateTabs={ this.updateTabs }
-        user= { user }
+        user={ user }
       />
     )
   }

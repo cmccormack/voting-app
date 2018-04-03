@@ -89,6 +89,8 @@ class Main extends Component {
 
   render() {
 
+    const { user, loggedIn } = this.props
+
     const title = (
       <Row>
         <Col size="s12">
@@ -161,7 +163,7 @@ class Main extends Component {
             {'No polls found.  '}
             <Link
               className="teal-text text-accent-4"
-              to="/new"
+              to={loggedIn ? `user/${user}/new` : 'register'}
             >
               {'Be the first to create one!'}
             </Link>

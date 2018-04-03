@@ -15,6 +15,11 @@ import {
 const StyledNewChoiceIcon = styled(Icon)`
   position: absolute;
   line-height: 4.2rem;
+  cursor: pointer;
+
+  &:hover {
+    color: #11a799 !important;
+  }
 `
 
 
@@ -27,11 +32,12 @@ const StyledChoiceLabel = styled.label`
 const PollChoice = ({
   action,
   choice = '',
+  onChange,
   index = -1,
   selectedChoice = 0,
   ...props
 }) => {
-  
+
   const handleAction = e => {
     action(e, index)
   }
@@ -39,6 +45,10 @@ const PollChoice = ({
   const handleSelectedChoice = () => {
     props.handleSelectedChoice(index)
   }
+  
+  const handleInputChange = e => {
+    index === -1 ? onChange(e) : onChange(e, e.target.value, index)
+  } 
 
   return (
     <div>
@@ -59,6 +69,7 @@ const PollChoice = ({
     <FormInput
       action={ action && handleAction }
       index={ index }
+      onChange={ handleInputChange }
       size="s8"
       value={ choice }
       { ...props }
@@ -68,7 +79,11 @@ const PollChoice = ({
 }
 
 
-const PollChoices = ({choices, selectedChoice, ...props}) => {
+const PollChoices = ({
+  choices,
+  selectedChoice,
+  ...props
+}) => {
 
   const handleChoiceDelete = (e, i) => {
     e.preventDefault()
@@ -85,7 +100,7 @@ const PollChoices = ({choices, selectedChoice, ...props}) => {
         index={ i }
         label={ `Choice ${i + 1}` }
         name={ `choice_${i}` }
-        onChange={ e => props.handleInputChange(e, e.target.value, i) }
+        onChange={ props.handleInputChange }
         selectedChoice={ selectedChoice }
         { ...props }
       />
@@ -107,13 +122,7 @@ class NewPollForm extends Component {
     this.state = {
       newChoice: this.props.newChoice
     }
-    // this.handleChoiceAdd = this.handleChoiceAdd.bind(this)
   }
-
-  // handleChoiceAdd(e) {
-  //   e.preventDefault()
-  //   this.props.handleChoiceAdd(this.props.newChoice)
-  // }
 
   render() {
 
@@ -190,25 +199,29 @@ class NewPollForm extends Component {
                 {/* Allow user to enter new poll choice */}
                 <FormRow>
                   <PollChoice
-                    maxLength={inputLengths.choice.max}
-                    name="newChoice"
-                    onChange={this.props.handleInputChange}
+                    choice={ this.props.newChoice }
                     label="New Choice"
+                    maxLength={inputLengths.choice.max }
+                    name="newChoice"
+                    onChange={ this.props.handleInputChange }
+                    onFocus={ this.props.handleInputFocus }
+                    onBlur={ this.props.handleInputBlur }
                     size="s7 offset-s2"
-                    choice={this.props.newChoice}
                   />
                   <div className={"col s3"}>
                     <IconLink
+                      href="#AddNewChoice"
                       title="Click"
-                      href="#"
-                      onClick={this.props.handleChoiceAdd}
-                      Icon={<StyledNewChoiceIcon
-                        className="material-icons"
-                        fontSize="48px"
-                        color="teal-text text-darken-1"
-                      >
-                        {"add_circle_outline"}
-                      </StyledNewChoiceIcon>}
+                      onClick={ this.props.handleChoiceAdd }
+                      Icon={
+                        <StyledNewChoiceIcon
+                          className="material-icons"
+                          fontSize="48px"
+                          color="teal-text text-darken-1"
+                        >
+                          {"add_circle_outline"}
+                        </StyledNewChoiceIcon>
+                      }
                     >
                     </IconLink>
                   </div>

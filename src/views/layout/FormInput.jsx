@@ -40,6 +40,8 @@ const FormInput = ({
     action,
     actionIcon="close",
     label,
+    onBlur=()=>{},
+    onFocus=()=>{},
     size = "s12",
     type = "text",
     value = "",
@@ -79,7 +81,9 @@ const FormInput = ({
         id={`input_${name}`}
         maxLength={maxLength}
         name={name}
+        onBlur={onBlur}
         onChange={props.onChange}
+        onFocus={onFocus}
         type={type}
         value={value}
       />

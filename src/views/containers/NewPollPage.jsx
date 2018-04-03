@@ -12,6 +12,7 @@ class NewPollPage extends Component {
       choices: ['choice1', 'choice2'],
       error: "",
       newChoice: "",
+      newChoiceFocus: false,
       redirectpath: '#',
       selectedChoice: 0,
       shortName: "",
@@ -23,6 +24,8 @@ class NewPollPage extends Component {
     this.handleChoiceDelete = this.handleChoiceDelete.bind(this)
     this.handleChoiceAdd = this.handleChoiceAdd.bind(this)
     this.handleSelectedChoice = this.handleSelectedChoice.bind(this)
+    this.handleInputFocus = this.handleInputFocus.bind(this)
+    this.handleInputBlur = this.handleInputBlur.bind(this)
   }
 
   handleInputChange(e, choice, iter, newState={}) {
@@ -50,7 +53,7 @@ class NewPollPage extends Component {
 
 
   handleChoiceAdd(e) {
-    e.preventDefault()
+    e && e.preventDefault()
 
     const { newChoice: choice } = this.state
 
@@ -68,9 +71,22 @@ class NewPollPage extends Component {
     this.setState({ selectedChoice: index })
   }
 
+  handleInputFocus({target: { name }}) {
+    console.log('focused newChoice')
+    this.setState({ newChoiceFocus: name === 'newChoice' })
+  }
+
+  handleInputBlur({target: { name }}) {
+    console.log('blurred newChoice')
+    this.setState({ newChoiceFocus: !(name === 'newChoice') })
+  }
 
   handleSubmit(e) {
     e.preventDefault()
+
+    if (this.state.newChoiceFocus) {
+      return this.handleChoiceAdd()
+    }
 
     this.props.updateAuthStatus(user => {
 
@@ -121,6 +137,8 @@ class NewPollPage extends Component {
         handleChoiceDelete={ this.handleChoiceDelete }
         handleChoiceAdd={ this.handleChoiceAdd }
         handleSelectedChoice={ this.handleSelectedChoice }
+        handleInputFocus={ this.handleInputFocus }
+        handleInputBlur={ this.handleInputBlur }
         handleSubmit={ this.handleSubmit }
         { ...this.state }
       />

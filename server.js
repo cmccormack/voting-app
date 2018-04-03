@@ -20,14 +20,51 @@ const dbconf = require('./db.js')
 mongoose.Promise = global.Promise
 mongoose.connect(dbconf.url, dbconf.options)
 
+
+// USED TO UPDATE MODELS, DELETE LATER
+// models.User.updateMany({}, { polls: [] }, (err, docs) => {
+//   if (err) return console.error(err)
+//   console.log(docs)
+// })
+
+function updateModel(model, update={}) {
+  models[model].updateMany({}, update, (err, docs) => {
+    if (err) return console.error(err)
+    console.log(docs)
+  })
+}
+
+// Delete all polls, invoked when db connection opened
+function wipePolls() {
+  models.User.updateMany({}, { polls: [] }, (err, docs) => {
+    if (err) return console.error(err)
+  })
+  db.dropCollection('polls')
+}
+
+// Delete a user, invoked when db connection opened
+function wipeUser(username) {
+  models.User.findOneAndRemove({ username }, (err) => {
+    if (err) console.error(err)
+  })
+}
+
+// Delete all users, invoked when db connection opened
+function wipeUsers() {
+  db.dropCollection('users')
+}
+
+
 // The connection used by default for every model created using mongoose.model
 const db = mongoose.connection
 db.on('error', err => {
   console.error(`Mongoose default connection error: ${err}`) 
 })
 db.once('open', () => {
-  // db.dropCollection('users')
-  // db.dropCollection('polls')
+  // wipeUsers()
+  // wipePolls()
+  // wipeUser('tara')
+  // updateModel('User', { polls: [] })
   console.log(`Mongoose default connection opened [${dbconf.db}]`)
 })
 
@@ -36,14 +73,15 @@ const models = {
   Poll: require('./models/poll')(mongoose)
 }
 
-// USED TO UPDATE MODELS, DELETE LATER
-// models.User.updateMany({}, { deleted: false, locked: false }, (err, docs) => {
-//   if (err) return console.error(err)
-//   console.log(docs)
-// })
+
+
 models.Poll.find({}, (err, docs) => {
   if (err) return console.error(err)
   console.log(docs[docs.length-1])
+})
+models.User.findOne({ username: 'chris'}, (err, doc) => {
+ console.log(doc)
+
 })
 
 ///////////////////////////////////////////////////////////

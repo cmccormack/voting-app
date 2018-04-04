@@ -14,6 +14,11 @@ import { IndeterminateProgressBar } from '../utils'
 const ChoicesTitle = styled.div`
   text-align: center;
   font-size: 1.6rem;
+  text-transform: capitalize;
+`
+
+const ChoicesSection = styled.div`
+  margin-top: 40px;
 `
 
 class ViewPollPage extends Component {
@@ -63,21 +68,23 @@ class ViewPollPage extends Component {
           />
         </FormRow>
 
-        <FormRow>
-          <ChoicesTitle className='col s8 offset-s2 teal-text text-darken-1'>
-            Select a choice below to vote on your favorite!
-          </ChoicesTitle>
-          <Collection className="col s8 offset-s2">
-            {
-              choices.map(choice => (
-                <CollectionItem
-                  className="center-align"
-                  title={{title: choice.choice, color: "teal-text text-darken-1"}}
-                />
-              ))
-            }
-          </Collection>
-        </FormRow>
+        <ChoicesSection>
+          <FormRow>
+            <ChoicesTitle className='col s8 offset-s2 teal-text text-darken-1'>
+              Select a choice below to vote on your favorite!
+            </ChoicesTitle>
+            <Collection className="col s8 offset-s2">
+              {
+                choices.map(choice => (
+                  <CollectionItem
+                    className="center-align"
+                    title={{title: choice.choice, color: "teal-text text-darken-1"}}
+                  />
+                ))
+              }
+            </Collection>
+          </FormRow>
+        </ChoicesSection>
       </FormCard>
     )
 

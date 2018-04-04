@@ -75,14 +75,13 @@ const models = {
 
 
 
-models.Poll.find({}, (err, docs) => {
-  if (err) return console.error(err)
-  console.log(docs[docs.length-1])
-})
-models.User.findOne({ username: 'chris'}, (err, doc) => {
- console.log(doc)
-
-})
+// models.Poll.find({}, (err, docs) => {
+//   if (err) return console.error(err)
+//   console.log(docs[docs.length-1])
+// })
+// models.User.findOne({ username: 'chris'}, (err, doc) => {
+//  console.log(doc)
+// })
 
 ///////////////////////////////////////////////////////////
 //  Initialize Express and configure Middleware

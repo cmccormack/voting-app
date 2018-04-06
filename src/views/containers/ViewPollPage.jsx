@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { ViewPollForm } from '../components'
 import { FormCard, FormRow } from '../layout'
 import { IndeterminateProgressBar } from '../utils'
+import { getColorsIncrementHue } from '../../utils/colors'
 
 class ViewPollPage extends Component {
 
@@ -31,10 +32,20 @@ class ViewPollPage extends Component {
     })
       .then(res => res.json()).then(({ success, poll, message, username }) => {
         if (!success) return this.setState({ loaded: true, error: message })
+
+        // Create new array of incrementing colors of size poll.choices.length
+        const choiceColors = getColorsIncrementHue(
+          poll.choices.length,
+          180 / poll.choices.length,
+          60,
+          50
+        )
+
         this.setState({
           poll,
           loaded: true,
-          createdBy: username
+          choiceColors,
+          createdBy: username,
         })
 
       })

@@ -22,11 +22,12 @@ const ChoicesSection = styled.div`
   margin-top: 40px;
 `
 
-class ViewPollPage extends Component {
+class ViewPollForm extends Component {
 
   render() {
 
     const {
+      choiceColors,
       createdBy,
       error,
       footer,
@@ -63,6 +64,8 @@ class ViewPollPage extends Component {
       </FormCard>
     )
 
+
+
     const body = (
       <FormCard
         error={error}
@@ -74,6 +77,7 @@ class ViewPollPage extends Component {
           <Chart
             choices={ choices }
             className="col s12 m10 offset-m1"
+            colors={choiceColors}
           />
         </FormRow>
 
@@ -127,4 +131,4 @@ class ViewPollPage extends Component {
   }
 }
 
-export default ViewPollPage
+export default ViewPollForm

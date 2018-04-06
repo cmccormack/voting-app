@@ -4,6 +4,7 @@ import { VictoryPie, VictoryTheme } from 'victory'
 import { Link } from 'react-router-dom'
 
 import { Chart, GraphCard } from './layout'
+import { getColorsIncrementHue } from '../utils/colors'
 
 
 const Container = ({ className="", children }) => (
@@ -70,15 +71,25 @@ class Main extends Component {
 
   componentDidMount() {
     this._isMounted = true
-    console.log(`Main loaded? ${this.state.loaded}`)
     if (this.state.loaded) return
+
     fetch('/polls', {
       method: 'GET',
       credentials: 'include'
     })
       .then(res => res.json()).then((polls) => {
         if (!this._isMounted) return
-        this.setState({ polls, loaded: true })
+        this.setState({
+          polls: polls.map(poll=>{
+            poll.choiceColors = getColorsIncrementHue(
+              poll.choices.length,
+              180 / poll.choices.length,
+              60,
+              50
+            )
+            return poll
+          }), 
+          loaded: true })
       })
   }
 
@@ -142,7 +153,8 @@ class Main extends Component {
                   }
                   content={
                     <Chart
-                      choices={ poll.choices }
+                    choices={ poll.choices }
+                    colors={ poll.choiceColors }
                     />
                   }
                   actions={`Created by ${user}`}

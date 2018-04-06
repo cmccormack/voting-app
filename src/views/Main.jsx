@@ -153,8 +153,8 @@ class Main extends Component {
                   }
                   content={
                     <Chart
-                    choices={ poll.choices }
-                    colors={ poll.choiceColors }
+                      choices={ poll.choices }
+                      colors={ poll.choiceColors }
                     />
                   }
                   actions={`Created by ${user}`}

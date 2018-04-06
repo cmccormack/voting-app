@@ -37,7 +37,8 @@ module.exports = (passport, models) => {
           password: hashPassword(password),
           polls: [],
           locked: false,
-          deleted: false
+          deleted: false,
+          dateCreated: new Date(),
         })
 
         // Save new user to database

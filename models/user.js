@@ -6,22 +6,26 @@ module.exports = mongoose => {
     username: {
       type: String,
       unique: true,
-      required: true
+      required: true,
     },
     password: {
       type: String,
-      required: false
+      required: false,
+    },
+    dateCreated: {
+      type: Date,
+      required: true,
     },
     locked: {
-      type: Boolean
+      type: Boolean,
     },
     deleted: {
-      type: Boolean
+      type: Boolean,
     },
     polls: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Poll'
-    }]
+    }],
   })
 
   userSchema.methods.comparePasswords = function(password) {

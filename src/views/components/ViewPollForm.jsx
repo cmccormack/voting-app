@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 import {
   Alert,
@@ -25,7 +26,15 @@ class ViewPollPage extends Component {
 
   render() {
 
-    const { footer, loaded, poll, error, createdBy } = this.props
+    const {
+      createdBy,
+      error,
+      footer,
+      handleChoiceToggle,
+      loaded,
+      poll,
+      selectedChoice,
+    } = this.props
     const { title="Poll Not Found.", choices=[] } = poll
 
     const alert = (
@@ -77,8 +86,21 @@ class ViewPollPage extends Component {
               {
                 choices.map(choice => (
                   <CollectionItem
-                    className="center-align"
-                    title={{title: choice.choice, color: "teal-text text-darken-1"}}
+                    actions={[
+                      {
+                        icon: selectedChoice === choice.choice
+                          ? 'check_box'
+                          : 'check_box_outline_blank',
+                        target: "#",
+                        color: "teal-text text-lighten-2",
+                        handler: handleChoiceToggle.bind(null, choice.choice)
+                      }
+                    ]}
+                    key={choice.choice}
+                    title={{
+                      title: choice.choice,
+                      color: "teal-text text-darken-1"
+                    }}
                   />
                 ))
               }

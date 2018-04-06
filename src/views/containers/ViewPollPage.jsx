@@ -14,8 +14,10 @@ class ViewPollPage extends Component {
       error: "",
       loaded: false,
       poll: {},
-      createdBy: ''
+      createdBy: '',
+      selectedChoice: null,
     }
+    this.handleChoiceToggle = this.handleChoiceToggle.bind(this)
   }
 
   componentDidMount() {
@@ -39,6 +41,12 @@ class ViewPollPage extends Component {
       .catch(console.error)
   }
 
+  handleChoiceToggle(selectedChoice) {
+    this.setState({
+      selectedChoice
+    }, ()=> {console.log(this.state.selectedChoice)})
+  }
+
   render() {
 
     const { createdBy } = this.state
@@ -46,7 +54,8 @@ class ViewPollPage extends Component {
     return (
       <ViewPollForm
         { ...this.state }
-        footer={`Created by ${createdBy}`}
+        footer={ `Created by ${ createdBy }` }
+        handleChoiceToggle={ this.handleChoiceToggle }
       >
       </ViewPollForm>
     )

@@ -89,8 +89,8 @@ class ViewPollPage extends Component {
                     actions={[
                       {
                         icon: selectedChoice === choice.choice
-                          ? 'check_box'
-                          : 'check_box_outline_blank',
+                          ? 'radio_button_checked'
+                          : 'radio_button_unchecked',
                         target: "#",
                         color: "teal-text text-lighten-2",
                         handler: handleChoiceToggle.bind(null, choice.choice)

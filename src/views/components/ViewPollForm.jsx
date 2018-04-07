@@ -9,6 +9,7 @@ import {
   CollectionItem,
   FormCard,
   FormRow,
+  FormSubmitButton,
 } from '../layout'
 import { IndeterminateProgressBar } from '../utils'
 
@@ -31,7 +32,8 @@ class ViewPollForm extends Component {
       createdBy,
       error,
       footer,
-      handleChoiceToggle,
+      handleChoiceSelect,
+      handleSubmit,
       loaded,
       poll,
       selectedChoice,
@@ -45,16 +47,16 @@ class ViewPollForm extends Component {
           show={error ? true : false}
           type={error ? 'warning' : 'success'}
         >
-          {error}
+          { error }
         </Alert>
       </FormRow>
     )
 
     const loadingPoll = (
       <FormCard
+        alert={ alert }
         footer={'Please wait while the data is being accessed.'}
         title={'Loading Poll...'}
-        alert={ alert }
       >
         <FormRow>
           <div className="col s8 offset-s2">
@@ -68,10 +70,11 @@ class ViewPollForm extends Component {
 
     const body = (
       <FormCard
-        error={error}
-        footer={createdBy && footer}
-        title={title}
-        user={createdBy}
+        error={ error }
+        footer={ createdBy && footer }
+        title={ title }
+        user={ createdBy }
+        alert={ alert }
       >
         <FormRow>
           <Chart
@@ -83,7 +86,9 @@ class ViewPollForm extends Component {
 
         <ChoicesSection>
           <FormRow>
-            <ChoicesTitle className='col s8 offset-s2 teal-text text-darken-1'>
+            <ChoicesTitle 
+              className='col s8 offset-s2 teal-text text-darken-1'
+            >
               Select a choice below to vote on your favorite!
             </ChoicesTitle>
             <Collection className="col s8 offset-s2">
@@ -97,7 +102,7 @@ class ViewPollForm extends Component {
                           : 'radio_button_unchecked',
                         target: "#",
                         color: "teal-text text-lighten-2",
-                        handler: handleChoiceToggle.bind(null, choice.choice)
+                        handler: handleChoiceSelect.bind(null, choice.choice)
                       }
                     ]}
                     key={choice.choice}
@@ -109,6 +114,15 @@ class ViewPollForm extends Component {
                 ))
               }
             </Collection>
+          </FormRow>
+          <FormRow>
+            <FormSubmitButton
+              buttonText="Vote!"
+              icon="done_all"
+              onClick={this.props.handleSubmit}
+              position="right"
+              size="s8 offset-s2"
+            />
           </FormRow>
         </ChoicesSection>
       </FormCard>

@@ -12,13 +12,14 @@ class ViewPollPage extends Component {
     super(props)
 
     this.state = {
-      error: "",
+      error: '',
       loaded: false,
       poll: {},
       createdBy: '',
       selectedChoice: null,
     }
-    this.handleChoiceToggle = this.handleChoiceToggle.bind(this)
+    this.handleChoiceSelect = this.handleChoiceSelect.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   componentDidMount() {
@@ -42,20 +43,49 @@ class ViewPollPage extends Component {
         )
 
         this.setState({
-          poll,
-          loaded: true,
           choiceColors,
           createdBy: username,
+          loaded: true,
+          poll,
+          selectedChoice: poll.choices[0].choice || null
         })
 
       })
       .catch(console.error)
   }
 
-  handleChoiceToggle(selectedChoice) {
-    this.setState({
-      selectedChoice
-    }, ()=> {console.log(this.state.selectedChoice)})
+  handleChoiceSelect(selectedChoice) {
+    this.setState({ selectedChoice })
+  }
+
+  handleSubmit(e) {
+
+    const { params } = this.props.match
+    const { selectedChoice, poll } = this.state
+
+    // console.log(selectedChoice)
+    // console.log(`/api/${params.user}/polls/${params.poll}`)
+    // console.log(poll.choices.map(({ choice }) => choice))
+
+    if (!poll.choices.map(({choice}) => choice).includes(selectedChoice)) {
+      return this.setState({error: `Invalid choice [${selectedChoice}]!`})
+    }
+
+    fetch(`/api/${params.user}/polls/${params.poll}`, {
+      method: "POST",
+      headers: new Headers({'Content-Type': 'application/json'}),
+      cache: "default",
+      credentials: "same-origin",
+      body: JSON.stringify({ selectedChoice })
+    })
+      .then(res => res.json()).then(({ success, poll, message, username }) => {
+        if(!success) {
+          this.setState({
+            success,
+            error: message
+          })
+        }
+      })
   }
 
   render() {
@@ -66,7 +96,8 @@ class ViewPollPage extends Component {
       <ViewPollForm
         { ...this.state }
         footer={ `Created by ${ createdBy }` }
-        handleChoiceToggle={ this.handleChoiceToggle }
+        handleChoiceSelect={ this.handleChoiceSelect }
+        handleSubmit={ this.handleSubmit }
       >
       </ViewPollForm>
     )

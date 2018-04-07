@@ -85,9 +85,55 @@ module.exports = (app, passport, models) => {
           username: user.username
         })
       })
-
     })
   })
+
+
+  // Vote on a single poll
+  app.post('/api/:user/polls/:poll', (req, res, next) => {
+    const { user, poll } = req.params
+    const { selectedChoice } = req.body
+
+    Poll
+    .findOne({ 'shortName': poll })
+    .populate('createdBy')
+    .exec((err, doc) => {
+      if (err) return next(Error(err))
+      if (!doc) return next(Error('Invalid Poll Short Name'))
+      if (doc.createdBy.username !== user) {
+        return next(Error('Invalid Poll Short Name or User'))
+      }
+      console.log(selectedChoice)
+      Poll
+      .where({
+        'shortName': poll,
+        'choices.choice': selectedChoice,
+      })
+      .update({ $inc: { 'choices.$.votes': 1 } })
+      .exec((err, doc) => {
+        if (err) return console.error(err)
+        console.log(doc)
+      })
+      // Poll
+      // .findOne({
+      //   'shortName': poll,
+      //   'choices': {
+      //     $elemMatch: {
+      //       choice: selectedChoice
+      //     }
+      //   }  
+      // })
+      // .exec((err, doc) => {
+      //   console.log(doc)
+      // })
+
+
+      res.type('json').send({ success: true })
+    })
+
+    
+  })
+
 
   // Delete a single poll for a single user
   app.post('/api/poll/delete', (req, res, next) => {
@@ -354,15 +400,6 @@ module.exports = (app, passport, models) => {
           )))
     })
   })
-
-
-  ///////////////////////////////////////////////////////////
-  // Handle Invalid Routes that React Router Does Not
-  ///////////////////////////////////////////////////////////
-  // app.get('/:path/*', (req, res) => {
-  //   console.log(`New Request for ${req.hostname + req.path}`)
-  //   res.redirect('/')
-  // })
 
 
   ///////////////////////////////////////////////////////////

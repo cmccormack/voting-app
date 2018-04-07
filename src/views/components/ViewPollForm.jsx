@@ -23,6 +23,7 @@ const ChoicesSection = styled.div`
   margin-top: 40px;
 `
 
+
 class ViewPollForm extends Component {
 
   render() {

@@ -4,7 +4,7 @@ import { VictoryPie, VictoryTheme } from 'victory'
 import { Link } from 'react-router-dom'
 
 import { Chart, GraphCard } from './layout'
-import { getColorsIncrementHue } from '../utils/colors'
+import { getRandomHue, getColorsIncrementHue } from '../utils/colors'
 
 
 const Container = ({ className="", children }) => (
@@ -82,10 +82,12 @@ class Main extends Component {
         this.setState({
           polls: polls.map(poll=>{
             poll.choiceColors = getColorsIncrementHue(
-              poll.choices.length,
-              180 / poll.choices.length,
-              60,
-              50
+              getRandomHue(),
+              {
+                length: poll.choices.length,
+                increment: 20,
+                saturation: 60,
+              }
             )
             return poll
           }), 

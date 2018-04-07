@@ -39,6 +39,7 @@ class ViewPollForm extends Component {
       poll,
       selectedChoice,
     } = this.props
+    
     const { title="Poll Not Found.", choices=[] } = poll
 
     const alert = (

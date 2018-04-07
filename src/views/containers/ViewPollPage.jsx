@@ -42,7 +42,6 @@ class ViewPollPage extends Component {
             increment: 20,
             saturation: 60,
           }
-          
         )
 
         this.setState({

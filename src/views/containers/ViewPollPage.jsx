@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { ViewPollForm } from '../components'
 import { FormCard, FormRow } from '../layout'
 import { IndeterminateProgressBar } from '../utils'
-import { getColorsIncrementHue } from '../../utils/colors'
+import { getRandomHue, getColorsIncrementHue } from '../../utils/colors'
 
 class ViewPollPage extends Component {
 
@@ -36,10 +36,13 @@ class ViewPollPage extends Component {
 
         // Create new array of incrementing colors of size poll.choices.length
         const choiceColors = getColorsIncrementHue(
-          poll.choices.length,
-          180 / poll.choices.length,
-          60,
-          50
+          getRandomHue(),
+          {
+            length: poll.choices.length,
+            increment: 20,
+            saturation: 60,
+          }
+          
         )
 
         this.setState({
@@ -62,10 +65,6 @@ class ViewPollPage extends Component {
 
     const { params } = this.props.match
     const { selectedChoice, poll } = this.state
-
-    // console.log(selectedChoice)
-    // console.log(`/api/${params.user}/polls/${params.poll}`)
-    // console.log(poll.choices.map(({ choice }) => choice))
 
     if (!poll.choices.map(({choice}) => choice).includes(selectedChoice)) {
       return this.setState({error: `Invalid choice [${selectedChoice}]!`})

@@ -77,12 +77,12 @@ class ViewPollPage extends Component {
       body: JSON.stringify({ selectedChoice })
     })
       .then(res => res.json()).then(({ success, poll, message, username }) => {
-        if(!success) {
-          this.setState({
-            success,
-            error: message
-          })
-        }
+        console.log(poll)
+        this.setState({
+          success,
+          error: message,
+          poll: success ? poll : this.state.poll
+        })
       })
   }
 

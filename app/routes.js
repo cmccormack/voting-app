@@ -91,44 +91,38 @@ module.exports = (app, passport, models) => {
 
   // Vote on a single poll
   app.post('/api/:user/polls/:poll', (req, res, next) => {
-    const { user, poll } = req.params
+    const { params } = req
     const { selectedChoice } = req.body
 
     Poll
-    .findOne({ 'shortName': poll })
+    .findOne({ 'shortName': params.poll })
     .populate('createdBy')
-    .exec((err, doc) => {
+    .exec((err, poll) => {
       if (err) return next(Error(err))
-      if (!doc) return next(Error('Invalid Poll Short Name'))
-      if (doc.createdBy.username !== user) {
+      if (!poll) return next(Error('Invalid Poll Short Name'))
+      if (poll.createdBy.username !== params.user) {
         return next(Error('Invalid Poll Short Name or User'))
       }
-      console.log(selectedChoice)
+
       Poll
       .where({
-        'shortName': poll,
+        'shortName': params.poll,
         'choices.choice': selectedChoice,
       })
       .update({ $inc: { 'choices.$.votes': 1 } })
-      .exec((err, doc) => {
-        if (err) return console.error(err)
-        console.log(doc)
+      .exec((err) => {
+        if (err) return next(Error(err))
+
+        Poll
+        .findOne({shortName: params.poll})
+        .exec((err, poll) => {
+          if (err) return next(Error(err))
+          res.type('json').send({
+            success: true,
+            poll,
+          })
+        })
       })
-      // Poll
-      // .findOne({
-      //   'shortName': poll,
-      //   'choices': {
-      //     $elemMatch: {
-      //       choice: selectedChoice
-      //     }
-      //   }  
-      // })
-      // .exec((err, doc) => {
-      //   console.log(doc)
-      // })
-
-
-      res.type('json').send({ success: true })
     })
 
     

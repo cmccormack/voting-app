@@ -91,14 +91,6 @@ class UserPollsForm extends Component {
         user={ user }
         alert={ alert }
       >
-        {/* <FormRow>
-          <Chart
-            choices={ choices }
-            className="col s12 m10 offset-m1"
-            colors={choiceColors}
-          />
-        </FormRow> */}
-
         { polls.length > 0 &&
           <ChoicesSection>
             <FormRow>

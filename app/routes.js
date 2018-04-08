@@ -52,14 +52,17 @@ module.exports = (app, passport, models) => {
 
   // Get all polls of a single user
   app.get('/api/:user/polls', (req, res, next) => {
+    console.log(req.params)
     User
     .findOne({ username: req.params.user })
     .populate('polls')
     .exec((err, user) => {
+      if (err) return next(Error(err))
+      // console.log(JSON.stringify(user.polls, null, 2))
       res.type('json').send({
         success: true,
         message: '',
-        polls: user.polls
+        polls: user ? user.polls : []
       })
     })
   })

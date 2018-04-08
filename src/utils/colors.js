@@ -5,7 +5,7 @@ export const getColor = (h=0, s=50, l=50) => `hsl(${h}, ${s}%, ${l}%)`
 export const getRandomHue = (max=360) => randInt(max)
 
 export const getColorsIncrementHue = (seed, options) => {
-  console.log(options)
+
   const {
     length = 1,
     increment: inc = 10,

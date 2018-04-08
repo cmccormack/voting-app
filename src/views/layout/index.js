@@ -1,35 +1,39 @@
 import Alert from './Alert'
-import Header from './Header'
+import Col from './Col'
+import Collection from './Collection'
+import CollectionItem from './CollectionItem'
+import Chart from './Chart'
 import Footer from './Footer'
 import FormCard from './FormCard'
 import FormSubmitButton from './FormSubmitButton'
 import FormInput from './FormInput'
 import FormRow from './FormRow'
 import GraphCard from './GraphCard'
+import Header from './Header'
 import IconLink from './IconLink'
 import Icon from './Icon'
+import Row from './Row'
 import Tab from './Tab'
 import Tabs from './Tabs'
 import TabBody from './TabBody'
-import Collection from './Collection'
-import CollectionItem from './CollectionItem'
-import Chart from './Chart'
 
 export {
   Alert,
-  Header,
+  Col,
+  Collection,
+  CollectionItem,
+  Chart,
   Footer,
   FormCard,
   FormSubmitButton,
   FormInput,
   FormRow,
+  Header,
   GraphCard,
   IconLink,
   Icon,
+  Row,
   Tab,
   Tabs,
   TabBody,
-  Collection,
-  CollectionItem,
-  Chart
 }

@@ -3,29 +3,16 @@ import styled from 'styled-components'
 import { VictoryPie, VictoryTheme } from 'victory'
 import { Link } from 'react-router-dom'
 
-import { Chart, GraphCard } from './layout'
+import { Chart, Col, GraphCard, Row } from './layout'
 import { getRandomHue, getColorsIncrementHue } from '../utils/colors'
 
-
-const Container = ({ className="", children }) => (
+const Container = ({ className = "", children }) => (
   <div className={`container ${className}`}>
     {children}
   </div>
 )
 
-const Row = ({ children }) => (
-  <div className="row">
-    { children }
-  </div>
-)
-
-const Col = ({ size='s12', color='', children }) => (
-  <div className={`col ${size} ${color}`}>
-    { children }
-  </div>
-)
-
-const MainWrapper = styled(Container)`
+const MainWrapper = styled(Container) `
   border-radius: 5px;
   margin-top: 80px;
   padding: 20px;
@@ -48,8 +35,8 @@ const BodyWrapper = SectionWrapper.extend`
 `
 
 const Header = styled.p.attrs({
-  className: ({color}) => color,
-})`
+  className: ({ color }) => color,
+}) `
   margin: ${({ margin }) => margin || '0'};
   padding: ${({ padding }) => padding || '0'};
   font-size: ${({ fontSize }) => fontSize};
@@ -80,7 +67,7 @@ class Main extends Component {
       .then(res => res.json()).then((polls) => {
         if (!this._isMounted) return
         this.setState({
-          polls: polls.map(poll=>{
+          polls: polls.map(poll => {
             poll.choiceColors = getColorsIncrementHue(
               getRandomHue(),
               {
@@ -90,8 +77,9 @@ class Main extends Component {
               }
             )
             return poll
-          }), 
-          loaded: true })
+          }),
+          loaded: true
+        })
       })
   }
 
@@ -123,7 +111,7 @@ class Main extends Component {
             padding=".2rem 0"
           >
             {'Check out some of the great user-submitted ' +
-            'polls below, or create your own.'}
+              'polls below, or create your own.'}
           </Header>
           <Header
             className="teal-text text-darken-1"
@@ -131,20 +119,20 @@ class Main extends Component {
             padding=".2rem 0"
           >
             {'See if the thing you like is better then ' +
-            'the thing that other person likes!'}
+              'the thing that other person likes!'}
           </Header>
         </Col>
       </Row>
     )
 
     const loadingDisplay = (
-        <h1 className="teal-text text-darken-3">Loading...</h1>
+      <h1 className="teal-text text-darken-3">Loading...</h1>
     )
 
     const body = (
       <Row>
-        { this.state.polls.map(
-          ({title, shortName, createdBy: user, ...poll}) => {
+        {this.state.polls.map(
+          ({ title, shortName, createdBy: user, ...poll }) => {
             return (
               <Col size="s12 xl6" key={`${user}-${shortName}`}>
                 <GraphCard
@@ -155,15 +143,15 @@ class Main extends Component {
                   }
                   content={
                     <Chart
-                      choices={ poll.choices }
-                      colors={ poll.choiceColors }
+                      choices={poll.choices}
+                      colors={poll.choiceColors}
                     />
                   }
                   actions={`Created by ${user}`}
                 />
               </Col>
             )
-        })}
+          })}
       </Row>
     )
 
@@ -193,18 +181,18 @@ class Main extends Component {
         <TitleWrapper
           className="teal lighten-5"
         >
-          { title }
+          {title}
         </TitleWrapper>
         <BodyWrapper
           className="teal lighten-5"
         >
-        {
-          !this.state.loaded 
-            ? loadingDisplay 
-            : this.state.polls.length > 0
-              ? body
-              : pollsEmpty
-        }
+          {
+            !this.state.loaded
+              ? loadingDisplay
+              : this.state.polls.length > 0
+                ? body
+                : pollsEmpty
+          }
         </BodyWrapper>
       </MainWrapper>
     )

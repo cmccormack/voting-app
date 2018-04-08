@@ -1,8 +1,9 @@
 import LoginPage from './LoginPage'
-import RegisterPage from './RegisterPage'
-import UserAccountPage from './UserAccountPage'
 import LogoutPage from './LogoutPage'
 import NewPollPage from './NewPollPage'
+import RegisterPage from './RegisterPage'
+import UserAccountPage from './UserAccountPage'
+import UserPollsPage from './UserPollsPage'
 import ViewPollPage from './ViewPollPage'
 
 export {
@@ -11,5 +12,6 @@ export {
   RegisterPage,
   UserAccountPage,
   NewPollPage,
-  ViewPollPage
+  UserPollsPage,
+  ViewPollPage,
 }

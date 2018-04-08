@@ -3,11 +3,12 @@ import { Route, Redirect, Switch} from 'react-router-dom'
 
 import { PrivateRoute } from './views/utils'
 import {
-  RegisterPage,
   LoginPage,
   LogoutPage,
-  UserAccountPage,
   NewPollPage,
+  RegisterPage,
+  UserAccountPage,
+  UserPollsPage,
   ViewPollPage,
 } from './views/containers'
 import Main from './views/Main'
@@ -75,6 +76,18 @@ const Routes = ({
         user={ user }
       />
 
+      // View User Polls
+      <Route exact path="/user/:user/polls"
+        render={ ({match}) => (
+          <UserPollsPage
+            title={`Polls created by ${match.params.user}`}
+            footer="Some Footer Text Here"
+            user={match.params.user}
+          />
+        )}
+      />
+
+
       <Route
         exact path="/user/:user/polls/:poll"
         component={ ViewPollPage }
@@ -89,6 +102,8 @@ const Routes = ({
           user={user}
         />
       )} />
+
+
 
 
       // Redirect to Main page for now

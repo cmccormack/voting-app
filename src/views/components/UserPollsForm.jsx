@@ -114,7 +114,7 @@ class UserPollsForm extends Component {
                             colors={poll.choiceColors}
                           />
                         }
-                        actions={`Created by ${user}`}
+                        actions={ [] }
                       />
                     </Col>
                   )

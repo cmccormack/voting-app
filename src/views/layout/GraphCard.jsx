@@ -35,7 +35,7 @@ const GraphCard = ({ title, content, actions}) => (
     <GraphCardContent content={content}>
       <GraphCardTitle title={title} />
     </GraphCardContent>
-    <GraphCardActions actions={actions} />
+    { actions.length > 0 && <GraphCardActions actions={actions} /> }
   </GraphCardWrapper>
 )
 

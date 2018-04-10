@@ -22,10 +22,13 @@ const GraphCardContent = ({ content, children: title }) => (
 
 const GraphCardActionsStyled = styled.div`
   position: relative !important;
+  color: none !important;
+  text-transform: none !important;
 `
 
 const GraphCardActions = ({ actions }) => (
   <GraphCardActionsStyled className="card-action">
+    { console.log(actions)}
     { actions }
   </GraphCardActionsStyled>
 )
@@ -35,7 +38,7 @@ const GraphCard = ({ title, content, actions}) => (
     <GraphCardContent content={content}>
       <GraphCardTitle title={title} />
     </GraphCardContent>
-    { actions.length > 0 && <GraphCardActions actions={actions} /> }
+    { actions && <GraphCardActions actions={actions} /> }
   </GraphCardWrapper>
 )
 

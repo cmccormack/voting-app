@@ -5,7 +5,7 @@ import Alert from './Alert'
 import FormRow from './FormRow'
 
 const FormCardMain = styled.div.attrs({
-  className: "card z-depth-4 hoverable"
+  className: "card z-depth-4"
 }) `
   margin-top: 80px;
 `
@@ -46,6 +46,7 @@ const FormCard = ({title, footer, error, children, alert}) => {
 
         <div className="row">
           <div className="col-xs-12 center">
+          {console.log(footer)}
             {footer}
           </div>
         </div>

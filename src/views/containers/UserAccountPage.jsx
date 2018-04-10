@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import path from 'path'
+import { Link } from 'react-router-dom'
 
 import { UserAccountForm } from '../components'
 
@@ -114,14 +116,26 @@ class UserAccountPage extends Component {
     const { location, user } = this.props
 
     const title = "My Account"
-    const footer = "Some Footer Text Here"
+    const footer = (
+      <span className="footer-text">
+        <Link to={path.join(location.pathname, `polls`)}>
+          {"View all of your polls!"}
+        </Link>
+      </span>
+    )
 
     return (
       <UserAccountForm
         deletePoll={ this.deletePoll }
         deleteAccount={ this.deleteAccount }
         error={ error }
-        footer={ footer }
+        footer={
+          <span className="footer-text">
+            <Link to={path.join(location.pathname, `polls`)}>
+              {"View all of your polls!"}
+            </Link>
+          </span>
+        }
         loaded={ loaded }
         location={ location }
         polls={ polls }

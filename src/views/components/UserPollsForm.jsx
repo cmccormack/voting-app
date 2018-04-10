@@ -104,7 +104,7 @@ class UserPollsForm extends Component {
                     <Col size="s12 xl10 offset-xl1" key={`${user}-${shortName}`}>
                       <GraphCard
                         title={
-                          <Link to={`${shortName}`}>
+                          <Link to={`polls/${shortName}`}>
                             {title}
                           </Link>
                         }
@@ -114,7 +114,7 @@ class UserPollsForm extends Component {
                             colors={poll.choiceColors}
                           />
                         }
-                        actions={ [] }
+                        actions={ null }
                       />
                     </Col>
                   )

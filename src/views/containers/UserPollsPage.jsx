@@ -10,13 +10,13 @@ class UserPollsPage extends Component {
     this.state = {
       error: "",
       footer: this.props.footer,
-      loaded: false,
-      loadingFailed: false,
+      loading: true,
       polls: [],
       title: this.props.title,
+      apiTimeout: 5 * 1000 // 5 seconds
     }
-    this.timeoutID = 0
     this._isMounted = false
+    this.getPolls = this.getPolls.bind(this)
   }
 
   getPolls() {
@@ -27,13 +27,10 @@ class UserPollsPage extends Component {
       credentials: "same-origin"
     })
       .then(res => res.json()).then(({success, polls, message}) => {
-        
+        console.log('in getPolls .then')
         // Return early if Component unmounted or loading timer expired
-        if (!this._isMounted || this.loadingFailed) return
-        
-        // Stop timer to prevent showing loading failed message
-        clearTimeout(this.timeoutID)
-        
+        if (!this._isMounted) return
+
         if (!success) {
           return this.setState({ error: message})
         }
@@ -50,7 +47,7 @@ class UserPollsPage extends Component {
             )
             return poll
           }),
-          loaded: true,
+          loading: false,
           loadingFailed: false,
           title: polls.length > 0 
             ? this.state.title
@@ -63,13 +60,6 @@ class UserPollsPage extends Component {
   componentDidMount() {
     this._isMounted = true
     this.getPolls()
-    this.timeoutID = setTimeout(() => {
-      console.log('Loading timed out...')
-      this.setState({
-        loaded: true,
-        loadingFailed: true,
-      })
-    }, 5000)
   }
 
   componentWillUnmount() {

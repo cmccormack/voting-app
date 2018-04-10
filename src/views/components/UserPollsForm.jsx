@@ -13,6 +13,8 @@ import {
 } from '../layout'
 import { IndeterminateProgressBar } from '../utils'
 
+import LoaderWithTimeout from '../utils/LoaderWithTimeout'
+
 const ChoicesTitle = styled.div`
   text-align: center;
   font-size: 1.6rem;
@@ -29,11 +31,12 @@ class UserPollsForm extends Component {
   render() {
 
     const {
+      apiTimeout,
       error,
       footer,
       handleChoiceSelect,
       handleSubmit,
-      loaded,
+      loading,
       loadingFailed,
       polls,
       title,
@@ -57,14 +60,8 @@ class UserPollsForm extends Component {
       <FormCard
         alert={alert}
         footer={'Please try again later'}
-        title={'Error Loading Polls From Server'}
-      >
-        {/* <FormRow>
-          <div className="col s8 offset-s2">
-            <IndeterminateProgressBar />
-          </div>
-        </FormRow> */}
-      </FormCard>
+        title={'Error Loading Polls From Server.'}
+      />
     )
 
     const loadingPolls = (
@@ -74,9 +71,9 @@ class UserPollsForm extends Component {
         title={'Loading Polls...'}
       >
         <FormRow>
-          <div className="col s8 offset-s2">
+          <Col size="s8 offset-s2">
             <IndeterminateProgressBar />
-          </div>
+          </Col>
         </FormRow>
       </FormCard>
     )
@@ -99,14 +96,15 @@ class UserPollsForm extends Component {
               >
                 Select a poll below and vote!
               </ChoicesTitle>
+            </FormRow>
+            <FormRow>
               { polls.map(
                 ({ title, shortName, ...poll }) => {
-                  console.log(`user/${user}/polls/${shortName}`)
                   return (
                     <Col size="s12 xl10 offset-xl1" key={`${user}-${shortName}`}>
                       <GraphCard
                         title={
-                          <Link to={`polls/${shortName}`}>
+                          <Link to={`${shortName}`}>
                             {title}
                           </Link>
                         }
@@ -131,17 +129,17 @@ class UserPollsForm extends Component {
     return (
 
       <div className="container center">
-        <div className="row">
-          <div className="col s12 m10 offset-m1 xl8 offset-xl2">
-            { 
-              !loaded
-              ? loadingPolls
-              : this.props.loadingFailed
-                ? loadingPollsFailedCard
-                : body
-            }
-          </div>
-        </div>
+        <FormRow>
+          <Col size="s12 m10 offset-m1 xl8 offset-xl2">
+            <LoaderWithTimeout
+              loaded={ !loading }
+              renderSuccess={ body }
+              renderFailed={ loadingPollsFailedCard }
+              renderLoading={ loadingPolls }
+              timeout={ apiTimeout }
+            />
+          </Col>
+        </FormRow>
       </div>
 
     )

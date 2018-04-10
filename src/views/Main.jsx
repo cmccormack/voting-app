@@ -14,7 +14,7 @@ const Container = ({ className = "", children }) => (
 
 const MainWrapper = styled(Container) `
   border-radius: 5px;
-  margin-top: 80px;
+  margin: 80px auto 80px;
   padding: 20px;
   min-width: 420px;
 `
@@ -40,6 +40,11 @@ const Header = styled.p.attrs({
   margin: ${({ margin }) => margin || '0'};
   padding: ${({ padding }) => padding || '0'};
   font-size: ${({ fontSize }) => fontSize};
+`
+
+const CardActionLink = styled(Link)`
+  color: #039be5 !important;
+  text-transform: none !important;
 `
 
 
@@ -147,7 +152,13 @@ class Main extends Component {
                       colors={poll.choiceColors}
                     />
                   }
-                  actions={`Created by ${user}`}
+                  actions={
+                    <span className={'card-footer-text'}>
+                      {'Created by '}
+                      <CardActionLink to={`user/${user}/polls`}>{user}
+                      </CardActionLink>
+                    </span>
+                  }
                 />
               </Col>
             )

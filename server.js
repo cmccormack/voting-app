@@ -72,7 +72,7 @@ const models = {
   User: require('./models/user')(mongoose),
   Poll: require('./models/poll')(mongoose)
 }
-
+console.log(require('./models/user'))
 
 
 // models.Poll.find({}, (err, docs) => {

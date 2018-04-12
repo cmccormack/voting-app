@@ -354,8 +354,9 @@ module.exports = (app, passport, models) => {
 
       poll.save(err => {
 
+          console.log('poll.save')
         if (err) return next( new Error(err) )
-
+          console.log('blah')
         User.findOneAndUpdate(
           { _id: user._id },
           { $push: { polls: poll._id }},

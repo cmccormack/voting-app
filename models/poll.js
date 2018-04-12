@@ -59,7 +59,6 @@ module.exports = mongoose => {
   })
 
   const Poll = mongoose.model('Poll', PollSchema, 'polls')
-
   return Poll
 
 }

@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "npm run build && node server.js",
-    "dev": "nodemon --ignore src/ --ignore public/ --inspect server.js ",
+    "dev": "nodemon --ignore src/ --ignore public/ server.js ",
     "build": "rimraf ./public && webpack --env.production --colors --progress",
     "webpack": "webpack -d --watch",
     "webpackdev": "webpack-dev-server --env.development --colors --progress"
@@ -45,7 +45,7 @@
     "webpack-dev-server": "^2.9.4"
   },
   "dependencies": {
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^2.0.0",
     "body-parser": "^1.18.2",
     "chart.js": "^2.7.2",
     "connect-mongo": "^2.0.0",

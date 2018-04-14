@@ -47,6 +47,14 @@ const CardActionLink = styled(Link)`
   text-transform: none !important;
 `
 
+const textContent = {
+  header: 'Welcome to Votery!', 
+  subheaders: [
+    'Check out some of the great user-submitted polls below, or create your own.',
+    'See if the thing you like is better than the thing that other person likes!'
+  ]
+}
+
 
 class Main extends Component {
 
@@ -89,13 +97,14 @@ class Main extends Component {
   }
 
   componentWillUnmount() {
-    this._isMounted = true
+    this._isMounted = false
   }
 
 
   render() {
 
     const { user, loggedIn } = this.props
+    const { header, subheaders } = textContent
 
     const title = (
       <Row>
@@ -105,27 +114,23 @@ class Main extends Component {
             fontSize="4rem"
             padding="3rem 0"
           >
-            {'Welcome to Votery!'}
+            {header}
           </Header>
         </Col>
 
         <Col size="s12">
-          <Header
-            className="teal-text text-darken-1"
-            fontSize="1.2rem"
-            padding=".2rem 0"
-          >
-            {'Check out some of the great user-submitted ' +
-              'polls below, or create your own.'}
-          </Header>
-          <Header
-            className="teal-text text-darken-1"
-            fontSize="1.2rem"
-            padding=".2rem 0"
-          >
-            {'See if the thing you like is better then ' +
-              'the thing that other person likes!'}
-          </Header>
+          {
+            subheaders.map((h,i) => (
+              <Header
+                className="teal-text text-darken-1"
+                fontSize="1.2rem"
+                padding=".2rem 0"
+                key={i}
+              >
+                {h}
+              </Header>
+            ))
+          }
         </Col>
       </Row>
     )

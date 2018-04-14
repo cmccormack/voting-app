@@ -46,7 +46,6 @@ const FormCard = ({title, footer, error, children, alert}) => {
 
         <div className="row">
           <div className="col-xs-12 center">
-          {console.log(footer)}
             {footer}
           </div>
         </div>

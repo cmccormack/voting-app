@@ -32,12 +32,13 @@ const ActionGroup = styled.div`
 `
 
 const CollectionItem = ({
-  className,
+  children,
+  className='',
   target,
   title: { title='', color=''},
   props,
   actions,
-  header=false
+  header=false,
 }) => (
   <li className={`${className} collection-${header ? 'header' : 'item'}`}>
     <div>
@@ -48,7 +49,9 @@ const CollectionItem = ({
           : <span className={ color }>{title}</span>
         )
       }
-      { actions  &&
+      { children }
+      {
+        actions  &&
         <ActionGroup>
           <ActionItems
             actions={ Array.isArray(actions) ? actions : [ actions ] }

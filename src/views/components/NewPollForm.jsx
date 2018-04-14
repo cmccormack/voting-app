@@ -2,16 +2,17 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 
 import {
+  Alert,
   FormCard,
-  FormSubmitButton,
   FormInput,
   FormRow,
-  IconLink,
+  FormSubmitButton,
   Icon,
-  Alert
+  IconLink,
+  PollChoice,
 } from '../layout'
 
-
+console.log(JSON.stringify(Icon))
 const StyledNewChoiceIcon = styled(Icon)`
   position: absolute;
   line-height: 4.2rem;
@@ -21,63 +22,6 @@ const StyledNewChoiceIcon = styled(Icon)`
     color: #11a799 !important;
   }
 `
-
-
-const StyledChoiceLabel = styled.label`
-  right: 0;
-  top: 0;
-  bottom: 0;
-`
-
-const PollChoice = ({
-  action,
-  choice = '',
-  onChange,
-  index = -1,
-  selectedChoice = 0,
-  ...props
-}) => {
-
-  const handleAction = e => {
-    action(e, index)
-  }
-
-  const handleSelectedChoice = () => {
-    props.handleSelectedChoice(index)
-  }
-  
-  const handleInputChange = e => {
-    index === -1 ? onChange(e) : onChange(e, e.target.value, index)
-  } 
-
-  return (
-    <div>
-      { index >= 0 &&
-      <div className="col s2 right-align">
-        <input
-          checked={ index===selectedChoice }
-          className='with-gap'
-          type='radio'
-          name='choices'
-          id={`choice_${ index }`}
-          onChange={handleSelectedChoice}
-          value={index}
-        />
-        <StyledChoiceLabel htmlFor={`choice_${ index }`}></StyledChoiceLabel>
-      </div>
-      }
-    <FormInput
-      action={ action && handleAction }
-      index={ index }
-      onChange={ handleInputChange }
-      size="s8"
-      value={ choice }
-      { ...props }
-    />
-    </div>
-  )
-}
-
 
 const PollChoices = ({
   choices,

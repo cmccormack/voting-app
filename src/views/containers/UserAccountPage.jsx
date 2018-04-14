@@ -32,11 +32,9 @@ class UserAccountPage extends Component {
 
     if (!confirmDelete) return
 
-    const myHeaders = new Headers()
-    myHeaders.append("Content-Type", "application/json")
     fetch(`/api/poll/delete`, {
       method: "POST",
-      headers: myHeaders,
+      headers: { "Content-Type": "application/json" },
       cache: "default",
       credentials: "same-origin",
       body: JSON.stringify({ id })
@@ -59,11 +57,10 @@ class UserAccountPage extends Component {
     if (!confirmDelete) return
 
     const { user } = this.props
-    const myHeaders = new Headers()
-    myHeaders.append("Content-Type", "application/json")
+
     fetch(`/api/user/delete`, {
       method: "POST",
-      headers: myHeaders,
+      headers: { "Content-Type": "application/json" },
       cache: "default",
       credentials: "same-origin",
       body: JSON.stringify({ user })

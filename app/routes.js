@@ -296,7 +296,7 @@ module.exports = (app, passport, models) => {
 
     body('choices')
       .custom(array => Array.from(new Set(array)).length >= 2)
-      .withMessage('Must include at least two unique choices'),
+      .withMessage('Choices must be unique'),
 
     body('choices.*')
       .trim()

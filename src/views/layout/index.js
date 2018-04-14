@@ -12,6 +12,7 @@ import GraphCard from './GraphCard'
 import Header from './Header'
 import IconLink from './IconLink'
 import Icon from './Icon'
+import PollChoice from './PollChoice'
 import Row from './Row'
 import Tab from './Tab'
 import Tabs from './Tabs'
@@ -32,6 +33,7 @@ export {
   GraphCard,
   IconLink,
   Icon,
+  PollChoice,
   Row,
   Tab,
   Tabs,

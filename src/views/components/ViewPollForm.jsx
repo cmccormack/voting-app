@@ -8,6 +8,7 @@ import {
   Collection,
   CollectionItem,
   FormCard,
+  FormInput,
   FormRow,
   FormSubmitButton,
 } from '../layout'
@@ -23,6 +24,35 @@ const ChoicesSection = styled.div`
   margin-top: 40px;
 `
 
+const NewChoiceInput = styled.input`
+  height: inherit !important;
+  margin-bottom: 0 !important;
+  width: 66% !important;
+  border-bottom: none !important;
+`
+
+const VoteCollectionItem = ({ selectedChoice, title, ...props }) => (
+  <CollectionItem
+    actions={[
+      {
+        icon: selectedChoice === title
+          ? 'radio_button_checked'
+          : 'radio_button_unchecked',
+        target: "#",
+        color: "teal-text text-lighten-2",
+        handler: props.handleChoiceSelect.bind(null, title)
+      }
+    ]}
+    key={ title }
+    title={{
+      title,
+      color: "teal-text text-darken-1"
+    }}
+  >
+    { props.children }
+  </CollectionItem>
+)
+
 
 class ViewPollForm extends Component {
 
@@ -36,6 +66,7 @@ class ViewPollForm extends Component {
       handleChoiceSelect,
       handleSubmit,
       loaded,
+      newChoice,
       poll,
       selectedChoice,
     } = this.props
@@ -115,6 +146,20 @@ class ViewPollForm extends Component {
                   />
                 ))
               }
+
+              {/* // Allow user to add their own poll choice */}
+              <VoteCollectionItem
+                handleChoiceSelect={ handleChoiceSelect }
+                selectedChoice={ selectedChoice }
+              >
+                <NewChoiceInput 
+                  className='teal-text text-darken-1'
+                  value={ newChoice }
+                  onChange={ this.props.handleInputChange }
+                  placeholder="Add New Choice!"
+                />
+              </VoteCollectionItem>
+
             </Collection>
           </FormRow>
           <FormRow>

@@ -113,7 +113,7 @@ passportInit(passport, models)
 ///////////////////////////////////////////////////////////
 //  Import Express Routes and call with Express app
 ///////////////////////////////////////////////////////////
-const routes = require('./app/routes.js')
+const routes = require('./routes/routes.js')
 routes(app, passport, models)
 
 

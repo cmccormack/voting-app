@@ -51,7 +51,7 @@ class UserAccountForm extends Component {
               ]}
               key={id}
               target={path.join(location.pathname, `polls/${shortName}`)}
-              title={{ title, color: "teal-text text-darken-1" }}
+              title={{ text: title, color: "teal-text text-darken-1" }}
             />
           ))
         }

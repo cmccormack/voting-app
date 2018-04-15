@@ -15,6 +15,18 @@ import Routes from './Routes'
 import { Header, Footer } from './views/layout'
 
 
+const globalOptions = {
+  poll: {
+    inputLengths: {
+      title: { min: 4, max: 64 },
+      shortName: { min: 0, max: 16 },
+      choices: { min: 2, max: undefined },
+      choice: { min: 1, max: 32 }
+    }
+  }
+}
+
+
 const Wrapper = styled.div`
   display: flex;
   min-height: 100vh;

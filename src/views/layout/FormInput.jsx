@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 
 import { Icon } from './'
+import { CharacterCounter } from '../utils'
 
 const InputAction = styled.a.attrs({
   href: "#",
@@ -15,23 +16,6 @@ const InputAction = styled.a.attrs({
   margin: auto 0;
   line-height: 3;
 `
-
-const CharacterCountStyled = styled.span`
-  color: ${props => props.color};
-  display: ${props => props.isVisible ? 'block' : 'none'};
-  position: absolute;
-  right: -10px;
-  line-height: 4;
-`
-
-const CharacterCount = ({ count, max }) => (
-  <CharacterCountStyled
-    color={count > max * .8 ? 'red' : count > max * .5 ? 'orange' : 'green'}
-    isVisible={count > max * .5}
-  >
-    {count}
-  </CharacterCountStyled>
-)
 
 const FormInput = ({
     name,
@@ -51,25 +35,27 @@ const FormInput = ({
   }) => {
 
   return (
-    <div className={`input-field col ${size}`}>
-      <CharacterCount
-        count={value.length}
-        max={maxLength}
+    <div className={`input-field col ${ size }`}>
+      <CharacterCounter
+        count={ value.length }
+        max={ maxLength }
+        right={ '-10px' }
+        lineHeight={ 4 }
       />
       { icon && (
           <i className="material-icons prefix">
-            {icon}
+            { icon }
           </i>
-      )}
+      ) }
       { action && (
         <InputAction
-          id={`${name}_action`}
-          data-index={index}
-          onClick={action}
+          id={`${ name }_action`}
+          data-index={ index }
+          onClick={ action }
         >
           <Icon 
             className="material-icons"
-            fontSize={'18px'}
+            fontSize="18px"
           >
             { actionIcon }
           </Icon>
@@ -77,23 +63,23 @@ const FormInput = ({
       )}
       <input
         className="validate"
-        disabled={disabled}
-        id={`input_${name}`}
-        maxLength={maxLength}
-        name={name}
-        onBlur={onBlur}
-        onChange={props.onChange}
-        onFocus={onFocus}
-        type={type}
-        value={value}
+        disabled={ disabled }
+        id={`input_${ name}` }
+        maxLength={ maxLength }
+        name={ name }
+        onBlur={ onBlur }
+        onChange={ props.onChange }
+        onFocus={ onFocus }
+        type={ type }
+        value={ value }
       />
       { label && 
         ( 
           <label 
             className={ value ? 'active' : '' }
-            htmlFor={name}
+            htmlFor={ name }
           >
-            {label}
+            { label }
           </label> 
         )
       }

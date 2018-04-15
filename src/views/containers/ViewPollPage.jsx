@@ -17,7 +17,7 @@ class ViewPollPage extends Component {
       poll: {},
       createdBy: '',
       selectedChoice: null,
-      newChoice: null,
+      newChoice: '',
     }
     this.handleChoiceSelect = this.handleChoiceSelect.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -63,7 +63,6 @@ class ViewPollPage extends Component {
   }
 
   handleInputChange({ target: { value } }) {
-    console.log(value)
     this.setState({ newChoice: value })
   }
 
@@ -102,7 +101,7 @@ class ViewPollPage extends Component {
         { ...this.state }
         footer={ `Created by ${ createdBy }` }
         handleChoiceSelect={ this.handleChoiceSelect }
-        handleInputChange= { this.handleInputChange }
+        handleInputChange={ this.handleInputChange }
         handleSubmit={ this.handleSubmit }
         newChoice={ newChoice }
       >

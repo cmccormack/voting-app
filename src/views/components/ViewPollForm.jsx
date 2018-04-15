@@ -12,7 +12,11 @@ import {
   FormRow,
   FormSubmitButton,
 } from '../layout'
-import { IndeterminateProgressBar } from '../utils'
+
+import {
+  CharacterCounter,
+  IndeterminateProgressBar,
+} from '../utils'
 
 const ChoicesTitle = styled.div`
   text-align: center;
@@ -25,10 +29,15 @@ const ChoicesSection = styled.div`
 `
 
 const NewChoiceInput = styled.input`
+  border-bottom: none !important;
   height: inherit !important;
   margin-bottom: 0 !important;
-  width: 66% !important;
-  border-bottom: none !important;
+`
+
+const NewChoiceInputWrapper = styled.div`
+  display: inline-block;
+  position: relative;
+  width: 66%;
 `
 
 const VoteCollectionItem = ({ selectedChoice, title, ...props }) => (
@@ -152,12 +161,22 @@ class ViewPollForm extends Component {
                 handleChoiceSelect={ handleChoiceSelect }
                 selectedChoice={ selectedChoice }
               >
-                <NewChoiceInput 
-                  className='teal-text text-darken-1'
-                  value={ newChoice }
-                  onChange={ this.props.handleInputChange }
-                  placeholder="Add New Choice!"
-                />
+                <NewChoiceInputWrapper>
+                  <NewChoiceInput
+                    className='teal-text text-darken-1'
+                    value={ newChoice }
+                    onChange={ this.props.handleInputChange }
+                    placeholder="Add New Choice!"
+                  />
+                  <CharacterCounter
+                    count={ newChoice.length }
+                    max={ 32 }
+                    top={ 0 }
+                    bottom={ 0 }
+                    right={ '-20px' }
+                    lineHeight={ 1.4 }
+                  />
+                </NewChoiceInputWrapper>
               </VoteCollectionItem>
 
             </Collection>

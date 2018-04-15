@@ -12,7 +12,6 @@ import {
   PollChoice,
 } from '../layout'
 
-console.log(JSON.stringify(Icon))
 const StyledNewChoiceIcon = styled(Icon)`
   position: absolute;
   line-height: 4.2rem;

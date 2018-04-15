@@ -1,11 +1,13 @@
-import PrivateRoute from './PrivateRoute'
-import Spinner from './Spinner'
+import CharacterCounter from './CharacterCounter'
 import IndeterminateProgressBar from './IndeterminateProgressBar'
 import LoaderWithTimeout from './LoaderWithTimeout'
+import PrivateRoute from './PrivateRoute'
+import Spinner from './Spinner'
 
 export {
-  PrivateRoute,
-  Spinner,
+  CharacterCounter,
   IndeterminateProgressBar,
   LoaderWithTimeout,
+  PrivateRoute,
+  Spinner,
 }

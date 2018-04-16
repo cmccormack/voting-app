@@ -35,7 +35,7 @@ const CollectionItem = ({
   children,
   className='',
   target,
-  title: { title='', color=''},
+  title: { color='', text='', },
   props,
   actions,
   header=false,
@@ -43,10 +43,10 @@ const CollectionItem = ({
   <li className={`${className} collection-${header ? 'header' : 'item'}`}>
     <div>
       { 
-        title && (
+        text && (
           target
-          ? <Link className={ color } to={target}>{title}</Link>
-          : <span className={ color }>{title}</span>
+          ? <Link className={ color } to={target}>{text}</Link>
+          : <span className={ color }>{text}</span>
         )
       }
       { children }

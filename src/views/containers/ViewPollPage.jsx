@@ -12,13 +12,23 @@ class ViewPollPage extends Component {
     super(props)
 
     this.state = {
+      choiceColors: [],
+      colorSeed: getRandomHue(),
+      createdBy: '',
       error: '',
       loaded: false,
       poll: {},
-      createdBy: '',
-      selectedChoice: null,
       newChoice: '',
+      selectedChoice: null,
+      selectedIndex: 0,
     }
+
+    this.chartColorOptions = {
+      saturation: 40,
+      lightness: 60,
+      increment: 20,
+    }
+
     this.handleChoiceSelect = this.handleChoiceSelect.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -36,58 +46,62 @@ class ViewPollPage extends Component {
       .then(res => res.json()).then(({ success, poll, message, username }) => {
         if (!success) return this.setState({ loaded: true, error: message })
 
-        // Create new array of incrementing colors of size poll.choices.length
-        const choiceColors = getColorsIncrementHue(
-          getRandomHue(),
-          {
-            length: poll.choices.length,
-            increment: 20,
-            saturation: 60,
-          }
-        )
-
         this.setState({
-          choiceColors,
+          choiceColors: this.getUpdatedPollColors(poll.choices.length),
           createdBy: username,
           loaded: true,
           poll,
-          selectedChoice: poll.choices[0].choice || null
+          selectedChoice: '',
+          selectedIndex: 0
         })
 
       })
       .catch(console.error)
   }
 
-  handleChoiceSelect(selectedChoice) {
-    this.setState({ selectedChoice })
+  getUpdatedPollColors(length) {
+    const { increment, lightness, saturation, } = this.chartColorOptions
+    const h = this.state.colorSeed
+    return getColorsIncrementHue(this.state.colorSeed, {
+      length,
+      increment,
+      saturation,
+      lightness,
+    })
   }
 
-  handleInputChange({ target: { value } }) {
-    this.setState({ newChoice: value })
+  handleChoiceSelect(selectedIndex, selectedChoice) {
+    this.setState({ selectedIndex, selectedChoice })
+  }
+
+  handleInputChange(index, {target: { value }}) {
+    this.setState({
+      newChoice: value,
+      selectedChoice: value,
+      selectedIndex: index
+    })
   }
 
   handleSubmit(e) {
 
     const { params } = this.props.match
-    const { selectedChoice, poll } = this.state
-
-    if (!poll.choices.map(({choice}) => choice).includes(selectedChoice)) {
-      return this.setState({error: `Invalid choice [${selectedChoice}]!`})
-    }
-
+    const { selectedChoice, selectedIndex, poll } = this.state
+    
     fetch(`/api/${params.user}/polls/${params.poll}`, {
       method: "POST",
       headers: new Headers({'Content-Type': 'application/json'}),
       cache: "default",
       credentials: "same-origin",
-      body: JSON.stringify({ selectedChoice })
+      body: JSON.stringify({ selectedChoice, selectedIndex })
     })
       .then(res => res.json()).then(({ success, poll, message, username }) => {
-        console.log(poll)
+        success && window.scrollTo(0,50)
         this.setState({
-          success,
+          choiceColors: this.getUpdatedPollColors(poll.choices.length),
           error: message,
-          poll: success ? poll : this.state.poll
+          newChoice: success ? '' : newChoice,
+          poll: success ? poll : this.state.poll,
+          success,
         })
       })
   }

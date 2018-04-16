@@ -40,22 +40,28 @@ const NewChoiceInputWrapper = styled.div`
   width: 66%;
 `
 
-const VoteCollectionItem = ({ selectedChoice, title, ...props }) => (
+const VoteCollectionItem = ({ 
+  choice,
+  index,
+  selectedChoice,
+  selectedIndex,
+  title,
+  ...props
+}) => (
   <CollectionItem
     actions={[
       {
-        icon: selectedChoice === title
+        icon: selectedIndex === index
           ? 'radio_button_checked'
           : 'radio_button_unchecked',
         target: "#",
         color: "teal-text text-lighten-2",
-        handler: props.handleChoiceSelect.bind(null, title)
+        handler: props.handleChoiceSelect.bind(null, index, choice)
       }
     ]}
-    key={ title }
     title={{
-      title,
-      color: "teal-text text-darken-1"
+      color: "teal-text text-darken-1",
+      text:  title,
     }}
   >
     { props.children }
@@ -78,6 +84,7 @@ class ViewPollForm extends Component {
       newChoice,
       poll,
       selectedChoice,
+      selectedIndex,
     } = this.props
     
     const { title="Poll Not Found.", choices=[] } = poll
@@ -135,37 +142,34 @@ class ViewPollForm extends Component {
             </ChoicesTitle>
             <Collection className="col s8 offset-s2">
               {
-                choices.map(choice => (
-                  <CollectionItem
-                    actions={[
-                      {
-                        icon: selectedChoice === choice.choice
-                          ? 'radio_button_checked'
-                          : 'radio_button_unchecked',
-                        target: "#",
-                        color: "teal-text text-lighten-2",
-                        handler: handleChoiceSelect.bind(null, choice.choice)
-                      }
-                    ]}
-                    key={choice.choice}
-                    title={{
-                      title: choice.choice,
-                      color: "teal-text text-darken-1"
-                    }}
+                choices.map(({choice}, i) => (
+                  <VoteCollectionItem
+                    choice={ choice }
+                    handleChoiceSelect={ handleChoiceSelect }
+                    index={ i }
+                    key={ choice}
+                    selectedChoice={ selectedChoice }
+                    selectedIndex={ selectedIndex }
+                    title={ choice }
                   />
                 ))
               }
 
               {/* // Allow user to add their own poll choice */}
               <VoteCollectionItem
+                choice={ newChoice }
                 handleChoiceSelect={ handleChoiceSelect }
+                index={ choices.length }
                 selectedChoice={ selectedChoice }
+                selectedIndex={ selectedIndex }
               >
                 <NewChoiceInputWrapper>
                   <NewChoiceInput
                     className='teal-text text-darken-1'
                     value={ newChoice }
-                    onChange={ this.props.handleInputChange }
+                    onChange={
+                      this.props.handleInputChange.bind(null, choices.length)
+                    }
                     placeholder="Add New Choice!"
                   />
                   <CharacterCounter

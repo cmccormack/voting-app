@@ -90,45 +90,54 @@ module.exports = (app, passport, models) => {
       })
     })
   })
-
-
+  
+  
   // Vote on a single poll
   app.post('/api/:user/polls/:poll', (req, res, next) => {
     const { params } = req
     const { selectedChoice } = req.body
+    
+    const updateComplete = (err, doc) => {
+      if (err) return next(Error(err))
+      if (!doc) return next(Error('Poll Not Found!'))
+
+      res.type('json').send({ success: true, poll: doc })
+    }
 
     Poll
     .findOne({ 'shortName': params.poll })
+    
     .populate('createdBy')
     .exec((err, poll) => {
+
       if (err) return next(Error(err))
       if (!poll) return next(Error('Invalid Poll Short Name'))
       if (poll.createdBy.username !== params.user) {
         return next(Error('Invalid Poll Short Name or User'))
       }
 
-      Poll
-      .where({
-        'shortName': params.poll,
-        'choices.choice': selectedChoice,
-      })
-      .update({ $inc: { 'choices.$.votes': 1 } })
-      .exec((err) => {
-        if (err) return next(Error(err))
-
+      // Check if vote choice exists - if not add it and vote for it
+      if (!poll.choices.map(({choice})=>choice).includes(selectedChoice)) {
+        
         Poll
-        .findOne({shortName: params.poll})
-        .exec((err, poll) => {
-          if (err) return next(Error(err))
-          res.type('json').send({
-            success: true,
-            poll,
-          })
-        })
-      })
-    })
+        .findByIdAndUpdate(
+          poll._id,
+          { $push: { 'choices': { choice: selectedChoice, votes: 1 } } },
+          { new: true },
+        )
+        .exec(updateComplete)
 
-    
+      } else {
+
+        Poll.findOneAndUpdate(
+          { _id: poll._id, 'choices.choice': selectedChoice },
+          { $inc: { 'choices.$.votes': 1 } },
+          { new: true },
+        )
+        .exec(updateComplete)
+
+      }
+    })
   })
 
 
@@ -343,7 +352,7 @@ module.exports = (app, passport, models) => {
       const poll = new Poll({
         choices: choices.map((choice, i) => ({
           choice,
-          votes: i===selectedChoice ? 1 : 0
+          votes: i === selectedChoice ? 1 : 0
         })),
         createdTime: Date.now(),
         createdBy: user._id,
@@ -354,9 +363,7 @@ module.exports = (app, passport, models) => {
 
       poll.save(err => {
 
-          console.log('poll.save')
-        if (err) return next( new Error(err) )
-          console.log('blah')
+        if (err) return next(Error(err))
         User.findOneAndUpdate(
           { _id: user._id },
           { $push: { polls: poll._id }},

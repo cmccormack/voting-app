@@ -27,14 +27,12 @@ class UserPollsPage extends Component {
       credentials: "same-origin"
     })
       .then(res => res.json()).then(({success, polls, message}) => {
-        console.log('in getPolls .then')
         // Return early if Component unmounted or loading timer expired
         if (!this._isMounted) return
 
         if (!success) {
           return this.setState({ error: message})
         }
-        console.log(polls.length > 0)
         this.setState({
           polls: polls.map(poll => {
             poll.choiceColors = getColorsIncrementHue(

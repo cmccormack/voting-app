@@ -28,7 +28,6 @@ const GraphCardActionsStyled = styled.div`
 
 const GraphCardActions = ({ actions }) => (
   <GraphCardActionsStyled className="card-action">
-    { console.log(actions)}
     { actions }
   </GraphCardActionsStyled>
 )

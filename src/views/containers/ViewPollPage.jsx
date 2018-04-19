@@ -71,21 +71,26 @@ class ViewPollPage extends Component {
   }
 
   handleChoiceSelect(selectedIndex, selectedChoice) {
-    this.setState({ selectedIndex, selectedChoice })
+    this.setState({
+      error: '',
+      selectedIndex,
+      selectedChoice,
+    })
   }
 
   handleInputChange(index, {target: { value }}) {
     this.setState({
+      error: '',
       newChoice: value,
       selectedChoice: value,
-      selectedIndex: index
+      selectedIndex: index,
     })
   }
 
   handleSubmit(e) {
 
     const { params } = this.props.match
-    const { selectedChoice, selectedIndex, poll } = this.state
+    const { newChoice, selectedChoice, selectedIndex, poll } = this.state
     
     fetch(`/api/${params.user}/polls/${params.poll}`, {
       method: "POST",
@@ -94,10 +99,19 @@ class ViewPollPage extends Component {
       credentials: "same-origin",
       body: JSON.stringify({ selectedChoice, selectedIndex })
     })
-      .then(res => res.json()).then(({ success, poll, message, username }) => {
+      .then(res => res.json())
+      .then(({
+        success=false,
+        poll={ choices: [] },
+        message='',
+        username=''
+      }) => {
         success && window.scrollTo(0,50)
+        console.log(message)
         this.setState({
-          choiceColors: this.getUpdatedPollColors(poll.choices.length),
+          choiceColors: success
+            ? this.getUpdatedPollColors(poll.choices.length)
+            : this.state.choiceColors,
           error: message,
           newChoice: success ? '' : newChoice,
           poll: success ? poll : this.state.poll,

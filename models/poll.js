@@ -8,29 +8,27 @@ module.exports = mongoose => {
     },
     createdTime: {
       type: String,
-      required: true
+      required: true,
     },
     title: {
       type: String,
-      required: true
+      required: true,
     },
     shortName: {
       type: String,
-      required: true
+      required: true,
     },
     choices: [{
       index: Number,
       choice: String,
-      votes: Number
+      votes: Number,
     }],
     voters: [{
-      votedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+      sessionID: {
+        type: String,
       },
       datevoted: Date,
-      choiceIndex: Number
-    }]
+    }],
   })
 
   PollSchema.statics.getPolls = function() {

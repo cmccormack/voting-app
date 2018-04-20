@@ -35,8 +35,10 @@ module.exports = (passport, models) => {
           })
         }
 
-        return done(null, user)
-
+        req.session.regenerate(err => {
+          if (err) return done(err)
+          return done(null, user)
+        })
       })
     }
 

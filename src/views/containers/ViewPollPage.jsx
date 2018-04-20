@@ -43,15 +43,17 @@ class ViewPollPage extends Component {
       cache: "default",
       credentials: "same-origin"
     })
-      .then(res => res.json()).then(({ success, poll, message, username }) => {
+      .then(res => res.json())
+      .then(({ success, poll, message, username }) => {
         if (!success) return this.setState({ loaded: true, error: message })
+        const { choices=[] } = poll
 
         this.setState({
           choiceColors: this.getUpdatedPollColors(poll.choices.length),
           createdBy: username,
           loaded: true,
           poll,
-          selectedChoice: '',
+          selectedChoice: choices[0].choice,
           selectedIndex: 0
         })
 
@@ -106,8 +108,9 @@ class ViewPollPage extends Component {
         message='',
         username=''
       }) => {
+        // Scroll to top of page to view graph
         success && window.scrollTo(0,50)
-        console.log(message)
+
         this.setState({
           choiceColors: success
             ? this.getUpdatedPollColors(poll.choices.length)

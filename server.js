@@ -34,7 +34,8 @@ function updateModel(model, update={}) {
   })
 }
 
-// Delete all polls, invoked when db connection opened
+
+// Delete all polls
 function wipePolls() {
   models.User.updateMany({}, { polls: [] }, (err, docs) => {
     if (err) return console.error(err)
@@ -42,14 +43,14 @@ function wipePolls() {
   db.dropCollection('polls')
 }
 
-// Delete a user, invoked when db connection opened
+// Delete a single user
 function wipeUser(username) {
   models.User.findOneAndRemove({ username }, (err) => {
     if (err) console.error(err)
   })
 }
 
-// Delete all users, invoked when db connection opened
+// Delete all users
 function wipeUsers() {
   db.dropCollection('users')
 }
@@ -61,9 +62,10 @@ db.on('error', err => {
   console.error(`Mongoose default connection error: ${err}`) 
 })
 db.once('open', () => {
+  // wipePoll('0')
   // wipeUsers()
   // wipePolls()
-  // wipeUser('tara')
+  // wipeUser('random')
   // updateModel('User', { polls: [] })
   console.log(`Mongoose default connection opened [${dbconf.db}]`)
 })

@@ -13,12 +13,14 @@ module.exports = (app, passport, models) => {
   // Testing/Debug Middleware, DELETE LATER
   ///////////////////////////////////////////////////////////
   app.use((req, res, next) => {
-    const { user, sessionID } = req
-    console.log(`user: ${user ? user.username : 'null'}, ` +
-      `sessionID: ${sessionID ? sessionID : 'null'}, ` +
-      `isAuthenticated: ${user ? req.isAuthenticated() : 'null'}`)
+    const { user = { username: null }, sessionID } = req
+    // console.log(`user: ${user ? user.username : 'null'}, ` +
+    //   `sessionID: ${sessionID ? sessionID : 'null'}, ` +
+    //   `isAuthenticated: ${user ? req.isAuthenticated() : 'null'}`)
+    console.log(`DEBUG user: ${user.username} sessionID: ${req.sessionID}`)
     next()
   })
+
 
   ///////////////////////////////////////////////////////////
   // Calls to API
@@ -96,6 +98,7 @@ module.exports = (app, passport, models) => {
   app.post('/api/:user/polls/:poll', (req, res, next) => {
     const { body, params, sessionID } = req
     const { selectedChoice } = body
+    const expiry = 1 * 1000 * 60 // 60 seconds
     
     const updateComplete = (err, doc) => {
       if (err) return next(Error(err))
@@ -106,7 +109,6 @@ module.exports = (app, passport, models) => {
 
     Poll
     .findOne({ 'shortName': params.poll })
-    
     .populate('createdBy')
     .exec((err, poll) => {
 
@@ -116,40 +118,50 @@ module.exports = (app, passport, models) => {
         return next(Error('Invalid Poll Short Name or User'))
       }
 
-      if (poll.voters.map(v=>v.sessionID).includes(sessionID)) {
-        return next(Error('Please try again later'))
-      }
 
+      return updateComplete(null, poll)
       // Check if vote choice exists
       if (!poll.choices.map(({choice})=>choice).includes(selectedChoice)) {
-        
-        // Choice did not exist, add choice and single vote
-        Poll
-        .findByIdAndUpdate(
-          poll._id,
-          { 
-            $push: { 'choices': { choice: selectedChoice, votes: 1 } },
-            $push: { 'voters': { sessionID, datevoted: Date.now() } },
-          },
-          { new: true },
-        )
-        .exec(updateComplete)
 
+
+        // Choice did not exist, add choice and single vote
+        // updatedVoters.push({
+        //   'choices': { choice: selectedChoice, votes: 1 },
+        //   'voters': { sessionID, datevoted: Date.now() }
+        // })
       } else {
 
-        // Choice exists, increment votes
-        Poll
-        .findOneAndUpdate(
-          { _id: poll._id, 'choices.choice': selectedChoice },
-          {
-            $inc: { 'choices.$.votes': 1 },
-            $push: { 'voters': { sessionID, datevoted: Date.now() } },
-          },
-          { new: true },
-        )
-        .exec(updateComplete)
 
       }
+
+      //   Poll
+      //   .findByIdAndUpdate(
+      //     poll._id,
+      //     { 
+      //       $push: { 
+      //         'choices': { choice: selectedChoice, votes: 1 }, 
+      //         'voters': { sessionID, datevoted: Date.now() }
+      //       },
+      //     },
+      //     { new: true },
+      //   )
+      //   .exec(updateComplete)
+
+      // } else {
+      //   console.log('choice did exist')
+      //   // Choice exists, increment votes
+      //   Poll
+      //   .findOneAndUpdate(
+      //     { _id: poll._id, 'choices.choice': selectedChoice },
+      //     {
+      //       $inc: { 'choices.$.votes': 1 },
+      //       $push: { 'voters': { sessionID, datevoted: Date.now() } },
+      //     },
+      //     { new: true },
+      //   )
+      //   .exec(updateComplete)
+
+      // }
     })
   })
 
@@ -225,6 +237,7 @@ module.exports = (app, passport, models) => {
   ///////////////////////////////////////////////////////////
   app.post('/login', (req, res, next) => {
 
+    console.log(`/login POST sessionID: ${req.sessionID}`)
     passport.authenticate('login', (err, user, info) => {
 
       const { message='' } = info ? info : {}
@@ -238,9 +251,8 @@ module.exports = (app, passport, models) => {
       }
 
       // Establish session with user
-     
       req.login(user, err => {
-        
+
         if (err) return next(err)
         console.log(`New session created for user ${user.username}`)
         res.type('json').send({
@@ -265,6 +277,7 @@ module.exports = (app, passport, models) => {
         success: true,
         message: `User ${username} logged out.`
       })
+      console.log(`User ${username} sessionID: ${req.sessionID} logged out.`)
     })
   })
 
@@ -375,7 +388,7 @@ module.exports = (app, passport, models) => {
         createdBy: user._id,
         shortName: shortName || user.polls.length,
         title,
-        voters: []
+        voters: {}
       })
 
       poll.save(err => {

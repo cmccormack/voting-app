@@ -21,6 +21,7 @@ class ViewPollPage extends Component {
       newChoice: '',
       selectedChoice: null,
       selectedIndex: 0,
+      timeRemaining: 0,
     }
 
     this.chartColorOptions = {
@@ -28,6 +29,7 @@ class ViewPollPage extends Component {
       lightness: 60,
       increment: 20,
     }
+    this.intervalID = 0
 
     this.handleChoiceSelect = this.handleChoiceSelect.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -49,17 +51,8 @@ class ViewPollPage extends Component {
         if (!success) return this.setState({ loaded: true, error: message })
         
         const { choices=[], seedColor=0 } = poll
-        const choiceColors = getColorsIncrementHue(
-            seedColor, {
-            length: choices.length,
-            increment,
-            saturation,
-            lightness,
-          }
-        )
-        console.log(choiceColors)
         this.setState({
-          choiceColors,
+          choiceColors: this.getColorArray(choices.length, seedColor),
           seedColor: seedColor,
           createdBy: username,
           loaded: true,
@@ -72,22 +65,68 @@ class ViewPollPage extends Component {
       .catch(console.error)
   }
 
+  getColorArray(length=0, hue=0) {
+
+    const { increment, lightness, saturation } = this.chartColorOptions
+    return getColorsIncrementHue(hue, {
+        length,
+        increment,
+        saturation,
+        lightness,
+      }
+    )
+  }
+
   handleChoiceSelect(selectedIndex, selectedChoice) {
+    const { error, timeRemaining } = this.state
     this.setState({
-      error: '',
+      error: timeRemaining ? error : '',
       selectedIndex,
       selectedChoice,
     })
   }
 
   handleInputChange(index, {target: { value }}) {
+    const { error, timeRemaining } = this.state
     this.setState({
-      error: '',
+      error: timeRemaining ? error : '',
       newChoice: value,
       selectedChoice: value,
       selectedIndex: index,
     })
   }
+
+  timeRemainingMessage(time) {
+    const { timeRemaining } = this.state
+    return `You can vote again in ${
+      Math.floor((time ? time : timeRemaining) / 1000)
+    } seconds`
+  }
+
+  countdownTimer(decrement=1000) {
+    clearInterval(this.intervalID)
+    
+    this.intervalID = setInterval(() => {
+      
+      const { timeRemaining } = this.state
+      if (timeRemaining > 0) {
+        return this.setState({
+          error: this.timeRemainingMessage(),
+          timeRemaining: timeRemaining - decrement,
+        })
+      }
+
+      clearInterval(this.intervalID)
+      this.setState({
+        timeRemaining: 0,
+        error: '',
+      })
+      
+    }, decrement)
+
+    return this.timeRemainingMessage()
+  }
+
 
   handleSubmit(e) {
 
@@ -102,19 +141,21 @@ class ViewPollPage extends Component {
       body: JSON.stringify({ selectedChoice, selectedIndex })
     })
       .then(res => res.json())
-      .then(({
-        success=false,
-        poll={ choices: [] },
-        message='',
-        username=''
-      }) => {
-
+      .then(response => {
+        const { success, poll={}, message='', username='', error={} } = response
+        const { timeRemaining=0 } = error
+        const { choices=[], seedColor=0 } = poll
+        console.log(timeRemaining)
         this.setState({
-          error: message,
+          choiceColors: success ? this.getColorArray(choices.length, seedColor) : this.state.choiceColors,
+          error: timeRemaining 
+            ? this.timeRemainingMessage(timeRemaining)
+            : message,
           newChoice: success ? '' : newChoice,
           poll: success ? poll : this.state.poll,
           success,
-        })
+          timeRemaining,
+        }, this.countdownTimer)
       })
   }
 

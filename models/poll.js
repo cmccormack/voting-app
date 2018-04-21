@@ -23,11 +23,10 @@ module.exports = mongoose => {
       choice: String,
       votes: Number,
     }],
-    voters: {
-      sessionID: {
-        datevoted: String,
-      },
-    },
+    voters: [{
+      sessionID: String,
+      datevoted: Date,
+    }],
   })
 
   PollSchema.statics.getPolls = function() {

@@ -45,7 +45,7 @@
     "webpack-dev-server": "^2.9.4"
   },
   "dependencies": {
-    "bcrypt": "^2.0.0",
+    "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
     "chart.js": "^2.7.2",
     "connect-mongo": "^2.0.0",

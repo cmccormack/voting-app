@@ -339,7 +339,7 @@ module.exports = (app, passport, models) => {
 
     body('choices')
       .custom(array => Array.from(new Set(array)).length >= 2)
-      .withMessage('Choices must be unique'),
+      .withMessage('Must include at least two unique choices'),
 
     body('choices.*')
       .trim()
@@ -365,6 +365,7 @@ module.exports = (app, passport, models) => {
 
     const errors = validationResult(req)
     const { title, shortName, choices, selectedChoice } = req.body
+    const { sessionID } = req
     
     if (!errors.isEmpty()) {
       return next( Error(errors.array()[0].msg) )
@@ -393,7 +394,10 @@ module.exports = (app, passport, models) => {
         seedColor: Math.floor(Math.random() * 360),
         shortName: shortName || user.polls.length,
         title,
-        voters: {}
+        voters: [{
+          sessionID: sessionID,
+          datevoted: Date.now()
+        }]
       })
 
       poll.save(err => {

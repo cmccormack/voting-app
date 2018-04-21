@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { VictoryPie, VictoryTheme } from 'victory'
 import { Link } from 'react-router-dom'
+import ReactPaginate from 'react-paginate';
 
 import { Chart, Col, GraphCard, Row } from './layout'
 import { getRandomHue, getColorsIncrementHue } from '../utils/colors'
@@ -82,7 +83,17 @@ class Main extends Component {
     this._isMounted = true
     if (this.state.loaded) return
     
-    const { lightness, saturation, increment } = this.chartColorOptions
+    this.fetchPolls()
+ 
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
+  }
+
+
+  fetchPolls() {
+
     const { skip, limit } = this.state
     const params = { skip, limit }
     const query = Object.keys(params).map(k => (
@@ -95,6 +106,7 @@ class Main extends Component {
     })
       .then(res => res.json()).then((polls) => {
         if (!this._isMounted) return
+        const { lightness, saturation, increment } = this.chartColorOptions
         this.setState({
           polls: polls.map(poll => {
             poll.choiceColors = getColorsIncrementHue(
@@ -110,10 +122,6 @@ class Main extends Component {
           loaded: true
         })
       })
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false
   }
 
 
@@ -228,6 +236,22 @@ class Main extends Component {
                 ? body
                 : pollsEmpty
           }
+          <div id="react-paginate">
+          <ReactPaginate
+              breakLabel={<span className="teal-text text-lighten-3">...</span>}
+              pageCount={10}
+              pageRangeDisplayed={5}
+              marginPagesDisplayed={2}
+              pageClassName="btn-flat waves-effect waves-teal"
+              pageLinkClassName="teal-text"
+              previousClassName="btn teal lighten-4 waves-effect waves-teal"
+              previousLinkClassName="teal-text"
+              nextClassName="btn teal lighten-4 waves-effect waves-teal"
+              nextLinkClassName="teal-text"
+              disabledClassName="teal-text text-lighten-3"
+              hrefBuilder={ (d) => console.log(d) }
+            />
+          </div>
         </BodyWrapper>
       </MainWrapper>
     )

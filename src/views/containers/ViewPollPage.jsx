@@ -30,6 +30,7 @@ class ViewPollPage extends Component {
       increment: 20,
     }
     this.intervalID = 0
+    this._isMounted = false
 
     this.handleChoiceSelect = this.handleChoiceSelect.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -37,6 +38,8 @@ class ViewPollPage extends Component {
   }
 
   componentDidMount() {
+
+    this._isMounted = true
 
     const { user, poll } = this.props.match.params
     const { increment, lightness, saturation } = this.chartColorOptions
@@ -48,6 +51,7 @@ class ViewPollPage extends Component {
     })
       .then(res => res.json())
       .then(({ success, poll, message, username }) => {
+        if (!this._isMounted) return
         if (!success) return this.setState({ loaded: true, error: message })
         
         const { choices=[], seedColor=0 } = poll
@@ -63,6 +67,10 @@ class ViewPollPage extends Component {
 
       })
       .catch(console.error)
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
   }
 
   getColorArray(length=0, hue=0) {

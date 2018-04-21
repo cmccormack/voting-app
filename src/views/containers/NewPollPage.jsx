@@ -9,7 +9,7 @@ class NewPollPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      choices: ['choice1', 'choice2'],
+      choices: ['', ''],
       error: "",
       newChoice: "",
       newChoiceFocus: false,
@@ -72,12 +72,10 @@ class NewPollPage extends Component {
   }
 
   handleInputFocus({target: { name }}) {
-    console.log('focused newChoice')
     this.setState({ newChoiceFocus: name === 'newChoice' })
   }
 
   handleInputBlur({target: { name }}) {
-    console.log('blurred newChoice')
     this.setState({ newChoiceFocus: !(name === 'newChoice') })
   }
 

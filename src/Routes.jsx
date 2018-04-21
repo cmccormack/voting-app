@@ -81,7 +81,6 @@ const Routes = ({
         render={ ({match}) => (
           <UserPollsPage
             title={`Polls created by ${match.params.user}`}
-            footer="Some Footer Text Here"
             user={match.params.user}
           />
         )}

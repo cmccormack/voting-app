@@ -37,12 +37,6 @@ class UserAccountForm extends Component {
             <CollectionItem
               actions={[
                 {
-                  icon: 'edit',
-                  target: "#",
-                  color: "teal-text text-lighten-2",
-                  handler: null
-                },
-                {
                   icon: 'delete',
                   target: "#",
                   color: "deep-orange-text text-accent-2",

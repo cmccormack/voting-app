@@ -74,11 +74,6 @@ class NewPollForm extends Component {
     const layout = {
       title: "Create New Poll",
       error: error,
-      footer: (
-        <div>
-          {'Some Footer Text Here'}
-        </div>
-      )
     }
 
     const alert = (

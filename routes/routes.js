@@ -118,50 +118,53 @@ module.exports = (app, passport, models) => {
         return next(Error('Invalid Poll Short Name or User'))
       }
 
+      // Filter all but recent voters based on expiry time
+      const recentVoters = poll.voters.filter(v => {
+        return Date.now() - v.datevoted < expiry
+      })
+      const voterIds = recentVoters.map(({sessionID}) => sessionID)
+      const voterIndex = voterIds.indexOf(req.sessionID)
 
-      return updateComplete(null, poll)
-      // Check if vote choice exists
-      if (!poll.choices.map(({choice})=>choice).includes(selectedChoice)) {
-
-
-        // Choice did not exist, add choice and single vote
-        // updatedVoters.push({
-        //   'choices': { choice: selectedChoice, votes: 1 },
-        //   'voters': { sessionID, datevoted: Date.now() }
-        // })
+      if (~voterIndex) {
+        return next(`You can vote again in ${
+          Math.floor(
+            (expiry - (Date.now() - poll.voters[voterIndex].datevoted)) / 1000
+          )
+        } seconds`)
       } else {
-
-
+        recentVoters.push({
+          sessionID: sessionID,
+          datevoted: Date.now()
+        })
       }
 
-      //   Poll
-      //   .findByIdAndUpdate(
-      //     poll._id,
-      //     { 
-      //       $push: { 
-      //         'choices': { choice: selectedChoice, votes: 1 }, 
-      //         'voters': { sessionID, datevoted: Date.now() }
-      //       },
-      //     },
-      //     { new: true },
-      //   )
-      //   .exec(updateComplete)
+      // Clone poll choices
+      const choices = JSON.parse(JSON.stringify(poll.choices))
 
-      // } else {
-      //   console.log('choice did exist')
-      //   // Choice exists, increment votes
-      //   Poll
-      //   .findOneAndUpdate(
-      //     { _id: poll._id, 'choices.choice': selectedChoice },
-      //     {
-      //       $inc: { 'choices.$.votes': 1 },
-      //       $push: { 'voters': { sessionID, datevoted: Date.now() } },
-      //     },
-      //     { new: true },
-      //   )
-      //   .exec(updateComplete)
+      // Add new choice if doesn't exist else increment choice
+      const choicesNames = choices.map(({choice})=>choice)
+      const choiceIndex = choicesNames.indexOf(selectedChoice)
+      if (~choiceIndex) {
+        choices[choiceIndex].votes += 1
+      } else {
+        choices.push({choice: selectedChoice, votes: 1})
+      }
 
-      // }
+      // Update Poll
+      Poll.findByIdAndUpdate(
+        poll._id,
+        {
+          $set: {
+            'choices': choices,
+            'voters': recentVoters,
+          },
+        },
+        { new: true },
+      )
+      .exec(updateComplete)
+
+
+
     })
   })
 
@@ -450,9 +453,8 @@ module.exports = (app, passport, models) => {
   // Error Handler
   ///////////////////////////////////////////////////////////
   app.use((err, req, res, next) => {
-    console.log(err.message)
-
     const errmsg = err.message ? err.message : err
+    
     console.log(`Error Middleware: ${errmsg}`)
     res.type('json').send({
       success: false,

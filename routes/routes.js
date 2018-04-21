@@ -389,6 +389,7 @@ module.exports = (app, passport, models) => {
         })),
         createdTime: Date.now(),
         createdBy: user._id,
+        seedColor: Math.floor(Math.random() * 360),
         shortName: shortName || user.polls.length,
         title,
         voters: {}
@@ -432,10 +433,7 @@ module.exports = (app, passport, models) => {
           return next( Error('Error retrieving polls from database') )
         }
 
-        res.type('json').send(polls.map(
-          ({ title, shortName, choices, createdBy: { username } }) => (
-            { title, shortName, choices, createdBy: username }
-          )))
+        res.type('json').send(polls)
     })
   })
 

@@ -14,9 +14,6 @@ module.exports = (app, passport, models) => {
   ///////////////////////////////////////////////////////////
   app.use((req, res, next) => {
     const { user = { username: null }, sessionID } = req
-    // console.log(`user: ${user ? user.username : 'null'}, ` +
-    //   `sessionID: ${sessionID ? sessionID : 'null'}, ` +
-    //   `isAuthenticated: ${user ? req.isAuthenticated() : 'null'}`)
     console.log(`DEBUG user: ${user.username} sessionID: ${req.sessionID}`)
     next()
   })
@@ -37,6 +34,8 @@ module.exports = (app, passport, models) => {
 
   // Get all Polls
   app.get('/api/polls', (req, res, next) => {
+
+
     Poll.getPolls()
     .then(docs => {
       res.type('json').send(docs)
@@ -126,11 +125,13 @@ module.exports = (app, passport, models) => {
       const voterIndex = voterIds.indexOf(req.sessionID)
 
       if (~voterIndex) {
-        return next(`You can vote again in ${
-          Math.floor(
-            (expiry - (Date.now() - poll.voters[voterIndex].datevoted)) / 1000
-          )
-        } seconds`)
+        const timeRemaining =  Math.floor(
+          (expiry - (Date.now() - poll.voters[voterIndex].datevoted)) )
+
+        return next({
+          message: "Not enough time has elapsed since previous vote",
+          timeRemaining,
+        })
       } else {
         recentVoters.push({
           sessionID: sessionID,
@@ -424,9 +425,14 @@ module.exports = (app, passport, models) => {
   // Handle Get Requests for Polls
   ///////////////////////////////////////////////////////////
   app.get('/polls', (req, res, next) => {
+
     console.log(`New Request for ${req.hostname + req.path}`)
+    console.log(`query=${JSON.stringify(req.query)}`)
+    const { skip=0, limit=0 } = req.query
 
     Poll.find()
+      .skip(+skip)
+      .limit(+limit)
       .populate('createdBy')
       .exec((err, polls) => {
         if (err) {
@@ -452,11 +458,12 @@ module.exports = (app, passport, models) => {
   ///////////////////////////////////////////////////////////
   app.use((err, req, res, next) => {
     const errmsg = err.message ? err.message : err
-    
+
     console.log(`Error Middleware: ${errmsg}`)
     res.type('json').send({
       success: false,
-      message: errmsg
+      message: errmsg,
+      error: err
     })
   })
 

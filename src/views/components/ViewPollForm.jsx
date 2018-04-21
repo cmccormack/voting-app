@@ -116,7 +116,7 @@ class ViewPollForm extends Component {
     )
 
 
-
+    console.log(choiceColors)
     const body = (
       <FormCard
         error={ error }

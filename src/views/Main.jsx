@@ -66,10 +66,18 @@ class Main extends Component {
       polls: []
     }
 
+    this.chartColorOptions = {
+      saturation: 40,
+      lightness: 60,
+      increment: 20,
+    }
+
     this._isMounted = false
   }
 
   componentDidMount() {
+    const { lightness, saturation, increment } = this.chartColorOptions
+
     this._isMounted = true
     if (this.state.loaded) return
 
@@ -82,11 +90,11 @@ class Main extends Component {
         this.setState({
           polls: polls.map(poll => {
             poll.choiceColors = getColorsIncrementHue(
-              getRandomHue(),
-              {
+              poll.seedColor, {
                 length: poll.choices.length,
-                increment: 20,
-                saturation: 60,
+                increment,
+                lightness,
+                saturation,
               }
             )
             return poll
@@ -142,12 +150,14 @@ class Main extends Component {
     const body = (
       <Row>
         {this.state.polls.map(
-          ({ title, shortName, createdBy: user, ...poll }) => {
+          ({ title, shortName, createdBy, ...poll }) => {
+            const { username } = createdBy
+
             return (
-              <Col size="s12 xl6" key={`${user}-${shortName}`}>
+              <Col size="s12 xl6" key={`${username}-${shortName}`}>
                 <GraphCard
                   title={
-                    <Link to={`user/${user}/polls/${shortName}`}>
+                    <Link to={`user/${username}/polls/${shortName}`}>
                       {title}
                     </Link>
                   }
@@ -160,7 +170,8 @@ class Main extends Component {
                   actions={
                     <span className={'card-footer-text'}>
                       {'Created by '}
-                      <CardActionLink to={`user/${user}/polls`}>{user}
+                      <CardActionLink to={`user/${username}/polls`}>
+                        {username}
                       </CardActionLink>
                     </span>
                   }

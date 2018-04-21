@@ -13,7 +13,7 @@ class ViewPollPage extends Component {
 
     this.state = {
       choiceColors: [],
-      colorSeed: getRandomHue(),
+      seedColor: 0,
       createdBy: '',
       error: '',
       loaded: false,
@@ -37,6 +37,7 @@ class ViewPollPage extends Component {
   componentDidMount() {
 
     const { user, poll } = this.props.match.params
+    const { increment, lightness, saturation } = this.chartColorOptions
 
     fetch(`/api/${user}/polls/${poll}`, {
       method: "GET",
@@ -46,10 +47,20 @@ class ViewPollPage extends Component {
       .then(res => res.json())
       .then(({ success, poll, message, username }) => {
         if (!success) return this.setState({ loaded: true, error: message })
-        const { choices=[] } = poll
-
+        
+        const { choices=[], seedColor=0 } = poll
+        const choiceColors = getColorsIncrementHue(
+            seedColor, {
+            length: choices.length,
+            increment,
+            saturation,
+            lightness,
+          }
+        )
+        console.log(choiceColors)
         this.setState({
-          choiceColors: this.getUpdatedPollColors(poll.choices.length),
+          choiceColors,
+          seedColor: seedColor,
           createdBy: username,
           loaded: true,
           poll,
@@ -59,17 +70,6 @@ class ViewPollPage extends Component {
 
       })
       .catch(console.error)
-  }
-
-  getUpdatedPollColors(length) {
-    const { increment, lightness, saturation, } = this.chartColorOptions
-    const h = this.state.colorSeed
-    return getColorsIncrementHue(this.state.colorSeed, {
-      length,
-      increment,
-      saturation,
-      lightness,
-    })
   }
 
   handleChoiceSelect(selectedIndex, selectedChoice) {
@@ -110,9 +110,6 @@ class ViewPollPage extends Component {
       }) => {
 
         this.setState({
-          choiceColors: success
-            ? this.getUpdatedPollColors(poll.choices.length)
-            : this.state.choiceColors,
           error: message,
           newChoice: success ? '' : newChoice,
           poll: success ? poll : this.state.poll,

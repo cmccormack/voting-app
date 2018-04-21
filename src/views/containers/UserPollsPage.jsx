@@ -15,6 +15,13 @@ class UserPollsPage extends Component {
       title: this.props.title,
       apiTimeout: 5 * 1000 // 5 seconds
     }
+
+    this.chartColorOptions = {
+      saturation: 40,
+      lightness: 60,
+      increment: 20,
+    }
+
     this._isMounted = false
     this.getPolls = this.getPolls.bind(this)
   }
@@ -33,14 +40,16 @@ class UserPollsPage extends Component {
         if (!success) {
           return this.setState({ error: message})
         }
+
+        const { increment, lightness, saturation } = this.chartColorOptions
         this.setState({
           polls: polls.map(poll => {
             poll.choiceColors = getColorsIncrementHue(
-              getRandomHue(),
+              poll.seedColor,
               {
                 length: poll.choices.length,
-                increment: 20,
-                saturation: 60,
+                increment,
+                saturation,
               }
             )
             return poll

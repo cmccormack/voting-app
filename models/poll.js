@@ -27,6 +27,7 @@ module.exports = mongoose => {
       sessionID: String,
       datevoted: Date,
     }],
+    seedColor: Number,
   })
 
   PollSchema.statics.getPolls = function() {

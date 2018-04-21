@@ -108,8 +108,6 @@ class ViewPollPage extends Component {
         message='',
         username=''
       }) => {
-        // Scroll to top of page to view graph
-        success && window.scrollTo(0,50)
 
         this.setState({
           choiceColors: success

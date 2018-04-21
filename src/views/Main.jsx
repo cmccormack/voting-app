@@ -62,6 +62,8 @@ class Main extends Component {
     super(props)
 
     this.state = {
+      limit: 2,
+      skip: 0,
       loaded: false,
       polls: []
     }
@@ -76,12 +78,18 @@ class Main extends Component {
   }
 
   componentDidMount() {
-    const { lightness, saturation, increment } = this.chartColorOptions
 
     this._isMounted = true
     if (this.state.loaded) return
+    
+    const { lightness, saturation, increment } = this.chartColorOptions
+    const { skip, limit } = this.state
+    const params = { skip, limit }
+    const query = Object.keys(params).map(k => (
+      `${k}=${params[k]}`
+    )).join('&')
 
-    fetch('/polls', {
+    fetch(`/polls?${query}`, {
       method: 'GET',
       credentials: 'include'
     })

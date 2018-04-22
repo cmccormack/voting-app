@@ -14,7 +14,7 @@ const Container = ({ className = "", children }) => (
 
 const MainWrapper = styled(Container) `
   border-radius: 5px;
-  margin: 80px auto 80px;
+  margin: 50px auto 80px;
   padding: 20px;
   min-width: 420px;
 `
@@ -49,6 +49,13 @@ const CardActionLink = styled(Link)`
 
 const PaginationStyled = styled.div`
   width: 100%;
+
+  @media only screen and (max-width: 768px){
+    li {
+      margin: 4px auto;
+      display: block;
+    }
+  }
 `
 const Pagination = ({children}) => (
   <PaginationStyled>
@@ -56,13 +63,30 @@ const Pagination = ({children}) => (
   </PaginationStyled>
 )
 
-const PageNum = styled.li.attrs({
-  className: props => props.active 
-    ? [props.className, props.activeClassName].join(' ')
-    : props.className
-})`
 
-`
+const PageNum = ({
+  active=false,
+  activeClass='',
+  className='',
+  effectClass='',
+  fontColorClass='',
+  ...props
+}) => {
+  const activeClassName = active ? activeClass : ''
+  return (
+    <li
+      className={[
+        className,
+        fontColorClass,
+        effectClass,
+        activeClassName
+      ].join(' ')}
+      { ...props }
+    >
+      { props.children }
+    </li>
+  )
+}
 
 const textContent = {
   header: 'Welcome to Votery!', 
@@ -110,8 +134,9 @@ class Main extends Component {
   }
 
   getPage(page) {
-    const { pagesCount: pages } = this.state
-    return (page >= 0 && page < pages) && this.fetchPolls(page)
+    const { pagesCount: pages, activePage } = this.state
+    if (page > pages -1 || page < 0 || page === activePage) return
+    this.fetchPolls(page)
   }
 
 
@@ -128,6 +153,7 @@ class Main extends Component {
       // Return early if component unmounted
       if (!this._isMounted) return
 
+      window.scrollTo(0, 50)
       const { lightness, saturation, increment } = this.chartColorOptions
       this.setState({
         polls: polls.map(poll => {
@@ -280,7 +306,11 @@ class Main extends Component {
           >
             <ul>
               <PageNum
-                className="btn-flat teal-text waves-effect waves-teal"
+                active={ activePage === 0 }
+                activeClass="text-lighten-4"
+                fontColorClass="teal-text"
+                effectClass="waves-effect waves-teal"
+                className="btn-flat"
                 onClick={ this.getPage.bind(this, activePage - 1)}
               >
                 {'Previous'}
@@ -290,8 +320,10 @@ class Main extends Component {
                 .fill().map((_, i) => (
                   <PageNum
                     active={activePage === i}
-                    activeClassName={'text-lighten-3'}
-                    className="btn-flat teal-text waves-effect waves-teal"
+                    activeClass="text-lighten-3"
+                    className="btn-flat"
+                    effectClass="waves-effect waves-teal"
+                    fontColorClass="teal-text"
                     key={String(i)}
                     onClick={ this.getPage.bind(this, i) }
                   >
@@ -300,7 +332,11 @@ class Main extends Component {
                 ))
               }
               <PageNum
-                className="btn-flat teal-text waves-effect waves-teal"
+                active={activePage === pagesCount -1}
+                activeClass="text-lighten-4"
+                className="btn-flat"
+                effectClass="waves-effect waves-teal"
+                fontColorClass="teal-text"
                 onClick={this.getPage.bind(this, activePage + 1)}
               >
                 {'Next'}

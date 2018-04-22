@@ -57,8 +57,8 @@ const PaginationStyled = styled.div`
     }
   }
 `
-const Pagination = ({children}) => (
-  <PaginationStyled>
+const Pagination = ({children, ...props}) => (
+  <PaginationStyled { ...props }>
     { children }
   </PaginationStyled>
 )
@@ -72,14 +72,15 @@ const PageNum = ({
   fontColorClass='',
   ...props
 }) => {
-  const activeClassName = active ? activeClass : ''
+
   return (
     <li
       className={[
         className,
         fontColorClass,
-        effectClass,
-        activeClassName
+        active ? '' : effectClass,
+        !active ? '' : activeClass,
+        active ? 'active' : '',
       ].join(' ')}
       { ...props }
     >
@@ -332,7 +333,7 @@ class Main extends Component {
                 ))
               }
               <PageNum
-                active={activePage === pagesCount -1}
+                active={activePage === pagesCount - 1}
                 activeClass="text-lighten-4"
                 className="btn-flat"
                 effectClass="waves-effect waves-teal"

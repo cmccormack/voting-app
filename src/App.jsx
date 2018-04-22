@@ -76,7 +76,7 @@ class App extends Component {
       credentials: 'include'
     })
     .then(res => res.json()).then((data) => {
-      console.log(`App.getAuthStatus: ${JSON.stringify(data)}`)
+      // console.log(`App.getAuthStatus: ${JSON.stringify(data)}`)
       cb(data)
       return data
     })

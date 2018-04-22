@@ -443,7 +443,10 @@ module.exports = (app, passport, models) => {
           return next( Error('Error retrieving polls from database') )
         }
 
-        res.type('json').send(polls)
+        Poll.count({}, (err, count) => {
+          res.type('json').send({ polls, count })
+        })
+        
     })
   })
 

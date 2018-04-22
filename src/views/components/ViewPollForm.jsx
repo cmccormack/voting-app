@@ -85,20 +85,28 @@ class ViewPollForm extends Component {
       poll,
       selectedChoice,
       selectedIndex,
+      showError,
+      voteSubmitted,
+      showVoteSubmitted,
     } = this.props
     
     const { title="Poll Not Found.", choices=[] } = poll
 
+    const voteSubmittedMsg = (
+      <span>
+        {'You successfully voted for '}
+        <b>{voteSubmitted}</b>{'!'}
+      </span>
+    )
+
     const alert = (
-      <FormRow>
         <Alert
           className="col s8 offset-s2"
-          show={error ? true : false}
-          type={error ? 'warning' : 'success'}
+          show={showError || showVoteSubmitted ? true : false}
+          type={showError ? 'warning' : 'success'}
         >
-          { error }
+          { showError ? error : showVoteSubmitted ? voteSubmittedMsg : null }
         </Alert>
-      </FormRow>
     )
 
     const loadingPoll = (
@@ -107,6 +115,7 @@ class ViewPollForm extends Component {
         footer={'Please wait while the data is being accessed.'}
         title={'Loading Poll...'}
       >
+        <FormRow/>
         <FormRow>
           <div className="col s8 offset-s2">
             <IndeterminateProgressBar />
@@ -117,7 +126,7 @@ class ViewPollForm extends Component {
 
     const body = (
       <FormCard
-        error={ error }
+        error={ showError | showVoteSubmitted }
         footer={ createdBy && footer }
         title={ title }
         user={ createdBy }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import { animateScroll } from 'react-scroll'
 
 import { ViewPollForm } from '../components'
 import { FormCard, FormRow } from '../layout'
@@ -14,24 +15,27 @@ class ViewPollPage extends Component {
 
     this.state = {
       choiceColors: [],
-      seedColor: 0,
       createdBy: '',
       error: '',
       loaded: false,
-      poll: {},
       newChoice: '',
-      selectedChoice: null,
+      poll: {},
+      seedColor: 0,
       selectedIndex: 0,
+      selectedChoice: null,
+      showError: false,
+      showVoteSubmitted: false,
       timeRemaining: 0,
+      voteSubmitted: '',
     }
 
     this.chartColorOptions = {
-      saturation: 40,
-      lightness: 60,
       increment: 20,
+      lightness: 60,
+      saturation: 40,
     }
-    this.intervalID = 0
     this._isMounted = false
+    this.intervalID = 0
 
     this.handleChoiceSelect = this.handleChoiceSelect.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -86,22 +90,29 @@ class ViewPollPage extends Component {
     )
   }
 
-  handleChoiceSelect(selectedIndex, selectedChoice) {
-    const { error, timeRemaining } = this.state
+  handleChoiceSelect(index, choice) {
+    const { error, newChoice, timeRemaining, selectedIndex } = this.state
     this.setState({
-      error: timeRemaining ? error : '',
-      selectedIndex,
-      selectedChoice,
+      selectedIndex: index,
+      selectedChoice: choice,
+      newChoice: selectedIndex === index ? newChoice : '',
+      showError: false,
+      error: '',
+      showVoteSubmitted: false,
+      voteSubmitted: '',
     })
   }
 
   handleInputChange(index, {target: { value }}) {
     const { error, timeRemaining } = this.state
     this.setState({
-      error: timeRemaining ? error : '',
       newChoice: value,
       selectedChoice: value,
       selectedIndex: index,
+      showError: false,
+      error: '',
+      showVoteSubmitted: false,
+      voteSubmitted: '',
     })
   }
 
@@ -113,16 +124,18 @@ class ViewPollPage extends Component {
   }
 
   countdownTimer(decrement=1000) {
+
     clearInterval(this.intervalID)
     
     this.intervalID = setInterval(() => {
 
       if (!this._isMounted) return clearInterval(this.intervalID)
 
-      const { timeRemaining } = this.state
+      const { showError, timeRemaining } = this.state
+
       if (timeRemaining > 0) {
         return this.setState({
-          error: this.timeRemainingMessage(),
+          error: showError ? this.timeRemainingMessage() : '',
           timeRemaining: timeRemaining - decrement,
         })
       }
@@ -131,6 +144,8 @@ class ViewPollPage extends Component {
       this.setState({
         timeRemaining: 0,
         error: '',
+        showError: false,
+        showVoteSubmitted: false,
       })
       
     }, decrement)
@@ -140,6 +155,15 @@ class ViewPollPage extends Component {
 
 
   handleSubmit(e) {
+
+    animateScroll.scrollToTop({
+      smooth: 'easeOutQuad',
+      duration: 400
+    })
+    
+    if (this.state.timeRemaining > 0) {
+      return this.setState({ showError: true })
+    }
 
     const { params } = this.props.match
     const { newChoice, selectedChoice, selectedIndex, poll } = this.state
@@ -157,15 +181,22 @@ class ViewPollPage extends Component {
         const { success, poll={}, message='', username='', error={} } = response
         const { timeRemaining=0 } = error
         const { choices=[], seedColor=0 } = poll
+
         this.setState({
-          choiceColors: success ? this.getColorArray(choices.length, seedColor) : this.state.choiceColors,
+          choiceColors: success 
+            ? this.getColorArray(choices.length, seedColor) 
+            : this.state.choiceColors,
           error: timeRemaining 
             ? this.timeRemainingMessage(timeRemaining)
             : message,
           newChoice: success ? '' : newChoice,
           poll: success ? poll : this.state.poll,
+          showVoteSubmitted: success ? true : false,
           success,
           timeRemaining,
+          voteSubmitted: success
+            ? selectedChoice
+            : '',
         }, this.countdownTimer)
       })
   }

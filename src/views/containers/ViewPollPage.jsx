@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 import { ViewPollForm } from '../components'
 import { FormCard, FormRow } from '../layout'
@@ -115,7 +116,9 @@ class ViewPollPage extends Component {
     clearInterval(this.intervalID)
     
     this.intervalID = setInterval(() => {
-      
+
+      if (!this._isMounted) return clearInterval(this.intervalID)
+
       const { timeRemaining } = this.state
       if (timeRemaining > 0) {
         return this.setState({
@@ -150,10 +153,10 @@ class ViewPollPage extends Component {
     })
       .then(res => res.json())
       .then(response => {
+        if (!this._isMounted) return
         const { success, poll={}, message='', username='', error={} } = response
         const { timeRemaining=0 } = error
         const { choices=[], seedColor=0 } = poll
-        console.log(timeRemaining)
         this.setState({
           choiceColors: success ? this.getColorArray(choices.length, seedColor) : this.state.choiceColors,
           error: timeRemaining 
@@ -174,7 +177,12 @@ class ViewPollPage extends Component {
     return (
       <ViewPollForm
         { ...this.state }
-        footer={ `Created by ${ createdBy }` }
+        footer={ 
+          <span>
+            {'Created by '}
+            <Link to={`/user/${createdBy}/polls`}>{createdBy}</Link>
+          </span>
+        }
         handleChoiceSelect={ this.handleChoiceSelect }
         handleInputChange={ this.handleInputChange }
         handleSubmit={ this.handleSubmit }

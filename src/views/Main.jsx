@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { VictoryPie, VictoryTheme } from 'victory'
 import { Link } from 'react-router-dom'
-import ReactPaginate from 'react-paginate';
 
 import { Chart, Col, GraphCard, Row } from './layout'
 import { getRandomHue, getColorsIncrementHue } from '../utils/colors'
@@ -48,6 +47,23 @@ const CardActionLink = styled(Link)`
   text-transform: none !important;
 `
 
+const PaginationStyled = styled.div`
+  width: 100%;
+`
+const Pagination = ({children}) => (
+  <PaginationStyled>
+    { children }
+  </PaginationStyled>
+)
+
+const PageNum = styled.li.attrs({
+  className: props => props.active 
+    ? [props.className, props.activeClassName].join(' ')
+    : props.className
+})`
+
+`
+
 const textContent = {
   header: 'Welcome to Votery!', 
   subheaders: [
@@ -63,10 +79,12 @@ class Main extends Component {
     super(props)
 
     this.state = {
-      limit: 2,
-      skip: 0,
+      activePage: 0,
+      limit: 6,
       loaded: false,
-      polls: []
+      pagesCount: 0,
+      polls: [],
+      pollsCount: 0,
     }
 
     this.chartColorOptions = {
@@ -91,37 +109,44 @@ class Main extends Component {
     this._isMounted = false
   }
 
+  getPage(page) {
+    const { pagesCount: pages } = this.state
+    return (page >= 0 && page < pages) && this.fetchPolls(page)
+  }
 
-  fetchPolls() {
 
-    const { skip, limit } = this.state
-    const params = { skip, limit }
-    const query = Object.keys(params).map(k => (
-      `${k}=${params[k]}`
-    )).join('&')
+  fetchPolls(skip=0) {
 
-    fetch(`/polls?${query}`, {
-      method: 'GET',
-      credentials: 'include'
-    })
-      .then(res => res.json()).then((polls) => {
-        if (!this._isMounted) return
-        const { lightness, saturation, increment } = this.chartColorOptions
-        this.setState({
-          polls: polls.map(poll => {
-            poll.choiceColors = getColorsIncrementHue(
-              poll.seedColor, {
-                length: poll.choices.length,
-                increment,
-                lightness,
-                saturation,
-              }
-            )
-            return poll
-          }),
-          loaded: true
-        })
+    const { limit } = this.state
+    const params = { skip: skip*limit, limit }
+
+    const query = Object.keys(params).map(k => (`${k}=${params[k]}`)).join('&')
+
+    fetch(`/polls?${query}`, { method: 'GET', credentials: 'include' })
+    .then(res => res.json()).then(({polls, count}) => {
+
+      // Return early if component unmounted
+      if (!this._isMounted) return
+
+      const { lightness, saturation, increment } = this.chartColorOptions
+      this.setState({
+        polls: polls.map(poll => {
+          poll.choiceColors = getColorsIncrementHue(
+            poll.seedColor, {
+              length: poll.choices.length,
+              increment,
+              lightness,
+              saturation,
+            }
+          )
+          return poll
+        }),
+        loaded: true,
+        pagesCount: Math.ceil(count/limit),
+        pollsCount: count,
+        activePage: skip,
       })
+    })
   }
 
 
@@ -129,6 +154,14 @@ class Main extends Component {
 
     const { user, loggedIn } = this.props
     const { header, subheaders } = textContent
+    const {
+      activePage,
+      limit,
+      loaded,
+      pagesCount,
+      polls,
+      pollsCount
+    } = this.state
 
     const title = (
       <Row>
@@ -165,7 +198,7 @@ class Main extends Component {
 
     const body = (
       <Row>
-        {this.state.polls.map(
+        {polls.map(
           ({ title, shortName, createdBy, ...poll }) => {
             const { username } = createdBy
 
@@ -230,28 +263,51 @@ class Main extends Component {
           className="teal lighten-5"
         >
           {
-            !this.state.loaded
+            !loaded
               ? loadingDisplay
-              : this.state.polls.length > 0
+              : polls.length > 0
                 ? body
                 : pollsEmpty
           }
-          <div id="react-paginate">
-          <ReactPaginate
-              breakLabel={<span className="teal-text text-lighten-3">...</span>}
-              pageCount={10}
-              pageRangeDisplayed={5}
-              marginPagesDisplayed={2}
-              pageClassName="btn-flat waves-effect waves-teal"
-              pageLinkClassName="teal-text"
-              previousClassName="btn teal lighten-4 waves-effect waves-teal"
-              previousLinkClassName="teal-text"
-              nextClassName="btn teal lighten-4 waves-effect waves-teal"
-              nextLinkClassName="teal-text"
-              disabledClassName="teal-text text-lighten-3"
-              hrefBuilder={ (d) => console.log(d) }
-            />
-          </div>
+          
+          <Pagination
+            className="center"
+            activePage={activePage}
+            itemsCountPerPage={10}
+            totalItemsCount={450}
+            pageRangeDisplayed={5}
+            onChange={this.getPage}
+          >
+            <ul>
+              <PageNum
+                className="btn-flat teal-text waves-effect waves-teal"
+                onClick={ this.getPage.bind(this, activePage - 1)}
+              >
+                {'Previous'}
+              </PageNum>
+              { 
+                Array(pagesCount)
+                .fill().map((_, i) => (
+                  <PageNum
+                    active={activePage === i}
+                    activeClassName={'text-lighten-3'}
+                    className="btn-flat teal-text waves-effect waves-teal"
+                    key={String(i)}
+                    onClick={ this.getPage.bind(this, i) }
+                  >
+                    {i+1}
+                  </PageNum>
+                ))
+              }
+              <PageNum
+                className="btn-flat teal-text waves-effect waves-teal"
+                onClick={this.getPage.bind(this, activePage + 1)}
+              >
+                {'Next'}
+              </PageNum>
+            </ul>
+          </Pagination>
+
         </BodyWrapper>
       </MainWrapper>
     )

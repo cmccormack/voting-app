@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom'
 
 import './images/favicon.ico'
-import './styles/styles.scss'
+// import './styles/styles.scss'
 import Routes from './Routes'
 import { Header, Footer } from './views/layout'
 

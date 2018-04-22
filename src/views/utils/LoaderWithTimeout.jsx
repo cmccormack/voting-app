@@ -23,7 +23,6 @@ class APILoaderWithTimeout extends Component {
   }
 
   render() {
-    console.log(this.props.loaded)
 
     this.props.loaded && clearInterval(this.timeoutID)
 

@@ -97,13 +97,17 @@ module.exports = (app, passport, models) => {
   app.post('/api/:user/polls/:poll', (req, res, next) => {
     const { body, params, sessionID } = req
     const { selectedChoice } = body
-    const expiry = 1 * 1000 * 60 // 60 seconds
+    const expiry = 10 * 1000 // 5 seconds
     
-    const updateComplete = (err, doc) => {
+    const updateComplete = (err, doc, timeRemaining=expiry) => {
       if (err) return next(Error(err))
       if (!doc) return next(Error('Poll Not Found!'))
 
-      res.type('json').send({ success: true, poll: doc })
+      res.type('json').send({
+        success: true,
+        poll: doc,
+        error: { message: 'No Error', timeRemaining }
+      })
     }
 
     Poll
@@ -124,13 +128,13 @@ module.exports = (app, passport, models) => {
       const voterIds = recentVoters.map(({sessionID}) => sessionID)
       const voterIndex = voterIds.indexOf(req.sessionID)
 
-      if (~voterIndex) {
-        const timeRemaining =  Math.floor(
-          (expiry - (Date.now() - poll.voters[voterIndex].datevoted)) )
 
+      let timeRemaining
+      if (~voterIndex) {
         return next({
           message: "Not enough time has elapsed since previous vote",
-          timeRemaining,
+          timeRemaining: Math.floor(
+            (expiry - (Date.now() - poll.voters[voterIndex].datevoted)))
         })
       } else {
         recentVoters.push({
@@ -162,10 +166,7 @@ module.exports = (app, passport, models) => {
         },
         { new: true },
       )
-      .exec(updateComplete)
-
-
-
+      .exec((err, doc) => updateComplete(err, doc, timeRemaining))
     })
   })
 

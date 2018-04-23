@@ -97,7 +97,7 @@ module.exports = (app, passport, models) => {
   app.post('/api/:user/polls/:poll', (req, res, next) => {
     const { body, params, sessionID } = req
     const { selectedChoice } = body
-    const expiry = 10 * 1000 // 5 seconds
+    const expiry = 60 * 1000 // 60 seconds
     
     const updateComplete = (err, doc, timeRemaining=expiry) => {
       if (err) return next(Error(err))

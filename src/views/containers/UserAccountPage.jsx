@@ -25,7 +25,6 @@ class UserAccountPage extends Component {
 
 
   deletePoll({ id, title }) {
-    console.log(id, title)
     const confirmDelete = confirm(
       `Are you sure you want to delete the poll ${title}?`
     )
@@ -45,7 +44,6 @@ class UserAccountPage extends Component {
           return this.setState({ error: message })
         }
         this.getPolls()
-        console.log(`Poll "${title}" deleted.`)
       })
   }
 
@@ -70,7 +68,6 @@ class UserAccountPage extends Component {
         if (!success) {
           return this.setState({ error: message })
         }
-        console.log(message)
         this.props.updateAuthStatus()
       })
   }

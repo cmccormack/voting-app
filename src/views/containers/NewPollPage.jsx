@@ -103,7 +103,6 @@ class NewPollPage extends Component {
         body: JSON.stringify({ title, shortName, choices, selectedChoice })
       })
         .then(res => res.json()).then(data => {
-          console.log(`handleSubmit data: ${JSON.stringify(data, null, 2)}`)
           const { success, message, poll={} } = data
           const { user='', shortName='' } = poll
 

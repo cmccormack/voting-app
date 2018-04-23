@@ -46,7 +46,6 @@ class LoginPage extends Component {
     })
       .then(res => res.json()).then(data => {
         // Response from login attempt
-        console.log(data)
         this.props.updateAuthStatus(response => {
           if (!response.isAuthenticated || !data.success) {
             this.setState({ error: data.message })

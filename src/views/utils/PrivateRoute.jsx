@@ -4,7 +4,6 @@ import { Route, Redirect } from 'react-router-dom'
 const PrivateRoute = (props) => {
   
   const { component: Component, allowRedirects, loggedIn, ...rest } = props
-  console.log(`PrivateRoute: loggedIn: ${loggedIn}`)
 
   return (
   <Route

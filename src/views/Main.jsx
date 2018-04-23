@@ -139,7 +139,7 @@ class Main extends Component {
     const { pagesCount: pages, activePage } = this.state
     if (page > pages -1 || page < 0 || page === activePage) return
 
-    window.scrollTo(0,50)
+    Scroll.animateScroll.scrollToTop({ duration: 500, smooth: 'easeOutQuad'})
 
     this.fetchPolls(page)
   }
@@ -343,7 +343,6 @@ class Main extends Component {
         <BodyWrapper
           className="teal lighten-5"
         >
-          { pagination }
           {
             !loaded
               ? loadingDisplay

@@ -1,17 +1,11 @@
-import React, { Component } from 'react'
+import React, { Component, } from 'react'
 import styled from 'styled-components'
-import { VictoryPie, VictoryTheme } from 'victory'
-import { Link } from 'react-router-dom'
+import { Link, } from 'react-router-dom'
 import Scroll from 'react-scroll'
+import PropTypes from 'prop-types'
 
-import { Chart, Col, GraphCard, Row } from './layout'
-import { getRandomHue, getColorsIncrementHue } from '../utils/colors'
-
-const Container = ({ className = "", children }) => (
-  <div className={`container ${className}`}>
-    {children}
-  </div>
-)
+import { Chart, Col, Container, GraphCard, Row, } from './layout'
+import { getColorsIncrementHue, } from '../utils/colors'
 
 const MainWrapper = styled(Container) `
   border-radius: 5px;
@@ -36,12 +30,19 @@ const BodyWrapper = SectionWrapper.extend`
 `
 
 const Header = styled.p.attrs({
-  className: ({ color }) => color,
+  className: ({ color, }) => color,
 }) `
-  margin: ${({ margin }) => margin || '0'};
-  padding: ${({ padding }) => padding || '0'};
-  font-size: ${({ fontSize }) => fontSize};
+  margin: ${({ margin, }) => margin || '0'};
+  padding: ${({ padding, }) => padding || '0'};
+  font-size: ${({ fontSize, }) => fontSize};
 `
+
+Header.propTypes = {
+  color: PropTypes.string,
+  margin: PropTypes.string,
+  padding: PropTypes.string,
+  fontSize: PropTypes.string,
+}
 
 const CardActionLink = styled(Link)`
   color: #039be5 !important;
@@ -94,8 +95,8 @@ const textContent = {
   header: 'Welcome to Votery!', 
   subheaders: [
     'Check out some of the great user-submitted polls below, or create your own.',
-    'See if the thing you like is better than the thing that other person likes!'
-  ]
+    'See if the thing you like is better than the thing that other person likes!',
+  ],
 }
 
 
@@ -136,10 +137,10 @@ class Main extends Component {
   }
 
   getPage(page) {
-    const { pagesCount: pages, activePage } = this.state
+    const { pagesCount: pages, activePage, } = this.state
     if (page > pages -1 || page < 0 || page === activePage) return
 
-    Scroll.animateScroll.scrollToTop({ duration: 500, smooth: 'easeOutQuad'})
+    Scroll.animateScroll.scrollToTop({ duration: 500, smooth: 'easeOutQuad',})
 
     this.fetchPolls(page)
   }
@@ -147,19 +148,19 @@ class Main extends Component {
 
   fetchPolls(skip=0) {
 
-    const { limit } = this.state
-    const params = { skip: skip*limit, limit }
+    const { limit, } = this.state
+    const params = { skip: skip*limit, limit, }
 
     const query = Object.keys(params).map(k => (`${k}=${params[k]}`)).join('&')
 
-    fetch(`/polls?${query}`, { method: 'GET', credentials: 'include' })
-    .then(res => res.json()).then(({polls, count}) => {
+    fetch(`/polls?${query}`, { method: 'GET', credentials: 'include', })
+    .then(res => res.json()).then(({polls, count,}) => {
 
       // Return early if component unmounted
       if (!this._isMounted) return
 
       window.scrollTo(0, 50)
-      const { lightness, saturation, increment } = this.chartColorOptions
+      const { lightness, saturation, increment, } = this.chartColorOptions
       this.setState({
         polls: polls.map(poll => {
           poll.choiceColors = getColorsIncrementHue(
@@ -184,15 +185,15 @@ class Main extends Component {
   render() {
 
     document.title = "Votery | Main"
-    const { user, loggedIn } = this.props
-    const { header, subheaders } = textContent
+    const { user, loggedIn, } = this.props
+    const { header, subheaders, } = textContent
     const {
       activePage,
       limit,
       loaded,
       pagesCount,
       polls,
-      pollsCount
+      pollsCount,
     } = this.state
 
     const title = (
@@ -232,7 +233,7 @@ class Main extends Component {
       <Row>
         {polls.map(
           ({ title, shortName, createdBy, ...poll }) => {
-            const { username } = createdBy
+            const { username, } = createdBy
 
             return (
               <Col size="s12 xl6" key={`${username}-${shortName}`}>

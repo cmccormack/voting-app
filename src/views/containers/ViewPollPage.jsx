@@ -1,12 +1,10 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import React, { Component, } from 'react'
+import { Link, } from 'react-router-dom'
 import Scroll from 'react-scroll'
+import PropTypes from 'prop-types'
 
-import { ViewPollForm } from '../components'
-import { FormCard, FormRow } from '../layout'
-import { IndeterminateProgressBar } from '../utils'
-import { getRandomHue, getColorsIncrementHue } from '../../utils/colors'
+import { ViewPollForm, } from '../components'
+import { getColorsIncrementHue, } from '../../utils/colors'
 
 class ViewPollPage extends Component {
 
@@ -46,20 +44,19 @@ class ViewPollPage extends Component {
 
     this._isMounted = true
 
-    const { user, poll } = this.props.match.params
-    const { increment, lightness, saturation } = this.chartColorOptions
+    const { user, poll, } = this.props.match.params
 
     fetch(`/api/${user}/polls/${poll}`, {
       method: "GET",
       cache: "default",
-      credentials: "same-origin"
+      credentials: "same-origin",
     })
       .then(res => res.json())
-      .then(({ success, poll, message, username }) => {
+      .then(({ success, poll, message, username, }) => {
         if (!this._isMounted) return
-        if (!success) return this.setState({ loaded: true, error: message })
+        if (!success) return this.setState({ loaded: true, error: message, })
         
-        const { choices=[], seedColor=0 } = poll
+        const { choices=[], seedColor=0, } = poll
         this.setState({
           choiceColors: this.getColorArray(choices.length, seedColor),
           seedColor: seedColor,
@@ -67,7 +64,7 @@ class ViewPollPage extends Component {
           loaded: true,
           poll,
           selectedChoice: choices[0].choice,
-          selectedIndex: 0
+          selectedIndex: 0,
         })
 
       })
@@ -80,7 +77,7 @@ class ViewPollPage extends Component {
 
   getColorArray(length=0, hue=0) {
 
-    const { increment, lightness, saturation } = this.chartColorOptions
+    const { increment, lightness, saturation, } = this.chartColorOptions
     return getColorsIncrementHue(hue, {
         length,
         increment,
@@ -91,7 +88,7 @@ class ViewPollPage extends Component {
   }
 
   handleChoiceSelect(index, choice) {
-    const { error, newChoice, timeRemaining, selectedIndex } = this.state
+    const {newChoice, selectedIndex, } = this.state
     this.setState({
       selectedIndex: index,
       selectedChoice: choice,
@@ -103,8 +100,7 @@ class ViewPollPage extends Component {
     })
   }
 
-  handleInputChange(index, {target: { value }}) {
-    const { error, timeRemaining } = this.state
+  handleInputChange(index, {target: { value, },}) {
     this.setState({
       newChoice: value,
       selectedChoice: value,
@@ -117,7 +113,7 @@ class ViewPollPage extends Component {
   }
 
   timeRemainingMessage(time) {
-    const { timeRemaining } = this.state
+    const { timeRemaining, } = this.state
     return `You can vote again in ${
       Math.floor((time ? time : timeRemaining) / 1000)
     } seconds`
@@ -131,7 +127,7 @@ class ViewPollPage extends Component {
 
       if (!this._isMounted) return clearInterval(this.intervalID)
 
-      const { showError, timeRemaining } = this.state
+      const { showError, timeRemaining, } = this.state
 
       if (timeRemaining > 0) {
         return this.setState({
@@ -154,41 +150,45 @@ class ViewPollPage extends Component {
   }
 
 
-  handleSubmit(e) {
+  handleSubmit() {
 
     Scroll.animateScroll.scrollToTop({
       smooth: 'easeOutQuad',
-      duration: 400
+      duration: 400,
     })
 
     if (this.state.timeRemaining > 0) {
-      return this.setState({ showError: true })
+      return this.setState({
+        showError: true,
+        error: this.timeRemainingMessage(),
+      })
     }
 
-    const { params } = this.props.match
-    const { newChoice, selectedChoice, selectedIndex, poll } = this.state
+    const { params, } = this.props.match
+    const { newChoice, selectedChoice, selectedIndex, } = this.state
     
     fetch(`/api/${params.user}/polls/${params.poll}`, {
       method: "POST",
-      headers: new Headers({'Content-Type': 'application/json'}),
+      headers: new Headers({'Content-Type': 'application/json',}),
       cache: "default",
       credentials: "same-origin",
-      body: JSON.stringify({ selectedChoice, selectedIndex })
+      body: JSON.stringify({ selectedChoice, selectedIndex, }),
     })
       .then(res => res.json())
       .then(response => {
         if (!this._isMounted) return
-        const { success, poll={}, message='', username='', error={} } = response
-        const { timeRemaining=0 } = error
-        const { choices=[], seedColor=0 } = poll
+        const { success, poll={}, message='', error={}, } = response
+        const { timeRemaining=0, } = error
+        const { choices=[], seedColor=0, } = poll
 
         this.setState({
           choiceColors: success 
             ? this.getColorArray(choices.length, seedColor) 
             : this.state.choiceColors,
-          error: timeRemaining 
+          error: timeRemaining > 0
             ? this.timeRemainingMessage(timeRemaining)
             : message,
+          showError: !success,
           newChoice: success ? '' : newChoice,
           poll: success ? poll : this.state.poll,
           showVoteSubmitted: success ? true : false,
@@ -203,7 +203,7 @@ class ViewPollPage extends Component {
 
   render() {
 
-    const { createdBy, newChoice, poll } = this.state
+    const { createdBy, newChoice, poll, } = this.state
     document.title = `Votery | ${poll.title}`
 
     return (
@@ -223,6 +223,15 @@ class ViewPollPage extends Component {
       </ViewPollForm>
     )
   }
+}
+
+ViewPollPage.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      user: PropTypes.string,
+      poll: PropTypes.string,
+    }),
+  }),
 }
 
 export default ViewPollPage

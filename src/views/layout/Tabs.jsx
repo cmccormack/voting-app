@@ -1,35 +1,48 @@
-import React, { Component } from 'react'
+import React, { PureComponent, } from 'react'
 import styled from 'styled-components'
-
-import { Tab } from './'
-
+import PropTypes from 'prop-types'
 
 const TabGroup = styled.ul`
+  overflow-x: hidden;
   li.indicator {
     background-color: ${props => props.indicatorColor || 'none'};
   }
 `
 
-class Tabs extends Component {
+class Tabs extends PureComponent {
 
   render(){
 
     const {
       children,
-      className = '',
-      color = '',
+      className,
+      color,
       indicatorColor,
-      ...props
     } = this.props
 
     return(
-      <div className={`col s12 ${className}`}>
+      <div className={`col s12 ${className} ${color}`}>
         <TabGroup className="tabs" indicatorColor={indicatorColor}>
           { children }
         </TabGroup>
       </div>
     )
   }
+}
+
+Tabs.propTypes = {
+  children: PropTypes.array,
+  className: PropTypes.string,
+  color: PropTypes.string,
+  indicatorColor: PropTypes.string,
+  
+
+}
+
+Tabs.defaultProps = {
+  className: '',
+  color: '',
+  indicatorColor: '#00897b',
 }
 
 export default Tabs

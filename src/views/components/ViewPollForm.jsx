@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component, } from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 import {
   Alert,
@@ -8,7 +8,6 @@ import {
   Collection,
   CollectionItem,
   FormCard,
-  FormInput,
   FormRow,
   FormSubmitButton,
 } from '../layout'
@@ -40,13 +39,13 @@ const NewChoiceInputWrapper = styled.div`
   width: 66%;
 `
 
-const VoteCollectionItem = ({ 
+const VoteCollectionItem = ({
+  children,
   choice,
+  handleChoiceSelect,
   index,
-  selectedChoice,
   selectedIndex,
   title,
-  ...props
 }) => (
   <CollectionItem
     actions={[
@@ -56,170 +55,195 @@ const VoteCollectionItem = ({
           : 'radio_button_unchecked',
         target: "#",
         color: "teal-text text-lighten-2",
-        handler: props.handleChoiceSelect.bind(null, index, choice)
-      }
+        handler: handleChoiceSelect.bind(null, index, choice),
+      },
     ]}
     title={{
       color: "teal-text text-darken-1",
       text:  title,
     }}
   >
-    { props.children }
+    { children }
   </CollectionItem>
 )
 
 
-class ViewPollForm extends Component {
+const ViewPollForm = (props) => {
 
-  render() {
+  const {
+    choiceColors,
+    createdBy,
+    error,
+    footer,
+    handleChoiceSelect,
+    handleInputChange,
+    handleSubmit,
+    loaded,
+    newChoice,
+    poll,
+    selectedChoice,
+    selectedIndex,
+    showError,
+    voteSubmitted,
+    showVoteSubmitted,
+  } = props
+  
+  const { title="Poll Not Found.", choices=[], } = poll
 
-    const {
-      choiceColors,
-      createdBy,
-      error,
-      footer,
-      handleChoiceSelect,
-      handleSubmit,
-      loaded,
-      newChoice,
-      poll,
-      selectedChoice,
-      selectedIndex,
-      showError,
-      voteSubmitted,
-      showVoteSubmitted,
-    } = this.props
-    
-    const { title="Poll Not Found.", choices=[] } = poll
+  const voteSubmittedMsg = (
+    <span>
+      {'You successfully voted for '}
+      <b>{voteSubmitted}</b>{'!'}
+    </span>
+  )
 
-    const voteSubmittedMsg = (
-      <span>
-        {'You successfully voted for '}
-        <b>{voteSubmitted}</b>{'!'}
-      </span>
-    )
-
-    const alert = (
-        <Alert
-          className="col s8 offset-s2"
-          show={showError || showVoteSubmitted ? true : false}
-          type={showError ? 'warning' : 'success'}
-        >
-          { showError ? error : showVoteSubmitted ? voteSubmittedMsg : null }
-        </Alert>
-    )
-
-    const loadingPoll = (
-      <FormCard
-        alert={ alert }
-        footer={'Please wait while the data is being accessed.'}
-        title={'Loading Poll...'}
+  const alert = (
+      <Alert
+        className="col s8 offset-s2"
+        show={showError || showVoteSubmitted ? true : false}
+        type={showError ? 'warning' : 'success'}
       >
-        <FormRow/>
+        { showError ? error : showVoteSubmitted ? voteSubmittedMsg : null }
+      </Alert>
+  )
+
+  const loadingPoll = (
+    <FormCard
+      alert={ alert }
+      footer={'Please wait while the data is being accessed.'}
+      title={'Loading Poll...'}
+    >
+      <FormRow/>
+      <FormRow>
+        <div className="col s8 offset-s2">
+          <IndeterminateProgressBar />
+        </div>
+      </FormRow>
+    </FormCard>
+  )
+
+  const body = (
+    <FormCard
+      error={ showError | showVoteSubmitted }
+      footer={ createdBy && footer }
+      title={ title }
+      user={ createdBy }
+      alert={ alert }
+    >
+      <FormRow>
+        <Chart
+          choices={ choices }
+          className="col s12 m10 offset-m1"
+          colors={choiceColors}
+        />
+      </FormRow>
+
+      <ChoicesSection>
         <FormRow>
-          <div className="col s8 offset-s2">
-            <IndeterminateProgressBar />
-          </div>
+          <ChoicesTitle 
+            className='col s8 offset-s2 teal-text text-darken-1'
+          >
+            Select a choice below to vote on your favorite!
+          </ChoicesTitle>
+          <Collection className="col s8 offset-s2">
+            {
+              choices.map(({ choice, }, i) => (
+                <VoteCollectionItem
+                  choice={ choice }
+                  handleChoiceSelect={ handleChoiceSelect }
+                  index={ i }
+                  key={ choice}
+                  selectedChoice={ selectedChoice }
+                  selectedIndex={ selectedIndex }
+                  title={ choice }
+                />
+              ))
+            }
+
+            {/* // Allow user to add their own poll choice */}
+            <VoteCollectionItem
+              choice={ newChoice }
+              handleChoiceSelect={ handleChoiceSelect }
+              index={ choices.length }
+              selectedChoice={ selectedChoice }
+              selectedIndex={ selectedIndex }
+            >
+              <NewChoiceInputWrapper>
+                <NewChoiceInput
+                  className='teal-text text-darken-1'
+                  value={ newChoice }
+                  onChange={ handleInputChange.bind(null, choices.length) }
+                  placeholder="Add New Choice!"
+                />
+                <CharacterCounter
+                  count={ newChoice.length }
+                  max={ 32 }
+                  top={ 0 }
+                  bottom={ 0 }
+                  right={ '-20px' }
+                  lineHeight={ 1.4 }
+                />
+              </NewChoiceInputWrapper>
+            </VoteCollectionItem>
+
+          </Collection>
         </FormRow>
-      </FormCard>
-    )
-
-    const body = (
-      <FormCard
-        error={ showError | showVoteSubmitted }
-        footer={ createdBy && footer }
-        title={ title }
-        user={ createdBy }
-        alert={ alert }
-      >
         <FormRow>
-          <Chart
-            choices={ choices }
-            className="col s12 m10 offset-m1"
-            colors={choiceColors}
+          <FormSubmitButton
+            buttonText="Vote!"
+            icon="done_all"
+            onClick={ handleSubmit }
+            position="right"
+            size="s8 offset-s2"
           />
         </FormRow>
+      </ChoicesSection>
+    </FormCard>
+  )
 
-        <ChoicesSection>
-          <FormRow>
-            <ChoicesTitle 
-              className='col s8 offset-s2 teal-text text-darken-1'
-            >
-              Select a choice below to vote on your favorite!
-            </ChoicesTitle>
-            <Collection className="col s8 offset-s2">
-              {
-                choices.map(({choice}, i) => (
-                  <VoteCollectionItem
-                    choice={ choice }
-                    handleChoiceSelect={ handleChoiceSelect }
-                    index={ i }
-                    key={ choice}
-                    selectedChoice={ selectedChoice }
-                    selectedIndex={ selectedIndex }
-                    title={ choice }
-                  />
-                ))
-              }
+  return (
 
-              {/* // Allow user to add their own poll choice */}
-              <VoteCollectionItem
-                choice={ newChoice }
-                handleChoiceSelect={ handleChoiceSelect }
-                index={ choices.length }
-                selectedChoice={ selectedChoice }
-                selectedIndex={ selectedIndex }
-              >
-                <NewChoiceInputWrapper>
-                  <NewChoiceInput
-                    className='teal-text text-darken-1'
-                    value={ newChoice }
-                    onChange={
-                      this.props.handleInputChange.bind(null, choices.length)
-                    }
-                    placeholder="Add New Choice!"
-                  />
-                  <CharacterCounter
-                    count={ newChoice.length }
-                    max={ 32 }
-                    top={ 0 }
-                    bottom={ 0 }
-                    right={ '-20px' }
-                    lineHeight={ 1.4 }
-                  />
-                </NewChoiceInputWrapper>
-              </VoteCollectionItem>
-
-            </Collection>
-          </FormRow>
-          <FormRow>
-            <FormSubmitButton
-              buttonText="Vote!"
-              icon="done_all"
-              onClick={this.props.handleSubmit}
-              position="right"
-              size="s8 offset-s2"
-            />
-          </FormRow>
-        </ChoicesSection>
-      </FormCard>
-    )
-
-    return (
-
-      <div className="container">
-        <div className="row">
-          <div className="col s12 m10 offset-m1 xl8 offset-xl2">
-            {!this.props.loaded
-              ? loadingPoll
-              : body
-            }
-          </div>
+    <div className="container">
+      <div className="row">
+        <div className="col s12 m10 offset-m1 xl8 offset-xl2">
+          {!loaded
+            ? loadingPoll
+            : body
+          }
         </div>
       </div>
+    </div>
 
-    )
-  }
+  )
+}
+
+VoteCollectionItem.propTypes = { 
+  children: PropTypes.element,
+  choice: PropTypes.string,
+  handleChoiceSelect: PropTypes.func,
+  index: PropTypes.number,
+  selectedChoice: PropTypes.string,
+  selectedIndex: PropTypes.number,
+  title: PropTypes.string,
+}
+
+ViewPollForm.propTypes = {
+  children: PropTypes.element,
+  choiceColors: PropTypes.arrayOf(PropTypes.string),
+  createdBy: PropTypes.string,
+  error: PropTypes.string,
+  footer: PropTypes.element,
+  handleChoiceSelect: PropTypes.func,
+  handleInputChange: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  loaded: PropTypes.bool,
+  newChoice: PropTypes.string,
+  poll: PropTypes.object,
+  selectedChoice: PropTypes.string,
+  selectedIndex: PropTypes.number,
+  showError: PropTypes.bool,
+  voteSubmitted: PropTypes.string,
+  showVoteSubmitted: PropTypes.bool,
 }
 
 export default ViewPollForm

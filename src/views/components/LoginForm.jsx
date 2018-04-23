@@ -1,83 +1,96 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-
-import { Link } from 'react-router-dom'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 import {
   Alert,
   FormCard,
   FormSubmitButton,
   FormInput,
-  FormRow
+  FormRow,
 } from '../layout'
 
-class LoginForm extends Component {
+const LoginForm = (props) => {
+  
+  const { title, footer, error, } = props
 
-  render() {
-    
-    const { title, footer, error } = this.props
-
-    const alert = (
-      <FormRow>
-        <Alert
-          className="col s8 offset-s2"
-          show={ error ? true : false }
-          type={ error ? 'warning' : 'success' }
-        >
-          { error }
-        </Alert>
-      </FormRow>
-    )
-
-    return (
-      <FormCard
-        title={ title }
-        footer={ footer }
-        error={ error }
-        alert={ alert }
+  const alert = (
+    <FormRow>
+      <Alert
+        className="col s8 offset-s2"
+        show={ error ? true : false }
+        type={ error ? 'warning' : 'success' }
       >
-        <form id="login_form" onSubmit={ this.props.handleSubmit }>
+        { error }
+      </Alert>
+    </FormRow>
+  )
 
-          <FormRow>
-            <FormInput
-              icon="account_circle"
-              label="Username"
-              name="username"
-              onChange={ this.props.handleInputChange }
-              required
-              size="s12 l8 offset-l2"
-              value={ this.props.username }
-            >
-            </FormInput>
-          </FormRow>
+  return (
+    <FormCard
+      title={ title }
+      footer={ footer }
+      error={ error }
+      alert={ alert }
+    >
+      <form id="login_form" onSubmit={ props.handleSubmit }>
 
-          <FormRow>
-            <FormInput
-              icon="lock"
-              label="Password"
-              name="password"
-              onChange={ this.props.handleInputChange }
-              required
-              size="s12 l8 offset-l2"
-              type="password"
-              value={ this.props.password }
-            >
-            </FormInput>
-          </FormRow>
+        <FormRow>
+          <FormInput
+            icon="account_circle"
+            label="Username"
+            name="username"
+            onChange={ props.handleInputChange }
+            required
+            size="s12 l8 offset-l2"
+            value={ props.username }
+          />
+        </FormRow>
 
-          <FormRow>
-            <FormSubmitButton
-              onClick={ this.props.handleSubmit }
-              position="right"
-              size="s12 l8 offset-l2"
-            />
-          </FormRow>
+        <FormRow>
+          <FormInput
+            icon="lock"
+            label="Password"
+            name="password"
+            onChange={ props.handleInputChange }
+            required
+            size="s12 l8 offset-l2"
+            type="password"
+            value={ props.password }
+          >
+          </FormInput>
+        </FormRow>
 
-        </form>
+        <FormRow>
+          <FormSubmitButton
+            onClick={ props.handleSubmit }
+            position="right"
+            size="s12 l8 offset-l2"
+          />
+        </FormRow>
 
-      </FormCard>
-    )
-  }
+      </form>
+
+    </FormCard>
+  )
+}
+
+LoginForm.propTypes = {
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  footer: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  error: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  username: PropTypes.string,
+  password: PropTypes.string,
+  handleSubmit: PropTypes.func,
+  handleInputChange: PropTypes.func,
 }
 
 export default LoginForm

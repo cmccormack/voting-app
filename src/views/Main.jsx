@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { VictoryPie, VictoryTheme } from 'victory'
 import { Link } from 'react-router-dom'
+import Scroll from 'react-scroll'
 
 import { Chart, Col, GraphCard, Row } from './layout'
 import { getRandomHue, getColorsIncrementHue } from '../utils/colors'
@@ -137,6 +138,9 @@ class Main extends Component {
   getPage(page) {
     const { pagesCount: pages, activePage } = this.state
     if (page > pages -1 || page < 0 || page === activePage) return
+
+    window.scrollTo(0,50)
+
     this.fetchPolls(page)
   }
 
@@ -277,6 +281,56 @@ class Main extends Component {
       </Row>
     )
 
+    const pagination = (
+      <Pagination
+        className="center"
+        activePage={activePage}
+        itemsCountPerPage={10}
+        totalItemsCount={450}
+        pageRangeDisplayed={5}
+        onChange={this.getPage}
+      >
+        <ul>
+          <PageNum
+            active={activePage === 0}
+            activeClass="text-lighten-4"
+            fontColorClass="teal-text"
+            effectClass="waves-effect waves-teal"
+            className="btn-flat"
+            onClick={this.getPage.bind(this, activePage - 1)}
+          >
+            {'Previous'}
+          </PageNum>
+          {
+            Array(pagesCount)
+              .fill().map((_, i) => (
+                <PageNum
+                  active={activePage === i}
+                  activeClass="text-lighten-3"
+                  className="btn-flat"
+                  effectClass="waves-effect waves-teal"
+                  fontColorClass="teal-text"
+                  key={String(i)}
+                  onClick={this.getPage.bind(this, i)}
+                >
+                  {i + 1}
+                </PageNum>
+              ))
+          }
+          <PageNum
+            active={activePage === pagesCount - 1}
+            activeClass="text-lighten-4"
+            className="btn-flat"
+            effectClass="waves-effect waves-teal"
+            fontColorClass="teal-text"
+            onClick={this.getPage.bind(this, activePage + 1)}
+          >
+            {'Next'}
+          </PageNum>
+        </ul>
+      </Pagination>
+    )
+
     return (
       <MainWrapper
         className="center teal lighten-4 z-depth-2"
@@ -289,6 +343,7 @@ class Main extends Component {
         <BodyWrapper
           className="teal lighten-5"
         >
+          { pagination }
           {
             !loaded
               ? loadingDisplay
@@ -296,55 +351,7 @@ class Main extends Component {
                 ? body
                 : pollsEmpty
           }
-          
-          <Pagination
-            className="center"
-            activePage={activePage}
-            itemsCountPerPage={10}
-            totalItemsCount={450}
-            pageRangeDisplayed={5}
-            onChange={this.getPage}
-          >
-            <ul>
-              <PageNum
-                active={ activePage === 0 }
-                activeClass="text-lighten-4"
-                fontColorClass="teal-text"
-                effectClass="waves-effect waves-teal"
-                className="btn-flat"
-                onClick={ this.getPage.bind(this, activePage - 1)}
-              >
-                {'Previous'}
-              </PageNum>
-              { 
-                Array(pagesCount)
-                .fill().map((_, i) => (
-                  <PageNum
-                    active={activePage === i}
-                    activeClass="text-lighten-3"
-                    className="btn-flat"
-                    effectClass="waves-effect waves-teal"
-                    fontColorClass="teal-text"
-                    key={String(i)}
-                    onClick={ this.getPage.bind(this, i) }
-                  >
-                    {i+1}
-                  </PageNum>
-                ))
-              }
-              <PageNum
-                active={activePage === pagesCount - 1}
-                activeClass="text-lighten-4"
-                className="btn-flat"
-                effectClass="waves-effect waves-teal"
-                fontColorClass="teal-text"
-                onClick={this.getPage.bind(this, activePage + 1)}
-              >
-                {'Next'}
-              </PageNum>
-            </ul>
-          </Pagination>
-
+          { pagination }
         </BodyWrapper>
       </MainWrapper>
     )

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { animateScroll } from 'react-scroll'
+import Scroll from 'react-scroll'
 
 import { ViewPollForm } from '../components'
 import { FormCard, FormRow } from '../layout'
@@ -156,11 +156,11 @@ class ViewPollPage extends Component {
 
   handleSubmit(e) {
 
-    animateScroll.scrollToTop({
+    Scroll.animateScroll.scrollToTop({
       smooth: 'easeOutQuad',
       duration: 400
     })
-    
+
     if (this.state.timeRemaining > 0) {
       return this.setState({ showError: true })
     }

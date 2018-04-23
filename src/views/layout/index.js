@@ -2,6 +2,7 @@ import Alert from './Alert'
 import Col from './Col'
 import Collection from './Collection'
 import CollectionItem from './CollectionItem'
+import Container from './Container'
 import Chart from './Chart'
 import Footer from './Footer'
 import FormCard from './FormCard'
@@ -23,6 +24,7 @@ export {
   Col,
   Collection,
   CollectionItem,
+  Container,
   Chart,
   Footer,
   FormCard,

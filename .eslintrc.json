@@ -1,0 +1,21 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "rules": {
+        "semi": 0,
+        "strict": 0,
+        "no-console": 0,
+        "comma-dangle": ["error", "always"]
+    },
+    "plugins": [
+        "react"
+    ],
+    "parser": "babel-eslint",
+    "env": {
+        "es6": true,
+        "node": true,
+        "browser": true
+    }
+}

@@ -122,6 +122,9 @@ class NewPollPage extends Component {
 
 
   render() {
+
+    document.title = "Votery | Create New Poll"
+
     const { submitted, redirectpath } = this.state
     
     if (submitted) {

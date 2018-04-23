@@ -62,6 +62,8 @@ class RegisterPage extends Component {
 
   render() {
 
+    document.title = "Votery | Register"
+
     return (
       <div className="container">
         <div className="row">

@@ -183,6 +183,7 @@ class Main extends Component {
 
   render() {
 
+    document.title = "Votery | Main"
     const { user, loggedIn } = this.props
     const { header, subheaders } = textContent
     const {
@@ -350,7 +351,7 @@ class Main extends Component {
                 ? body
                 : pollsEmpty
           }
-          { pagination }
+          { loaded && pagination }
         </BodyWrapper>
       </MainWrapper>
     )

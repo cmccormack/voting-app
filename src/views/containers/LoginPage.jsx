@@ -57,7 +57,7 @@ class LoginPage extends Component {
 
   render() {
 
-    // Add redirect logic if referral
+    document.title = "Votery | Login"
 
     return (
       <div className="container">

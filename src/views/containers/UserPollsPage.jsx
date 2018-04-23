@@ -75,6 +75,8 @@ class UserPollsPage extends Component {
 
   render() {
 
+    document.title = `Votery | ${user}'s Polls`
+
     const { user, } = this.props
 
     return (

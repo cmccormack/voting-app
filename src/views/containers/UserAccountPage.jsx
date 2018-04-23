@@ -109,6 +109,7 @@ class UserAccountPage extends Component {
     const { loaded, polls, error } = this.state
     const { location, user } = this.props
 
+    document.title = `Votery | ${user}`
     const title = "My Account"
     const footer = (
       <span className="footer-text">

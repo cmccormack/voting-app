@@ -16,7 +16,7 @@ class LogoutPage extends Component {
   }
 
   render() {
-
+    document.title = "Votery | Logging Out..."
     return (
       !this.props.loggedIn
       ? <Redirect to="/login" />

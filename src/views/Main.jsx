@@ -4,7 +4,15 @@ import { Link, } from 'react-router-dom'
 import Scroll from 'react-scroll'
 import PropTypes from 'prop-types'
 
-import { Chart, Col, Container, GraphCard, Row, } from './layout'
+import {
+  Chart,
+  Col,
+  Container,
+  GraphCard,
+  PageNum,
+  Pagination,
+  Row,
+} from './layout'
 import { getColorsIncrementHue, } from '../utils/colors'
 
 const MainWrapper = styled(Container) `
@@ -49,8 +57,9 @@ const CardActionLink = styled(Link)`
   text-transform: none !important;
 `
 
-const PaginationStyled = styled.div`
+const PaginationStyled = styled(Pagination)`
   width: 100%;
+  margin: auto;
 
   @media only screen and (max-width: 768px){
     li {
@@ -59,37 +68,7 @@ const PaginationStyled = styled.div`
     }
   }
 `
-const Pagination = ({children, ...props}) => (
-  <PaginationStyled { ...props }>
-    { children }
-  </PaginationStyled>
-)
 
-
-const PageNum = ({
-  active=false,
-  activeClass='',
-  className='',
-  effectClass='',
-  fontColorClass='',
-  ...props
-}) => {
-
-  return (
-    <li
-      className={[
-        className,
-        fontColorClass,
-        active ? '' : effectClass,
-        !active ? '' : activeClass,
-        active ? 'active' : '',
-      ].join(' ')}
-      { ...props }
-    >
-      { props.children }
-    </li>
-  )
-}
 
 const textContent = {
   header: 'Welcome to Votery!', 
@@ -189,11 +168,9 @@ class Main extends Component {
     const { header, subheaders, } = textContent
     const {
       activePage,
-      limit,
       loaded,
       pagesCount,
       polls,
-      pollsCount,
     } = this.state
 
     const title = (
@@ -274,7 +251,7 @@ class Main extends Component {
             {'No polls found.  '}
             <Link
               className="teal-text text-accent-4"
-              to={loggedIn ? `user/${user}/new` : 'register'}
+              to={loggedIn ? `/user/${user}/new` : 'register'}
             >
               {'Be the first to create one!'}
             </Link>
@@ -284,53 +261,51 @@ class Main extends Component {
     )
 
     const pagination = (
-      <Pagination
-        className="center"
+      <PaginationStyled
         activePage={activePage}
+        className="center"
         itemsCountPerPage={10}
-        totalItemsCount={450}
-        pageRangeDisplayed={5}
         onChange={this.getPage}
+        pageRangeDisplayed={5}
+        totalItemsCount={450}
       >
-        <ul>
-          <PageNum
-            active={activePage === 0}
-            activeClass="text-lighten-4"
-            fontColorClass="teal-text"
-            effectClass="waves-effect waves-teal"
-            className="btn-flat"
-            onClick={this.getPage.bind(this, activePage - 1)}
-          >
-            {'Previous'}
-          </PageNum>
-          {
-            Array(pagesCount)
-              .fill().map((_, i) => (
-                <PageNum
-                  active={activePage === i}
-                  activeClass="text-lighten-3"
-                  className="btn-flat"
-                  effectClass="waves-effect waves-teal"
-                  fontColorClass="teal-text"
-                  key={String(i)}
-                  onClick={this.getPage.bind(this, i)}
-                >
-                  {i + 1}
-                </PageNum>
-              ))
-          }
-          <PageNum
-            active={activePage === pagesCount - 1}
-            activeClass="text-lighten-4"
-            className="btn-flat"
-            effectClass="waves-effect waves-teal"
-            fontColorClass="teal-text"
-            onClick={this.getPage.bind(this, activePage + 1)}
-          >
-            {'Next'}
-          </PageNum>
-        </ul>
-      </Pagination>
+        <PageNum
+          active={activePage === 0}
+          activeClass="text-lighten-4"
+          className="btn-flat"
+          effectClass="waves-effect waves-teal"
+          fontColorClass="teal-text"
+          onClick={this.getPage.bind(this, activePage - 1)}
+        >
+          {'Previous'}
+        </PageNum>
+        {
+          Array(pagesCount)
+            .fill().map((_, i) => (
+              <PageNum
+                active={activePage === i}
+                activeClass="text-lighten-3"
+                className="btn-flat"
+                effectClass="waves-effect waves-teal"
+                fontColorClass="teal-text"
+                key={String(i)}
+                onClick={this.getPage.bind(this, i)}
+              >
+                {i + 1}
+              </PageNum>
+            ))
+        }
+        <PageNum
+          active={activePage === pagesCount - 1}
+          activeClass="text-lighten-4"
+          className="btn-flat"
+          effectClass="waves-effect waves-teal"
+          fontColorClass="teal-text"
+          onClick={this.getPage.bind(this, activePage + 1)}
+        >
+          {'Next'}
+        </PageNum>
+      </PaginationStyled>
     )
 
     return (
@@ -357,6 +332,11 @@ class Main extends Component {
       </MainWrapper>
     )
   }
+}
+
+Main.propTypes = {
+  user: PropTypes.string,
+  loggedIn: PropTypes.bool,
 }
 
 export default Main

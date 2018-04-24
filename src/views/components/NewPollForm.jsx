@@ -25,7 +25,7 @@ const StyledNewChoiceIcon = styled(Icon)`
 
 const PollChoices = ({
   choices,
-  selectedChoice,
+  selectedChoiceIndex,
   ...props
 }) => {
 
@@ -45,7 +45,7 @@ const PollChoices = ({
         label={ `Choice ${i + 1}` }
         name={ `choice_${i}` }
         onChange={ props.handleInputChange }
-        selectedChoice={ selectedChoice }
+        selectedChoice={ selectedChoiceIndex }
         { ...props }
       />
     </FormRow>
@@ -81,7 +81,7 @@ class NewPollForm extends Component {
       handleSelectedChoice,
       handleSubmit,
       newChoice,
-      selectedChoice,
+      selectedChoiceIndex,
       shortName,
       title,
     } = this.props
@@ -146,7 +146,7 @@ class NewPollForm extends Component {
                   handleSelectedChoice={ handleSelectedChoice }
                   icon=""
                   maxLength={inputLengths.choice.max}
-                  selectedChoice={selectedChoice}
+                  selectedChoiceIndex={selectedChoiceIndex}
                 />
 
                 {/* Allow user to enter new poll choice */}
@@ -201,7 +201,10 @@ class NewPollForm extends Component {
 
 NewPollForm.propTypes = {
   choices: PropTypes.array,
-  error: PropTypes.array,
+  error: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
   handleChoiceAdd: PropTypes.func,
   handleChoiceDelete: PropTypes.func,
   handleInputChange: PropTypes.func,
@@ -210,24 +213,21 @@ NewPollForm.propTypes = {
   handleSelectedChoice: PropTypes.func,
   handleSubmit: PropTypes.func,
   newChoice: PropTypes.string,
-  selectedChoice: PropTypes.string,
+  selectedChoiceIndex: PropTypes.number,
   shortName: PropTypes.string,
-  title: PropTypes.string,
-}
-
-NewPollForm.defaultProps = {
-  choices: [],
-  error: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-  ]),
-  newChoice: '',
-  selectedChoice: '',
-  shortName: '',
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
   ]),
+}
+
+NewPollForm.defaultProps = {
+  choices: [],
+  error: '',
+  newChoice: '',
+  selectedChoiceIndex: 0,
+  shortName: '',
+  title: '',
 }
 
 export default NewPollForm

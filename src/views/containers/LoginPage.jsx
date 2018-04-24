@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
-import { LoginForm } from '../components'
+import React, { Component, } from 'react'
+import { Link, } from 'react-router-dom'
+import { LoginForm, } from '../components'
+import PropTypes from 'prop-types'
 
 class LoginPage extends Component {
 
@@ -10,16 +10,25 @@ class LoginPage extends Component {
     this.state = {
       username: "",
       password: "",
-      error: ""
+      error: "",
     }
+    this._isMounted = false
+
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
   }
 
+  componentDidMount() {
+    this._isMounted = true
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
+  }
 
   handleInputChange(e) {
     let newState = {
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }
     if (e.target.name === 'username') {
       newState.error = ''
@@ -27,32 +36,33 @@ class LoginPage extends Component {
     this.setState(newState)
   }
 
-
   handleSubmit(event) {
     event.preventDefault()
 
-    const body = {
-      username: this.state.username,
-      password: this.state.password
-    }
-    const myHeaders = new Headers()
-    myHeaders.append("Content-Type", "application/json")
+    const { username, password, } = this.state
+    const { updateAuthStatus, } = this.props
+    const body = { username, password, }
+
     fetch("/login", {
       method: "POST",
-      headers: myHeaders,
+      headers: { "Content-Type": "application/json", },
       cache: "default",
       credentials: "same-origin",
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     })
-      .then(res => res.json()).then(data => {
-        // Response from login attempt
-        this.props.updateAuthStatus(response => {
-          if (!response.isAuthenticated || !data.success) {
-            this.setState({ error: data.message })
-          }
-        })
+    .then(res => res.json()).then(data => {
+
+      // Return early if component not mounted
+      if (!this._isMounted) return
+
+      // Response from login attempt
+      updateAuthStatus(response => {
+        if (!response.isAuthenticated || !data.success) {
+          this.setState({ error: data.message, })
+        }
       })
-      .catch(console.error)
+    })
+    .catch(console.error)
   }
 
   render() {
@@ -80,5 +90,8 @@ class LoginPage extends Component {
   }
 }
 
+LoginPage.propTypes = {
+  updateAuthStatus: PropTypes.func,
+}
 
 export default LoginPage

@@ -1,24 +1,26 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import { Redirect } from 'react-router-dom'
+import React, { Component, } from 'react'
+import { Redirect, } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
-import { NewPollForm } from '../components'
+import { NewPollForm, } from '../components'
 
 class NewPollPage extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      choices: ['', ''],
+      choices: [ '', '', ],
       error: "",
       newChoice: "",
       newChoiceFocus: false,
       redirectpath: '#',
-      selectedChoice: 0,
+      selectedChoiceIndex: 0,
       shortName: "",
       submitted: false,
-      title: ""
+      title: "",
     }
+    this._isMounted = false
+
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleChoiceDelete = this.handleChoiceDelete.bind(this)
@@ -28,15 +30,23 @@ class NewPollPage extends Component {
     this.handleInputBlur = this.handleInputBlur.bind(this)
   }
 
+  componentDidMount() {
+    this._isMounted = true
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
+  }
+
   handleInputChange(e, choice, iter, newState={}) {
 
     if (choice || choice === '') {
-      const choices = [...this.state.choices]
+      const choices = [ ...this.state.choices, ]
       choices[iter] = choice
-      newState = {choices}
+      newState = { choices, }
     } else {
       newState = {
-        [e.target.name]: e.target.value
+        [e.target.name]: e.target.value,
       }
     }
     newState.error = ''
@@ -48,35 +58,34 @@ class NewPollPage extends Component {
       index !== i
     )
 
-    this.setState({choices: newChoices})
+    this.setState({ choices: newChoices, })
   }
 
 
   handleChoiceAdd(e) {
     e && e.preventDefault()
 
-    const { newChoice: choice } = this.state
+    const { newChoice: choice, } = this.state
 
     if (choice) {
-      const choices = 
       this.setState({
-        choices: [...this.state.choices].concat(choice),
-        newChoice: ""
+        choices: [ ...this.state.choices, ].concat(choice),
+        newChoice: "",
       })
     }
 
   }
 
   handleSelectedChoice(index) {
-    this.setState({ selectedChoice: index })
+    this.setState({ selectedChoiceIndex: index, })
   }
 
-  handleInputFocus({target: { name }}) {
-    this.setState({ newChoiceFocus: name === 'newChoice' })
+  handleInputFocus({target: { name, },}) {
+    this.setState({ newChoiceFocus: name === 'newChoice', })
   }
 
-  handleInputBlur({target: { name }}) {
-    this.setState({ newChoiceFocus: !(name === 'newChoice') })
+  handleInputBlur({target: { name, },}) {
+    this.setState({ newChoiceFocus: !(name === 'newChoice'), })
   }
 
   handleSubmit(e) {
@@ -90,33 +99,34 @@ class NewPollPage extends Component {
 
       if (!user.isAuthenticated) return
 
-      const { title, shortName, choices, selectedChoice } = this.state
-
-      const myHeaders = new Headers()
-      myHeaders.append("Content-Type", "application/json")
+      const { title, shortName, choices, selectedChoiceIndex, } = this.state
   
       fetch("/submit_new_poll", {
         method: "POST",
-        headers: myHeaders,
+        headers: { "Content-Type": "application/json", },
         cache: "default",
         credentials: "same-origin",
-        body: JSON.stringify({ title, shortName, choices, selectedChoice })
+        body: JSON.stringify({ title, shortName, choices, selectedChoiceIndex, }),
       })
-        .then(res => res.json()).then(data => {
-          const { success, message, poll={} } = data
-          const { user='', shortName='' } = poll
+      .then(res => res.json()).then(data => {
 
-          const newPollPath = user && success 
-            ? `/user/${user}/polls/${shortName}` 
-            : ''
+        // Return early if component not mounted
+        if (!this._isMounted) return
 
-          this.setState({
-            error: success ? '' : message,
-            submitted: success ? true : false,
-            redirectpath: newPollPath
-          })
+        const { success, message, poll={}, } = data
+        const { user='', shortName='', } = poll
+
+        const newPollPath = user && success 
+          ? `/user/${user}/polls/${shortName}` 
+          : ''
+
+        this.setState({
+          error: success ? '' : message,
+          submitted: success ? true : false,
+          redirectpath: newPollPath,
         })
-        .catch(console.error)
+      })
+      .catch(console.error)
     })
   }
 
@@ -125,7 +135,7 @@ class NewPollPage extends Component {
 
     document.title = "Votery | Create New Poll"
 
-    const { submitted, redirectpath } = this.state
+    const { submitted, redirectpath, } = this.state
     
     if (submitted) {
       return <Redirect to={redirectpath} />
@@ -146,5 +156,8 @@ class NewPollPage extends Component {
   }
 }
 
+NewPollPage.propTypes = {
+  updateAuthStatus: PropTypes.func,
+}
 
 export default NewPollPage

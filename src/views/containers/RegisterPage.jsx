@@ -1,7 +1,8 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
-import { RegisterForm } from '../components'
+import React, { Component, } from 'react'
+import PropTypes from 'prop-types'
+
+import { Link, } from 'react-router-dom'
+import { RegisterForm, } from '../components'
 
 class RegisterPage extends Component {
 
@@ -10,16 +11,26 @@ class RegisterPage extends Component {
     this.state = {
       username: "",
       password: "",
-      error: ""
+      error: "",
     }
+    this._isMounted = false
+
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
+  }
+
+  componentDidMount() {
+    this._isMounted = true
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
   }
 
 
   handleInputChange(e){
     let newState = {
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }
     if (e.target.name === 'username') {
       newState.error = ''
@@ -33,32 +44,30 @@ class RegisterPage extends Component {
 
     const body = {
       username: this.state.username,
-      password: this.state.password
+      password: this.state.password,
     }
-    const myHeaders = new Headers()
-    myHeaders.append("Content-Type", "application/json")
+
     fetch("/register", {
       method: "POST",
-      headers: myHeaders,
+      headers: { "Content-Type": "application/json", },
       cache: "default",
       credentials: "same-origin",
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     })
-      .then(res => res.json()).then(data => {
-        // Response from registration attempt
-        this.props.updateAuthStatus( response => {
-          if (!response.isAuthenticated || !data.success) {
-            this.setState({error: data.message})
-          }
-        })
+    .then(res => res.json()).then(data => {
+
+      // Return early if component not mounted
+      if (!this._isMounted) return
+
+      // Response from registration attempt
+      this.props.updateAuthStatus( response => {
+        if (!response.isAuthenticated || !data.success) {
+          this.setState({error: data.message,})
+        }
       })
-      .catch(console.error)
+    })
+    .catch(console.error)
   }
-
-  componentDidMount() {
-    document.title = 'Votery | Register'
-  }
-
 
   render() {
 
@@ -85,5 +94,8 @@ class RegisterPage extends Component {
   }
 }
 
+RegisterPage.propTypes = {
+  updateAuthStatus: PropTypes.func,
+}
 
 export default RegisterPage

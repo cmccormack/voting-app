@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const TabBody = ({ size, children, className, id }) => (
+const TabBody = ({ size, children, className, id, }) => (
   <div
     className={`col ${size} ${className}`}
     id={id}

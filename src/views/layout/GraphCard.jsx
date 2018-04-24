@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, } from 'react'
 import styled from 'styled-components'
 
 const GraphCardWrapper = styled.div`
@@ -7,13 +7,13 @@ const GraphCardWrapper = styled.div`
   height: 100% !important;
 `
 
-const GraphCardTitle = ({ title }) => (
+const GraphCardTitle = ({ title, }) => (
   <span className="card-title">
     { title }
   </span>
 )
 
-const GraphCardContent = ({ content, children: title }) => (
+const GraphCardContent = ({ content, children: title, }) => (
   <div className="card-content">
     { title }
     { content }
@@ -26,13 +26,13 @@ const GraphCardActionsStyled = styled.div`
   text-transform: none !important;
 `
 
-const GraphCardActions = ({ actions }) => (
+const GraphCardActions = ({ actions, }) => (
   <GraphCardActionsStyled className="card-action">
     { actions }
   </GraphCardActionsStyled>
 )
 
-const GraphCard = ({ title, content, actions}) => (
+const GraphCard = ({ title, content, actions,}) => (
   <GraphCardWrapper className="card large hoverable">
     <GraphCardContent content={content}>
       <GraphCardTitle title={title} />

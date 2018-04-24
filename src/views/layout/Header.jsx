@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { Redirect, Link } from 'react-router-dom'
+import React, { Component, } from 'react'
+import { Redirect, Link, } from 'react-router-dom'
 import styled from 'styled-components'
 
-const NavItem = ({ hidden, to, content, updateAuth }) => (
+const NavItem = ({ hidden, to, content, updateAuth, }) => (
   <li hidden={hidden}>
     <Link
       onClick={ updateAuth }
@@ -13,7 +13,7 @@ const NavItem = ({ hidden, to, content, updateAuth }) => (
   </li>
 )
 
-const NavItems = ({ className, id, items, updateAuth }) => (
+const NavItems = ({ className, id, items, updateAuth, }) => (
   <ul className={className} id={id}>
     {items.map((item, i) => (
       <NavItem 
@@ -42,15 +42,15 @@ class Header extends Component {
 
   render() {
 
-    const {loggedIn, user, handleLogout} = this.props
+    const {loggedIn, user, handleLogout,} = this.props
 
     const links = [
-      { hidden: !loggedIn, to: `/user/${user}`, content: `Hello, ${user}!` },
-      { hidden: false, to: '/main', content: 'Main' },
-      { hidden: !loggedIn, to: `/user/${user}/new`, content: 'New Poll' },
-      { hidden: loggedIn, to: '/login', content: 'Login' },
-      { hidden: loggedIn, to: '/register', content: 'Register' },
-      { hidden: !loggedIn, to: '/logout', content: 'Logout' }
+      { hidden: !loggedIn, to: `/user/${user}`, content: `Hello, ${user}!`, },
+      { hidden: false, to: '/main', content: 'Main', },
+      { hidden: !loggedIn, to: `/user/${user}/new`, content: 'New Poll', },
+      { hidden: loggedIn, to: '/login', content: 'Login', },
+      { hidden: loggedIn, to: '/register', content: 'Register', },
+      { hidden: !loggedIn, to: '/logout', content: 'Logout', },
     ]
 
     return (

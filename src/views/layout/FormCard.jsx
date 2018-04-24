@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
+import React, { Component, } from 'react'
 import styled from 'styled-components'
 
 import Alert from './Alert'
 import FormRow from './FormRow'
 
 const FormCardMain = styled.div.attrs({
-  className: "card z-depth-4"
+  className: "card z-depth-4",
 }) `
   margin-top: 80px;
 `
 
 const FormCardTitle = styled.div.attrs({
-  className: "teal-text text-darken-1 center"
+  className: "teal-text text-darken-1 center",
 }) `
   font-size: 2.4rem !important;
   font-weight: 300;
@@ -26,7 +26,7 @@ const FormBody = styled.div`
   transition: transform .2s linear;
 `
 
-const FormCard = ({title, footer, error, children, alert}) => {
+const FormCard = ({title, footer, error, children, alert,}) => {
 
   return (
     <FormCardMain>

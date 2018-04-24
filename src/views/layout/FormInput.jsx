@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component, } from 'react'
 import styled from 'styled-components'
 
-import { Icon } from './'
-import { CharacterCounter } from '../utils'
+import { Icon, } from './'
+import { CharacterCounter, } from '../utils'
 
 const InputAction = styled.a.attrs({
   href: "#",
-  tabIndex: -1
+  tabIndex: -1,
 })`
   color: initial;
   position: absolute;

@@ -1,14 +1,8 @@
-import React from 'react'
-import styled from 'styled-components'
-
-const FooterWrapper = styled.div.attrs({
-  className:'center page-footer teal lighten-1'
-})`
-
-`
+import React from "react"
+import styled from "styled-components"
 
 const Link = styled.a.attrs({
-  target: "_blank"
+  target: "_blank",
 })`
   color: #DEE;
   :hover {
@@ -22,34 +16,34 @@ const LinkSocial = Link.extend`
 
 const socialIcons = [
   {
-    href: 'https://www.facebook.com/christopher.j.mccormack',
-    icon: 'facebook'
+    href: "https://www.facebook.com/christopher.j.mccormack",
+    icon: "facebook",
   },
   {
-    href: 'https://twitter.com/chrisjmccormack',
-    icon: 'twitter'
+    href: "https://twitter.com/chrisjmccormack",
+    icon: "twitter",
   }, 
   {
-    href: 'https://github.com/cmccormack',
-    icon: 'github'
+    href: "https://github.com/cmccormack",
+    icon: "github",
   }, 
   {
-    href: 'https://www.linkedin.com/in/christopherjmccormack',
-    icon: 'linkedin'
-  }
+    href: "https://www.linkedin.com/in/christopherjmccormack",
+    icon: "linkedin",
+  },
 ]
 
-const Footer = props => (
-  <FooterWrapper>
-    <div className='container'>
-      <div className='row'>
-        <div className='col l6 s12'>
+const Footer = () => (
+  <div className="center page-footer teal lighten-1">
+    <div className="container">
+      <div className="row">
+        <div className="col l6 s12">
           <span className="">
-            {'Created by '}
+            {"Created by "}
             <Link
               href="https://mackville.net"
             >
-              {'Christopher McCormack'}
+              {"Christopher McCormack"}
             </Link>
           </span>
         </div>
@@ -62,7 +56,7 @@ const Footer = props => (
         </div>
       </div>
     </div>
-  </FooterWrapper>
+  </div>
 )
 
 export default Footer

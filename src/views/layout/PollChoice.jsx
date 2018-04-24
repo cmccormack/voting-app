@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component, } from 'react'
 import styled from 'styled-components'
 
-import { FormInput } from './'
+import { FormInput, } from './'
 
 const StyledChoiceLabel = styled.label`
   right: 0;

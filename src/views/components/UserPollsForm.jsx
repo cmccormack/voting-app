@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component, } from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 import {
   Alert,
@@ -39,8 +40,8 @@ class UserPollsForm extends Component {
       loading,
       loadingFailed,
       polls,
-      title,
       selectedChoice,
+      title,
       user,
     } = this.props
 
@@ -110,8 +111,8 @@ class UserPollsForm extends Component {
                         }
                         content={
                           <Chart
-                            choices={poll.choices}
-                            colors={poll.choiceColors}
+                            choices={ poll.choices }
+                            colors={ poll.choiceColors }
                           />
                         }
                         actions={ null }
@@ -144,6 +145,41 @@ class UserPollsForm extends Component {
 
     )
   }
+}
+
+UserPollsForm.propTypes = {
+  apiTimeout: PropTypes.number,
+  error: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  footer: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  handleChoiceSelect: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  loading: PropTypes.bool,
+  loadingFailed: PropTypes.bool,
+  polls: PropTypes.array,
+  selectedChoice: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  user: PropTypes.string,
+}
+
+UserPollsForm.defaultProps = {
+  apiTimeout: 0,
+  error: '',
+  footer: '',
+  loading: true,
+  loadingFailed: false,
+  polls: [],
+  selectedChoice: '',
+  title: '',
+  user: '',
 }
 
 export default UserPollsForm

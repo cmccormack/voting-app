@@ -67,6 +67,24 @@ const VoteCollectionItem = ({
   </CollectionItem>
 )
 
+VoteCollectionItem.propTypes = { 
+  children: PropTypes.any,
+  choice: PropTypes.string,
+  handleChoiceSelect: PropTypes.func,
+  index: PropTypes.number,
+  selectedChoice: PropTypes.string,
+  selectedIndex: PropTypes.number,
+  title: PropTypes.string,
+}
+
+VoteCollectionItem.defaultProps = {
+  choice: '',
+  index: 0,
+  selectedChoice: '',
+  selectedIndex: 0,
+  title: '',
+}
+
 
 const ViewPollForm = (props) => {
 
@@ -217,22 +235,20 @@ const ViewPollForm = (props) => {
   )
 }
 
-VoteCollectionItem.propTypes = { 
-  children: PropTypes.element,
-  choice: PropTypes.string,
-  handleChoiceSelect: PropTypes.func,
-  index: PropTypes.number,
-  selectedChoice: PropTypes.string,
-  selectedIndex: PropTypes.number,
-  title: PropTypes.string,
-}
+
 
 ViewPollForm.propTypes = {
   children: PropTypes.element,
   choiceColors: PropTypes.arrayOf(PropTypes.string),
   createdBy: PropTypes.string,
-  error: PropTypes.string,
-  footer: PropTypes.element,
+  error: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  footer: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
   handleChoiceSelect: PropTypes.func,
   handleInputChange: PropTypes.func,
   handleSubmit: PropTypes.func,
@@ -244,6 +260,21 @@ ViewPollForm.propTypes = {
   showError: PropTypes.bool,
   voteSubmitted: PropTypes.string,
   showVoteSubmitted: PropTypes.bool,
+}
+
+ViewPollForm.defaultProps = {
+  choiceColors: [],
+  createdBy: '',
+  error: '',
+  footer: '',
+  loaded: false,
+  newChoice: '',
+  poll: {},
+  selectedChoice: '',
+  selectedIndex: 0,
+  showError: false,
+  voteSubmitted: false,
+  showVoteSubmitted: false,
 }
 
 export default ViewPollForm

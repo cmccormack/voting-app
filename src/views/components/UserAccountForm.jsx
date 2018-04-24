@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, } from 'react-router-dom'
 import path from 'path'
+import PropTypes from 'prop-types'
 
 import {
   Alert,
+  Collection,
+  CollectionItem,
   FormCard,
   FormRow,
-  Tabs,
   Tab,
   TabBody,
-  Collection,
-  CollectionItem
+  Tabs,
 } from '../layout'
 
 const StyledTabs = styled(Tabs)`
@@ -28,24 +29,34 @@ class UserAccountForm extends Component {
 
   render() {
 
-    const { title, footer, error, loaded, polls, user, location } = this.props
+    const {
+      deleteAccount,
+      deletePoll,
+      error,
+      footer,
+      loaded,
+      location,
+      polls,
+      title,
+      user,
+    } = this.props
 
     const pollsCollection = (
       <Collection>
         {
-          polls.map(({ _id: id, title, shortName }) => (
+          polls.map(({ _id: id, title, shortName, }) => (
             <CollectionItem
               actions={[
                 {
                   icon: 'delete',
                   target: "#",
                   color: "deep-orange-text text-accent-2",
-                  handler: () => this.props.deletePoll({ id, title })
-                }
+                  handler: () => deletePoll({ id, title, }),
+                },
               ]}
               key={id}
               target={path.join(location.pathname, `polls/${shortName}`)}
-              title={{ text: title, color: "teal-text text-darken-1" }}
+              title={{ text: title, color: "teal-text text-darken-1", }}
             />
           ))
         }
@@ -74,7 +85,7 @@ class UserAccountForm extends Component {
         <FormRow className="center">
           <TabBody id="settings" size="s10 m8 l6 offset-s1 offset-m2 offset-l3">
             <DeleteButton
-              onClick={this.props.deleteAccount}
+              onClick={ deleteAccount }
             >
               {'Delete My Account'}
             </DeleteButton>
@@ -146,6 +157,37 @@ class UserAccountForm extends Component {
       </div>
     )
   }
+}
+
+UserAccountForm.propTypes = {
+  deleteAccount: PropTypes.func,
+  deletePoll: PropTypes.func,
+  error: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  footer: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  loaded: PropTypes.bool,
+  location: PropTypes.object,
+  polls: PropTypes.array,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  user: PropTypes.string,
+}
+
+UserAccountForm.defaultProps = {
+  error: '',
+  footer: '',
+  loaded: false,
+  location: {},
+  polls: [],
+  title: 'User Account',
+  user: '',
 }
 
 export default UserAccountForm

@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component, } from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 import {
   Alert,
@@ -52,10 +53,10 @@ const PollChoices = ({
 }
 
 const inputLengths = {
-  title: { min: 4, max: 64 },
-  shortName: { min: 0, max: 16 },
-  choices: { min: 2, max: undefined },
-  choice: { min: 1, max: 32 }
+  title: { min: 4, max: 64, },
+  shortName: { min: 0, max: 16, },
+  choices: { min: 2, max: undefined, },
+  choice: { min: 1, max: 32, },
 }
 
 class NewPollForm extends Component {
@@ -63,13 +64,27 @@ class NewPollForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      newChoice: this.props.newChoice
+      newChoice: this.props.newChoice,
     }
   }
 
   render() {
 
-    const { error, choices, selectedChoice } = this.props
+    const {
+      choices,
+      error,
+      handleChoiceAdd,
+      handleChoiceDelete,
+      handleInputChange,
+      handleInputBlur,
+      handleInputFocus,
+      handleSelectedChoice,
+      handleSubmit,
+      newChoice,
+      selectedChoice,
+      shortName,
+      title,
+    } = this.props
 
     const layout = {
       title: "Create New Poll",
@@ -95,7 +110,7 @@ class NewPollForm extends Component {
             <FormCard {...layout} alert={ alert }>
               <form 
                 id="new_poll_form"
-                onSubmit={this.props.handleSubmit}
+                onSubmit={ handleSubmit }
               >
 
                 <FormRow>
@@ -104,10 +119,10 @@ class NewPollForm extends Component {
                     label="Title (e.g. Favorite Superhero)"
                     maxLength={inputLengths.title.max}
                     name="title"
-                    onChange={this.props.handleInputChange}
+                    onChange={ handleInputChange }
                     required
                     size="s12 m12 l8 offset-l2"
-                    value={this.props.title}
+                    value={ title }
                   />
                 </FormRow>
 
@@ -117,18 +132,18 @@ class NewPollForm extends Component {
                     label="Short Title (e.g. fav_superhero) (optional)"
                     maxLength={inputLengths.shortName.max}
                     name="shortName"
-                    onChange={this.props.handleInputChange}
+                    onChange={ handleInputChange }
                     size="s12 m12 l8 offset-l2"
-                    value={this.props.shortName}
+                    value={ shortName }
                   />
                 </FormRow>
 
                 {/* Iterate and display existing poll choices */}
                 <PollChoices
                   choices={choices}
-                  handleChoiceDelete={this.props.handleChoiceDelete}
-                  handleInputChange={this.props.handleInputChange}
-                  handleSelectedChoice={this.props.handleSelectedChoice}
+                  handleChoiceDelete={ handleChoiceDelete }
+                  handleInputChange={ handleInputChange}
+                  handleSelectedChoice={ handleSelectedChoice }
                   icon=""
                   maxLength={inputLengths.choice.max}
                   selectedChoice={selectedChoice}
@@ -137,20 +152,20 @@ class NewPollForm extends Component {
                 {/* Allow user to enter new poll choice */}
                 <FormRow>
                   <PollChoice
-                    choice={ this.props.newChoice }
+                    choice={ newChoice }
                     label="New Choice"
                     maxLength={inputLengths.choice.max }
                     name="newChoice"
-                    onChange={ this.props.handleInputChange }
-                    onFocus={ this.props.handleInputFocus }
-                    onBlur={ this.props.handleInputBlur }
+                    onChange={ handleInputChange }
+                    onFocus={ handleInputFocus }
+                    onBlur={ handleInputBlur }
                     size="s7 offset-s2"
                   />
                   <div className={"col s3"}>
                     <IconLink
                       href="#AddNewChoice"
                       title="Click"
-                      onClick={ this.props.handleChoiceAdd }
+                      onClick={ handleChoiceAdd }
                       Icon={
                         <StyledNewChoiceIcon
                           className="material-icons"
@@ -168,7 +183,7 @@ class NewPollForm extends Component {
                 {/* Submit poll */}
                 <FormRow>
                   <FormSubmitButton
-                    onClick={this.props.handleSubmit}
+                    onClick={ handleSubmit }
                     position="right"
                     size="s6 offset-s3"
                   />
@@ -182,6 +197,37 @@ class NewPollForm extends Component {
       </div>
     )
   }
+}
+
+NewPollForm.propTypes = {
+  choices: PropTypes.array,
+  error: PropTypes.array,
+  handleChoiceAdd: PropTypes.func,
+  handleChoiceDelete: PropTypes.func,
+  handleInputChange: PropTypes.func,
+  handleInputBlur: PropTypes.func,
+  handleInputFocus: PropTypes.func,
+  handleSelectedChoice: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  newChoice: PropTypes.string,
+  selectedChoice: PropTypes.string,
+  shortName: PropTypes.string,
+  title: PropTypes.string,
+}
+
+NewPollForm.defaultProps = {
+  choices: [],
+  error: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  newChoice: '',
+  selectedChoice: '',
+  shortName: '',
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
 }
 
 export default NewPollForm

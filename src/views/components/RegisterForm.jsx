@@ -1,19 +1,27 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
+import React, { Component, } from 'react'
+import PropTypes from 'prop-types'
 
 import {
   Alert,
   FormCard,
   FormSubmitButton,
   FormInput,
-  FormRow
+  FormRow,
 } from '../layout'
 
 class RegisterForm extends Component {
 
   render() {
 
-    const { title, footer, error } = this.props
+    const {
+      error,
+      footer,
+      handleInputChange,
+      handleSubmit,
+      password,
+      title,
+      username,
+    } = this.props
 
     const alert = (
       <FormRow>
@@ -34,17 +42,17 @@ class RegisterForm extends Component {
         footer={ footer }
         title={ title }
       >
-        <form id="register_form" onSubmit={this.props.handleSubmit}>
+        <form id="register_form" onSubmit={ handleSubmit }>
 
           <FormRow>
             <FormInput
               icon="account_circle"
               label="Username"
               name="username"
-              onChange={this.props.handleInputChange}
+              onChange={ handleInputChange }
               required
               size="s12 l8 offset-l2"
-              value={this.props.username}
+              value={ username }
             >
             </FormInput>
           </FormRow>
@@ -54,18 +62,18 @@ class RegisterForm extends Component {
               icon="lock"
               label="Password"
               name="password"
-              onChange={this.props.handleInputChange}
+              onChange={ handleInputChange }
               required
               size="s12 l8 offset-l2"
               type="password"
-              value={this.props.password}
+              value={ password }
             >
             </FormInput>
           </FormRow>
 
           <FormRow>
             <FormSubmitButton 
-              onClick={this.props.handleSubmit}
+              onClick={ handleSubmit }
               position="right"
               size="s12 l8 offset-l2"
             />
@@ -76,6 +84,33 @@ class RegisterForm extends Component {
       </FormCard>
     )
   }
+}
+
+RegisterForm.propTypes = {
+  error: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  footer: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  handleInputChange: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  password: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  username: PropTypes.string,
+}
+
+RegisterForm.defaultProps = {
+  title: '',
+  error: '',
+  footer: '',
+  password: '',
+  username: '',
 }
 
 export default RegisterForm

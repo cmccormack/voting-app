@@ -75,7 +75,7 @@ const LoginForm = (props) => {
 }
 
 LoginForm.propTypes = {
-  title: PropTypes.oneOfType([
+  error: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
   ]),
@@ -83,14 +83,14 @@ LoginForm.propTypes = {
     PropTypes.string,
     PropTypes.element,
   ]),
-  error: PropTypes.oneOfType([
+  handleSubmit: PropTypes.func,
+  handleInputChange: PropTypes.func,
+  password: PropTypes.string,
+  title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
   ]),
   username: PropTypes.string,
-  password: PropTypes.string,
-  handleSubmit: PropTypes.func,
-  handleInputChange: PropTypes.func,
 }
 
 export default LoginForm

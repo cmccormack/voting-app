@@ -13,6 +13,7 @@ import GraphCard from './GraphCard'
 import Header from './Header'
 import IconLink from './IconLink'
 import Icon from './Icon'
+import { Pagination, PageNum, } from './Pagination'
 import PollChoice from './PollChoice'
 import Row from './Row'
 import Tab from './Tab'
@@ -35,6 +36,8 @@ export {
   GraphCard,
   IconLink,
   Icon,
+  Pagination,
+  PageNum,
   PollChoice,
   Row,
   Tab,

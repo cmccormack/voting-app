@@ -1,29 +1,47 @@
-import React, { Component } from 'react'
+import React, { Component, } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import { 
   BrowserRouter,
-  Redirect,
-  Link,
   Route,
-  Switch
 } from 'react-router-dom'
 
 import './images/favicon.ico'
 // import './styles/styles.scss'
 import Routes from './Routes'
-import { Header, Footer } from './views/layout'
+import { Col, Header, } from './views/layout'
+import { Footer, TextLink, SocialLink, } from './views/layout/footer'
 
 
 const globalOptions = {
   poll: {
     inputLengths: {
-      title: { min: 4, max: 64 },
-      shortName: { min: 0, max: 16 },
-      choices: { min: 2, max: undefined },
-      choice: { min: 1, max: 32 }
-    }
-  }
+      title: { min: 4, max: 64, },
+      shortName: { min: 0, max: 16, },
+      choices: { min: 2, max: undefined, },
+      choice: { min: 1, max: 32, },
+    },
+  },
+  footer: {
+    socialIcons: [
+      {
+        href: "https://www.facebook.com/christopher.j.mccormack",
+        icon: "facebook",
+      },
+      {
+        href: "https://twitter.com/chrisjmccormack",
+        icon: "twitter",
+      },
+      {
+        href: "https://github.com/cmccormack",
+        icon: "github",
+      },
+      {
+        href: "https://www.linkedin.com/in/christopherjmccormack",
+        icon: "linkedin",
+      },
+    ],
+  },
 }
 
 
@@ -50,7 +68,7 @@ class App extends Component {
       loggedIn: false,
       user: '',
       allowRedirects: false,
-      loading: true
+      loading: true,
     }
     this.getAuthStatus = this.getAuthStatus.bind(this)
     this.updateAuthStatus = this.updateAuthStatus.bind(this)
@@ -60,10 +78,10 @@ class App extends Component {
   handleLogout() {
     fetch('/logout', {
       method: 'POST',
-      credentials: 'same-origin'
+      credentials: 'same-origin',
     }).then(()=>{
       this.setState({
-        loggedIn: false
+        loggedIn: false,
       })
     })
   }
@@ -73,7 +91,7 @@ class App extends Component {
 
     return fetch('/isauthenticated', {
       method: 'GET',
-      credentials: 'include'
+      credentials: 'include',
     })
     .then(res => res.json()).then((data) => {
       cb(data)
@@ -86,11 +104,11 @@ class App extends Component {
     const cb = callback || function() {}
 
     this.getAuthStatus(data => {
-      const { user, isAuthenticated: loggedIn } = data
+      const { user, isAuthenticated: loggedIn, } = data
       this.setState({
         loggedIn,
         user,
-        allowRedirects: true
+        allowRedirects: true,
       })
       cb(data)
     })
@@ -99,19 +117,21 @@ class App extends Component {
 
   componentDidMount() {
     const intervalId = setTimeout(
-      () => this.setState({ loading: false }),
+      () => this.setState({ loading: false, }),
       2000
     )
     this.updateAuthStatus(
       () => {
         clearInterval(intervalId)
-        this.setState({ loading: false })
+        this.setState({ loading: false, })
       }
     )
   }
 
 
   render() {
+
+    const { poll, footer: { socialIcons }, } = globalOptions
 
     return (
       <Wrapper>
@@ -134,7 +154,39 @@ class App extends Component {
             
           }
         </Main>
-        <Footer />
+        <Footer
+          align={'center'}
+          colorClass="teal lighten-1"
+        >
+          <Col align="center" size="l6 s12">
+            { socialIcons.map((item) => (
+              <SocialLink
+                color="#DEE"
+                href={item.href}
+                key={item.icon}
+                spacing="12px"
+                target="_blank"
+              >
+                <i className={`fa fa-lg fa-${item.icon}`}></i>
+              </SocialLink>
+            ))}
+          </Col>
+          <Col
+            className="hide-on-med-and-down"
+            size="l6 s12"
+          >
+            <span className="">
+              {"Created by "}
+              <TextLink
+                color="#DEE"
+                href="https://mackville.net"
+                target="_blank"
+              >
+                {"Christopher McCormack"}
+              </TextLink>
+            </span>
+          </Col>
+        </Footer>
       </Wrapper>
     )
   }

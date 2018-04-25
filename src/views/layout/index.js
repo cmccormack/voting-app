@@ -4,7 +4,6 @@ import Collection from './Collection'
 import CollectionItem from './CollectionItem'
 import Container from './Container'
 import Chart from './Chart'
-import Footer from './Footer'
 import FormCard from './FormCard'
 import FormSubmitButton from './FormSubmitButton'
 import FormInput from './FormInput'
@@ -27,7 +26,6 @@ export {
   CollectionItem,
   Container,
   Chart,
-  Footer,
   FormCard,
   FormSubmitButton,
   FormInput,

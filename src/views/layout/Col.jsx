@@ -1,27 +1,31 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
 const Col = ({
-  size,
+  align,
   children,
   className,
+  size,
 }) => (
   <div
-    className={`col ${size} ${className}`}
+    className={ classNames('col', align+'-align', size, className) }
   >
     {children}
   </div>
 )
 
 Col.propTypes = {
-  size: PropTypes.string,
+  align: PropTypes.string,
   children: PropTypes.any,
   className: PropTypes.string,
+  size: PropTypes.string,
 }
 
 Col.defaultProps = {
-  size: 's12',
+  align: '',
   className: '',
+  size: 's12',
 }
 
 export default Col

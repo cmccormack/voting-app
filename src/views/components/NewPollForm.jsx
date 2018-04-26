@@ -86,9 +86,8 @@ class NewPollForm extends Component {
       title,
     } = this.props
 
-    const layout = {
+    const formCardtextContent = {
       title: "Create New Poll",
-      error: error,
     }
 
     const alert = (
@@ -107,7 +106,11 @@ class NewPollForm extends Component {
       <div className="container">
         <div className="row">
           <div className="col s12 m10 offset-m1 xl8 offset-xl2">
-            <FormCard {...layout} alert={ alert }>
+            <FormCard 
+              alert={ alert }
+              error={ error ? true : false }
+              { ...formCardtextContent }
+            >
               <form 
                 id="new_poll_form"
                 onSubmit={ handleSubmit }

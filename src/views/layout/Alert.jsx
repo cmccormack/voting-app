@@ -3,25 +3,25 @@ import PropTypes from 'prop-types'
 
 const fadeIn = keyframes`
   0% {
-    opacity: 0;
+    opacity: 0
     transform: scale(.75)
   }
   50% {
     transform: scale(1.25)
   }
   100% {
-    opacity: 1;
+    opacity: 1
     transform: scale(1)
   }
 `
 
 const fadeOut = keyframes`
   0% {
-    opacity: 1;
+    opacity: 1
     transform: scale(1)
   }
   100% {
-    opacity: 0;
+    opacity: 0
     transform: scale(.25)
   }
 `

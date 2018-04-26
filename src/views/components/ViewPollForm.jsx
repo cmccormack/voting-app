@@ -19,7 +19,7 @@ import {
 
 const ChoicesTitle = styled.div`
   text-align: center;
-  font-size: 1.6rem;
+  font-size: 1rem;
   text-transform: capitalize;
 `
 
@@ -142,7 +142,7 @@ const ViewPollForm = (props) => {
 
   const body = (
     <FormCard
-      error={ showError | showVoteSubmitted }
+      error={ showError || showVoteSubmitted }
       footer={ createdBy && footer }
       title={ title }
       user={ createdBy }

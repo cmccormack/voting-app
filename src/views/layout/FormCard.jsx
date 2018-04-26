@@ -1,7 +1,7 @@
-import React, { Component, } from 'react'
+import React from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
-import Alert from './Alert'
 import FormRow from './FormRow'
 
 const FormCardMain = styled.div.attrs({
@@ -26,7 +26,13 @@ const FormBody = styled.div`
   transition: transform .2s linear;
 `
 
-const FormCard = ({title, footer, error, children, alert,}) => {
+const FormCard = ({
+  title,
+  footer,
+  error,
+  children,
+  alert,
+}) => {
 
   return (
     <FormCardMain>
@@ -34,13 +40,13 @@ const FormCard = ({title, footer, error, children, alert,}) => {
 
         <div className="row">
           <FormCardTitle>
-            {title}
+            { title }
           </FormCardTitle>
         </div>
 
         { alert || <FormRow /> }
 
-        <FormBody slide={error ? true : false}>
+        <FormBody slide={ error ? true : false }>
           { children }
         </FormBody>
 
@@ -53,6 +59,20 @@ const FormCard = ({title, footer, error, children, alert,}) => {
       </div>
     </FormCardMain>
   )
+}
+
+FormCard.propTypes = {
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  footer: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  error: PropTypes.bool,
+  children: PropTypes.any,
+  alert: PropTypes.element,
 }
 
 export default FormCard

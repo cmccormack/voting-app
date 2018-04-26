@@ -261,14 +261,7 @@ class Main extends Component {
     )
 
     const pagination = (
-      <PaginationStyled
-        activePage={activePage}
-        className="center"
-        itemsCountPerPage={10}
-        onChange={this.getPage}
-        pageRangeDisplayed={5}
-        totalItemsCount={450}
-      >
+      <PaginationStyled>
         <PageNum
           active={activePage === 0}
           activeClass="text-lighten-4"

@@ -1,38 +1,29 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
 
 const PageNum = ({
-  active=false,
-  activeClass='',
+  active,
+  activeClass,
   children,
-  className='',
-  effectClass='',
-  fontColorClass='',
-  ...props
-}) => {
-  const classes = [
-    className,
-    fontColorClass,
-    active ? '' : effectClass,
-    !active ? '' : activeClass,
-    active ? 'active' : '',
-  ].join(' ')
-
-  return (
-    <li
-      className={ classes }
-      { ...props }
-    >
-      { children }
-    </li>
-  )
-}
-
-const Pagination = ({children, ...props}) => (
-  <ul { ...props }>
+  className,
+  effectClass,
+  fontColorClass,
+  onClick,
+}) => (
+  <li
+    className={ classNames(
+      className,
+      fontColorClass,
+      { [effectClass]: !active, },
+      { [activeClass]: active, },
+      { 'active': active, }
+    )}
+    onClick={ onClick }
+  >
     { children }
-  </ul>
+  </li>
 )
 
 PageNum.propTypes = {
@@ -45,15 +36,26 @@ PageNum.propTypes = {
   className: PropTypes.string,
   effectClass: PropTypes.string,
   fontColorClass: PropTypes.string,
+  onClick: PropTypes.func,
 }
 
 PageNum.defaultProps = {
   active: false,
+  activeClass: '',
   children: '',
   className: '',
   effectClass: '',
   fontColorClass: '',
 }
+
+
+const Pagination = ({
+  children,
+}) => (
+  <ul>
+    { children }
+  </ul>
+)
 
 Pagination.propTypes = {
   children: PropTypes.any,

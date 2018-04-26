@@ -1,19 +1,24 @@
 import React, { PureComponent, } from 'react'
 import { Doughnut, } from 'react-chartjs-2'
+import styled from 'styled-components'
 import PropTypes from 'prop-types'
+
+
+const DoughnutWrapperStyled = styled.div`
+  height: 300px;
+`
 
 class Chart extends PureComponent {
 
   render() {
 
     const {
-      className,
       choices,
       colors,
     } = this.props
 
     return (
-      <div className={className}>
+      <DoughnutWrapperStyled>
         <Doughnut
           data={{
             datasets: [{
@@ -29,19 +34,19 @@ class Chart extends PureComponent {
             },
             layout: {
               padding: {
-                top: 40,
+                top: 10,
               },
             },
             responsive: true,
+            maintainAspectRatio: false,
           }}
         />
-      </div>
+      </DoughnutWrapperStyled>
     )
   }
 }
 
 Chart.propTypes = {
-  className: PropTypes.string,
   choices: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string,
@@ -53,7 +58,6 @@ Chart.propTypes = {
 }
 
 Chart.defaultProps = {
-  className: '',
   choices: [],
   colors: [],
 }

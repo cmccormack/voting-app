@@ -9,7 +9,6 @@ import FormSubmitButton from './FormSubmitButton'
 import FormInput from './FormInput'
 import FormRow from './FormRow'
 import GraphCard from './GraphCard'
-import Header from './Header'
 import IconLink from './IconLink'
 import Icon from './Icon'
 import { Pagination, PageNum, } from './Pagination'
@@ -30,7 +29,6 @@ export {
   FormSubmitButton,
   FormInput,
   FormRow,
-  Header,
   GraphCard,
   IconLink,
   Icon,

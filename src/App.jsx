@@ -1,15 +1,14 @@
 import React, { Component, } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
-import { 
-  BrowserRouter,
-  Route,
-} from 'react-router-dom'
+import { BrowserRouter, Link, Route, } from 'react-router-dom'
+import classNames from 'classnames'
 
 import './images/favicon.ico'
 // import './styles/styles.scss'
 import Routes from './Routes'
-import { Col, Header, } from './views/layout'
+import { Col, } from './views/layout'
+import { Header, NavItems, } from './views/layout/header'
 import { Footer, TextLink, SocialLink, } from './views/layout/footer'
 
 
@@ -100,7 +99,7 @@ class App extends Component {
   }
 
   updateAuthStatus(callback) {
-    
+
     const cb = callback || function() {}
 
     this.getAuthStatus(data => {
@@ -131,17 +130,41 @@ class App extends Component {
 
   render() {
 
-    const { poll, footer: { socialIcons }, } = globalOptions
+    const { footer: { socialIcons, }, } = globalOptions
+    const { loggedIn, user, } = this.state
+
+    const headerLinks = [
+      { hidden: !loggedIn, to: `/user/${user}`, content: `Hello, ${user}!`, },
+      { hidden: false, to: '/main', content: 'Main', },
+      { hidden: !loggedIn, to: `/user/${user}/new`, content: 'New Poll', },
+      { hidden: loggedIn, to: '/login', content: 'Login', },
+      { hidden: loggedIn, to: '/register', content: 'Register', },
+      { hidden: !loggedIn, to: '/logout', content: 'Logout', },
+    ]
 
     return (
       <Wrapper>
-        <Route render={routeProps => (
+        <Route render={ routeProps => (
           <HeaderStyled
-            handleLogout={this.handleLogout}
-            updateAuth={this.updateAuthStatus}
-            {...this.state}
-            {...routeProps}
-          /> 
+            brand="Votery"
+            brandTo="/main"
+            handleLogout={ this.handleLogout }
+            links={ headerLinks }
+            tribarClass="right"
+            navColorClass="teal lighten-1"
+            navItemsAlign="right"
+            updateAuth={ this.updateAuthStatus }
+            { ...this.state }
+            { ...routeProps }
+          >
+            <NavItems
+              className={"right hide-on-med-and-down"}
+              id="top-nav"
+              updateAuth={this.updateAuthStatus.bind(null,null)}
+            >
+              { headerLinks }
+            </NavItems>
+          </HeaderStyled>
         )} />
         <Main>
           { this.state.loading

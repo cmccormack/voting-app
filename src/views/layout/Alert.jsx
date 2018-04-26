@@ -42,7 +42,6 @@ const Alert = styled.div`
   visibility: ${props => props.show ? 'visible' : 'hidden'};
   border-radius: .25rem;
   padding: .75rem 1.25rem !important;
-  margin-bottom: 1rem;
   border: 1px solid transparent;
   animation: .5s ${props => props.show ? fadeIn : fadeOut} ease-out;
   color: ${({type,}) => theme[type].fontColor};

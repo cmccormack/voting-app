@@ -1,5 +1,6 @@
-import React, { Component, } from 'react'
+import React from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 import { Icon, } from './'
 import { CharacterCounter, } from '../utils'
@@ -22,16 +23,16 @@ const FormInput = ({
     icon,
     index,
     action,
-    actionIcon="close",
+    actionIcon,
     label,
-    onBlur=()=>{},
-    onFocus=()=>{},
-    size = "s12",
-    type = "text",
-    value = "",
-    maxLength = 80,
+    onBlur,
+    onChange,
+    onFocus,
+    size,
+    type,
+    value,
+    maxLength,
     disabled,
-    ...props
   }) => {
 
   return (
@@ -68,7 +69,7 @@ const FormInput = ({
         maxLength={ maxLength }
         name={ name }
         onBlur={ onBlur }
-        onChange={ props.onChange }
+        onChange={ onChange }
         onFocus={ onFocus }
         type={ type }
         value={ value }
@@ -85,6 +86,39 @@ const FormInput = ({
       }
     </div>
   )
+}
+
+FormInput.propTypes = {
+  name: PropTypes.string,
+  icon: PropTypes.string,
+  index: PropTypes.number.isRequired,
+  action: PropTypes.func,
+  actionIcon: PropTypes.string,
+  label: PropTypes.string,
+  onBlur: PropTypes.func,
+  onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  size: PropTypes.string,
+  type: PropTypes.string,
+  value: PropTypes.string,
+  maxLength: PropTypes.number,
+  disabled: PropTypes.bool,
+}
+
+FormInput.defaultProps = {
+  name: '',
+  icon: '',
+  action: () => { },
+  actionIcon: "close",
+  label: null,
+  onBlur: () => { },
+  onChange: () => { },
+  onFocus: () => { },
+  size: "s12",
+  type: "text",
+  value: "",
+  maxLength: 80,
+  disabled: false,
 }
 
 export default FormInput

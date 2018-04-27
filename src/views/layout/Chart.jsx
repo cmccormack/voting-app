@@ -1,12 +1,6 @@
 import React, { PureComponent, } from 'react'
 import { Doughnut, } from 'react-chartjs-2'
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
-
-
-const DoughnutWrapperStyled = styled.div`
-  height: 300px;
-`
 
 class Chart extends PureComponent {
 
@@ -18,7 +12,6 @@ class Chart extends PureComponent {
     } = this.props
 
     return (
-      <DoughnutWrapperStyled>
         <Doughnut
           data={{
             datasets: [{
@@ -38,10 +31,9 @@ class Chart extends PureComponent {
               },
             },
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
           }}
         />
-      </DoughnutWrapperStyled>
     )
   }
 }

@@ -1,5 +1,6 @@
-import React, { Component, } from 'react'
+import React from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 import { FormInput, } from './'
 
@@ -9,12 +10,25 @@ const StyledChoiceLabel = styled.label`
   bottom: 0;
 `
 
-export default ({
+const StyledChoice = styled.div`
+  position: relative;
+  margin-top: 1rem;
+
+  label {
+    left: .75rem;
+    top: 0;
+    transform-origin: 0% 100%;
+    text-align: initial;
+    transform: translateY(12px);
+  }
+`
+
+const PollChoice = ({
   action,
-  choice = '',
+  choice,
   onChange,
-  index = -1,
-  selectedChoice = 0,
+  index,
+  selectedChoice,
   ...props
 }) => {
 
@@ -33,7 +47,7 @@ export default ({
   return (
     <div>
       {index >= 0 &&
-        <div className="col s2 right-align">
+        <StyledChoice className="col s2 right-align">
           <input
             checked={index === selectedChoice}
             className='with-gap'
@@ -41,10 +55,11 @@ export default ({
             name='choices'
             id={`choice_${index}`}
             onChange={handleSelectedChoice}
+          
             value={index}
           />
           <StyledChoiceLabel htmlFor={`choice_${index}`}></StyledChoiceLabel>
-        </div>
+        </StyledChoice>
       }
       <FormInput
         action={action && handleAction}
@@ -57,3 +72,20 @@ export default ({
     </div>
   )
 }
+
+PollChoice.propTypes = {
+  action: PropTypes.func,
+  choice: PropTypes.string,
+  handleSelectedChoice: PropTypes.func,
+  onChange: PropTypes.func,
+  index: PropTypes.number,
+  selectedChoice: PropTypes.number,
+}
+
+PollChoice.defaultProps = {
+  choice: '',
+  index: -1,
+  selectedChoice: '',
+}
+
+export default PollChoice

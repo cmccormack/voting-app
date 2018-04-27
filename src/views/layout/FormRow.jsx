@@ -5,10 +5,14 @@ import classNames from "classnames";
 
 const FormRowStyled = styled.div`
   position: relative;
+  text-align: ${props => props.align};
 `
 
-const FormRow = ({ align="", children, className="", }) => (
-  <FormRowStyled className={ classNames('row', align, className,) }>
+const FormRow = ({ align, children, className, }) => (
+  <FormRowStyled
+    align={ align }
+    className={ classNames('row', className,) }
+  >
     { children }
   </FormRowStyled>
 )
@@ -20,7 +24,7 @@ FormRow.propTypes = {
 }
 
 FormRow.defaultProps = {
-  align: 'left',
+  align: 'center',
   className: '',
 }
 

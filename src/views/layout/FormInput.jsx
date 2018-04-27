@@ -91,7 +91,7 @@ const FormInput = ({
 FormInput.propTypes = {
   name: PropTypes.string,
   icon: PropTypes.string,
-  index: PropTypes.number.isRequired,
+  index: PropTypes.number,
   action: PropTypes.func,
   actionIcon: PropTypes.string,
   label: PropTypes.string,
@@ -110,6 +110,7 @@ FormInput.defaultProps = {
   icon: '',
   action: () => { },
   actionIcon: "close",
+  index: 0,
   label: null,
   onBlur: () => { },
   onChange: () => { },

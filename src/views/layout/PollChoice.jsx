@@ -79,7 +79,7 @@ PollChoice.propTypes = {
   handleSelectedChoice: PropTypes.func,
   onChange: PropTypes.func,
   index: PropTypes.number,
-  selectedChoice: PropTypes.number,
+  selectedChoice: PropTypes.string,
 }
 
 PollChoice.defaultProps = {

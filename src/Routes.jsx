@@ -1,7 +1,8 @@
-import React, { Component } from 'react'
-import { Route, Redirect, Switch} from 'react-router-dom'
+import React from 'react'
+import { Route, Redirect, Switch,} from 'react-router-dom'
+import PropTypes from 'prop-types'
 
-import { PrivateRoute } from './views/utils'
+import { PrivateRoute, } from './views/utils'
 import {
   LoginPage,
   LogoutPage,
@@ -14,110 +15,127 @@ import {
 import Main from './views/Main'
 
 const Routes = ({
-  loggedIn,
   allowRedirects,
+  handleLogout,
+  inputLengths,
+  loggedIn,
+  updateAuthStatus,
   user,
-  ...props
 }) => (
-    <Switch>
-
-      // Login Route
-      <Route
-        exact path="/login"
-        render={() => (
-          loggedIn
-            ? (<Redirect to='/main' />)
-            : (<LoginPage updateAuthStatus={ props.updateAuthStatus } />)
-        )}
-      />
+  <Switch>
 
 
-      // Registration Route
-      <Route
-        exact path="/register"
-        render={() => (
-          loggedIn
-            ? (<Redirect to='/main' />)
-            : (<RegisterPage updateAuthStatus={ props.updateAuthStatus } />)
-        )}
-      />
+    {/* Login Route */}
+    <Route
+      exact path="/login"
+      render={() => (
+        loggedIn
+          ? (<Redirect to='/main' />)
+          : (<LoginPage updateAuthStatus={ updateAuthStatus } />)
+      )}
+    />
 
 
-      // Logout Route
-      <Route
-        exact path="/logout"
-        render={() => (
-          <LogoutPage
-            loggedIn={ loggedIn }
-            handleLogout={ props.handleLogout }
-          />
-        )}
-      />
+    {/* Registration Route */}
+    <Route
+      exact path="/register"
+      render={() => (
+        loggedIn
+          ? (<Redirect to='/main' />)
+          : (<RegisterPage updateAuthStatus={ updateAuthStatus } />)
+      )}
+    />
 
 
-      // Access user page only if logged in, else redirect to login
-      <PrivateRoute
-        allowRedirects={allowRedirects}
-        component={UserAccountPage}
-        exact path="/user/:user"
-        loggedIn={ loggedIn }
-        updateAuthStatus={ props.updateAuthStatus }
-        user={ user }
-      />
+    {/* Logout Route */}
+    <Route
+      exact path="/logout"
+      render={() => (
+        <LogoutPage
+          loggedIn={ loggedIn }
+          handleLogout={ handleLogout }
+        />
+      )}
+    />
 
 
-      // Create New Poll Route
-      <PrivateRoute
-        allowRedirects={ allowRedirects }
-        exact path="/user/:user/new"
-        component={ NewPollPage }
-        loggedIn={ loggedIn }
-        updateAuthStatus={ props.updateAuthStatus }
-        user={ user }
-      />
-
-      // View User Polls
-      <Route exact path="/user/:user/polls"
-        render={ ({match}) => (
-          <UserPollsPage
-            title={`Polls created by ${match.params.user}`}
-            user={match.params.user}
-          />
-        )}
-      />
+    {/* Access user page only if logged in, else redirect to login */}
+    <PrivateRoute
+      allowRedirects={allowRedirects}
+      component={UserAccountPage}
+      exact path="/user/:user"
+      loggedIn={ loggedIn }
+      updateAuthStatus={ updateAuthStatus }
+      user={ user }
+    />
 
 
-      <Route
-        exact path="/user/:user/polls/:poll"
-        component={ ViewPollPage }
-        user={ user }
-      />
+    {/* Create New Poll Route */}
+    <PrivateRoute
+      allowRedirects={ allowRedirects }
+      exact path="/user/:user/new"
+      component={ NewPollPage }
+      inputLengths={ inputLengths }
+      loggedIn={ loggedIn }
+      updateAuthStatus={ updateAuthStatus }
+      user={ user }
+    />
 
 
-      // Main page route 
-      <Route exact path="/main" render={() => (
+    {/* View User's Polls Route */}
+    <Route
+      exact path="/user/:user/polls"
+      render={ ({match,}) => (
+        <UserPollsPage
+          title={`Polls created by ${match.params.user}`}
+          user={match.params.user}
+        />
+      )}
+    />
+
+
+    {/* View a Poll Route */}
+    <Route
+      exact path="/user/:user/polls/:poll"
+      component={ ViewPollPage }
+      user={ user }
+    />
+
+
+    {/* Main Page Route  */}
+    <Route
+      exact path="/main"
+      render={() => (
         <Main 
           loggedIn={ loggedIn }
           user={user}
         />
-      )} />
+      )}
+    />
 
 
+    {/* Redirect to Main Page Route */}
+    <Route exact path="/" render={() => (
+      <Redirect to='/main' />
+    )} />
 
 
-      // Redirect to Main page for now
-      <Route exact path="/" render={() => (
-        <Redirect to='/main' />
-      )} />
+    {/* 404 Page not found Route */}
+    <Route render={() => (
+      <div className="center teal-text darken-3">
+        <h1>404 Page not found</h1>
+      </div>
+    )} />
+  </Switch> 
+)
 
-
-      // 404 Page not found Route
-      <Route render={() => (
-        <div className="center teal-text darken-3">
-          <h1>404 Page not found</h1>
-        </div>
-      )} />
-    </Switch> 
-  )
+Routes.propTypes = {
+  loggedIn: PropTypes.bool,
+  allowRedirects: PropTypes.bool,
+  handleLogout: PropTypes.func,
+  inputLengths: PropTypes.object,
+  updateAuthStatus: PropTypes.func,
+  user: PropTypes.string,
+}
 
 export default Routes

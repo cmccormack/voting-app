@@ -157,7 +157,7 @@ const ViewPollForm = (props) => {
       </FormRow>
 
       <ChoicesSection>
-        <FormRow>
+        <FormRow align="left">
           <ChoicesTitle 
             className='col s8 offset-s2 teal-text text-darken-1'
           >

@@ -72,7 +72,7 @@ class UserAccountForm extends Component {
 
     const body = (
       <div>
-        <FormRow>
+        <FormRow align="left">
           <TabBody id="polls" size="s10 offset-s1">
             { 
               polls.length > 0
@@ -82,7 +82,7 @@ class UserAccountForm extends Component {
           </TabBody>
         </FormRow>
 
-        <FormRow className="center">
+        <FormRow align="right">
           <TabBody id="settings" size="s10 m8 l6 offset-s1 offset-m2 offset-l3">
             <DeleteButton
               onClick={ deleteAccount }

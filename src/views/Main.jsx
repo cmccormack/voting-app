@@ -99,6 +99,7 @@ class Main extends Component {
       increment: 20,
     }
 
+    this.mainOffset = 0
     this._isMounted = false
   }
 
@@ -106,7 +107,13 @@ class Main extends Component {
 
     this._isMounted = true
     if (this.state.loaded) return
-    
+
+    const bodyRectTop = document.body
+      .getBoundingClientRect().top
+    const mainRectTop = document.getElementById('mainBody')
+      .getBoundingClientRect().top
+    this.mainOffset = mainRectTop - bodyRectTop - 80
+
     this.fetchPolls()
  
   }
@@ -119,7 +126,11 @@ class Main extends Component {
     const { pagesCount: pages, activePage, } = this.state
     if (page > pages -1 || page < 0 || page === activePage) return
 
-    Scroll.animateScroll.scrollToTop({ duration: 500, smooth: 'easeOutQuad',})
+    console.log(this.mainOffset)
+    Scroll.animateScroll.scrollTo(
+      this.mainOffset,
+      { duration: 500, smooth: 'easeOutQuad',}
+    )
 
     this.fetchPolls(page)
   }
@@ -138,7 +149,9 @@ class Main extends Component {
       // Return early if component unmounted
       if (!this._isMounted) return
 
-      window.scrollTo(0, 50)
+
+      // console.log(mainRect - bodyRect)
+      // window.scrollTo(0, 2000)
       const { lightness, saturation, increment, } = this.chartColorOptions
       this.setState({
         polls: polls.map(poll => {
@@ -312,6 +325,7 @@ class Main extends Component {
         </TitleWrapper>
         <BodyWrapper
           className="teal lighten-5"
+          id="mainBody"
         >
           {
             !loaded

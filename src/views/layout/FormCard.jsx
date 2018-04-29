@@ -44,7 +44,10 @@ const FormCard = ({
           </FormCardTitle>
         </div>
 
-        { alert || <FormRow /> }
+        {/* { alert || <FormRow /> } */}
+        <FormRow>
+          { alert }
+        </FormRow>
 
         <FormBody slide={ error ? true : false }>
           { children }

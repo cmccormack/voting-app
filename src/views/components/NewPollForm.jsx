@@ -45,7 +45,7 @@ const PollChoices = ({
         label={ `Choice ${i + 1}` }
         name={ `choice_${i}` }
         onChange={ props.handleInputChange }
-        selectedChoice={ selectedChoiceIndex }
+        selectedChoiceIndex={ selectedChoiceIndex }
         { ...props }
       />
     </FormRow>
@@ -156,12 +156,14 @@ class NewPollForm extends Component {
                 <FormRow>
                   <PollChoice
                     choice={ newChoice }
+                    index={ -1 }
                     label="New Choice"
                     maxLength={inputLengths.choice.max }
                     name="newChoice"
                     onChange={ handleInputChange }
                     onFocus={ handleInputFocus }
                     onBlur={ handleInputBlur }
+                    selectedChoiceIndex={ selectedChoiceIndex }
                     size="s7 offset-s2"
                   />
                   <div className="col">
@@ -169,7 +171,7 @@ class NewPollForm extends Component {
                       href="#AddNewChoice"
                       title="Click"
                       onClick={ handleChoiceAdd }
-                      Icon={
+                      icon={
                         <StyledNewChoiceIcon
                           className="material-icons"
                           fontSize="48px"

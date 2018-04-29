@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 const IconLink = ({
   title='',
   href="#",
-  Icon,
+  icon,
   onClick,
 }) => (
   <a 
@@ -12,21 +12,25 @@ const IconLink = ({
     href={ href }
     onClick={ onClick }
   >
-    { Icon }
+    { icon }
   </a>
 )
 
 IconLink.propTypes = {
   title: PropTypes.string,
   href: PropTypes.string,
-  Icon: PropTypes.func,
+  icon: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.string,
+    PropTypes.object,
+  ]),
   onClick: PropTypes.func,
 }
 
 IconLink.defaultProps = {
   title: '',
   href: '#',
-  Icon: null,
+  icon: null,
   onClick: () => { },
 }
 

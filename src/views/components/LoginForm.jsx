@@ -29,7 +29,7 @@ const LoginForm = (props) => {
     <FormCard
       title={ title }
       footer={ footer }
-      error={ error }
+      error={ error ? true : false }
       alert={ alert }
     >
       <form id="login_form" onSubmit={ props.handleSubmit }>

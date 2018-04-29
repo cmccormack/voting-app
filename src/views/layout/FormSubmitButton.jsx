@@ -20,8 +20,12 @@ const FormSubmitButton = ({
 )
 
 FormSubmitButton.propTypes = {
-  buttonText: PropTypes.array,
-  icon: PropTypes.array,
+  buttonText: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+    PropTypes.element,
+  ]),
+  icon: PropTypes.string,
   onClick: PropTypes.func,
   position: PropTypes.string,
   size: PropTypes.string,

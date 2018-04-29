@@ -107,7 +107,7 @@ class UserAccountForm extends Component {
           show={error ? true : false}
           type={error ? 'warning' : 'success'}
         >
-          <strong>Warning!&nbsp;&nbsp;</strong>{error}
+          <strong>Warning!&nbsp;&nbsp;</strong>{ error }
         </Alert>
       </FormRow>
     )
@@ -117,10 +117,10 @@ class UserAccountForm extends Component {
         <div className="row">
           <div className="col s12 m10 offset-m1 xl8 offset-xl2">
             <FormCard
-              title={title}
-              footer={footer}
-              error={error}
-              alert={alert}
+              title={ title }
+              footer={ footer }
+              error={ error ? true : false }
+              alert={ alert }
             >
               <FormRow>
                 <StyledTabs

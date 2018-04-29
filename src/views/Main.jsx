@@ -284,7 +284,7 @@ class Main extends Component {
                 key={String(i)}
                 onClick={this.getPage.bind(this, i)}
               >
-                {i + 1}
+                { i+1 }
               </PageNum>
             ))
         }

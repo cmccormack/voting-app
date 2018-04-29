@@ -28,7 +28,7 @@ const PollChoice = ({
   choice,
   onChange,
   index,
-  selectedChoice,
+  selectedChoiceIndex,
   ...props
 }) => {
 
@@ -49,7 +49,7 @@ const PollChoice = ({
       {index >= 0 &&
         <StyledChoice className="col s2 right-align">
           <input
-            checked={index === selectedChoice}
+            checked={index === selectedChoiceIndex}
             className='with-gap'
             type='radio'
             name='choices'
@@ -78,14 +78,12 @@ PollChoice.propTypes = {
   choice: PropTypes.string,
   handleSelectedChoice: PropTypes.func,
   onChange: PropTypes.func,
-  index: PropTypes.number,
-  selectedChoice: PropTypes.string,
+  index: PropTypes.number.isRequired,
+  selectedChoiceIndex: PropTypes.number.isRequired,
 }
 
 PollChoice.defaultProps = {
   choice: '',
-  index: -1,
-  selectedChoice: '',
 }
 
 export default PollChoice

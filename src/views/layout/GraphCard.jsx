@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
 const GraphCardWrapper = styled.div`
   margin: 10px auto;
@@ -15,7 +16,10 @@ const GraphCardTitle = ({ title, }) => (
 )
 
 GraphCardTitle.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
 }
 
 GraphCardTitle.defaultProps = {
@@ -44,35 +48,35 @@ const GraphCardActionsStyled = styled.div`
 
 
 const GraphCardActions = ({ actions, }) => (
-  <GraphCardActionsStyled className="card-action">
+  <GraphCardActionsStyled
+    className={ classNames(
+      { "card-action": actions, },
+    )}
+  >
     { actions }
   </GraphCardActionsStyled>
 )
 
 GraphCardActions.propTypes = {
-  actions: PropTypes.array,
+  actions: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+    PropTypes.element,
+  ]),
 }
 
 GraphCardActions.defaultProps = {
-  actions: [],
+  actions: null,
 }
 
 
-const GraphCard = ({ actions, ...props }) => (
+const GraphCard = ({ ...props }) => (
   <GraphCardWrapper className="card large hoverable">
     <GraphCardContent { ...props }>
       <GraphCardTitle { ...props } />
     </GraphCardContent>
-    { actions && <GraphCardActions actions={actions} /> }
+    <GraphCardActions { ...props } />
   </GraphCardWrapper>
 )
-
-GraphCard.propTypes = {
-  actions: PropTypes.array,
-}
-
-GraphCard.defaultProps = {
-  actions: [],
-}
 
 export default GraphCard

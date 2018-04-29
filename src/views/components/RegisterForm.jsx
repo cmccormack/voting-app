@@ -38,7 +38,7 @@ class RegisterForm extends Component {
     return (
       <FormCard 
         alert={ alert }
-        error={ error }
+        error={ error ? true : false }
         footer={ footer }
         title={ title }
       >

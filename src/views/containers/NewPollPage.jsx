@@ -135,7 +135,11 @@ class NewPollPage extends Component {
 
     document.title = "Votery | Create New Poll"
 
-    const { submitted, redirectpath, } = this.state
+    const {
+      redirectpath,
+      submitted,
+      ...rest
+    } = this.state
     
     if (submitted) {
       return <Redirect to={redirectpath} />
@@ -150,7 +154,7 @@ class NewPollPage extends Component {
         handleInputFocus={ this.handleInputFocus }
         handleInputBlur={ this.handleInputBlur }
         handleSubmit={ this.handleSubmit }
-        { ...this.state }
+        { ...rest }
       />
     )
   }

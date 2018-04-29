@@ -10,9 +10,8 @@ import {
   FormCard,
   FormRow,
   GraphCard,
-  Row,
 } from '../layout'
-import { IndeterminateProgressBar } from '../utils'
+import { IndeterminateProgressBar, } from '../utils'
 
 import LoaderWithTimeout from '../utils/LoaderWithTimeout'
 
@@ -35,12 +34,8 @@ class UserPollsForm extends Component {
       apiTimeout,
       error,
       footer,
-      handleChoiceSelect,
-      handleSubmit,
       loading,
-      loadingFailed,
       polls,
-      selectedChoice,
       title,
       user,
     } = this.props
@@ -83,7 +78,7 @@ class UserPollsForm extends Component {
 
     const body = (
       <FormCard
-        error={ error }
+        error={ error ? true : false }
         footer={ user && footer }
         title={ title }
         user={ user }
@@ -95,7 +90,7 @@ class UserPollsForm extends Component {
               <ChoicesTitle 
                 className='col s10 offset-s1 teal-text text-darken-1'
               >
-                Select a poll below and vote!
+                {"Select a poll below!"}
               </ChoicesTitle>
             </FormRow>
             <FormRow>
@@ -157,12 +152,8 @@ UserPollsForm.propTypes = {
     PropTypes.string,
     PropTypes.element,
   ]),
-  handleChoiceSelect: PropTypes.func,
-  handleSubmit: PropTypes.func,
   loading: PropTypes.bool,
-  loadingFailed: PropTypes.bool,
   polls: PropTypes.array,
-  selectedChoice: PropTypes.string,
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.element,
@@ -175,9 +166,7 @@ UserPollsForm.defaultProps = {
   error: '',
   footer: '',
   loading: true,
-  loadingFailed: false,
   polls: [],
-  selectedChoice: '',
   title: '',
   user: '',
 }

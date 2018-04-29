@@ -1,5 +1,5 @@
-import React, { Component, } from 'react'
-import styled from 'styled-components'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const FormSubmitButton = ({
   buttonText='Submit',
@@ -18,5 +18,21 @@ const FormSubmitButton = ({
     </button>
   </div>
 )
+
+FormSubmitButton.propTypes = {
+  buttonText: PropTypes.array,
+  icon: PropTypes.array,
+  onClick: PropTypes.func,
+  position: PropTypes.string,
+  size: PropTypes.string,
+}
+
+FormSubmitButton.defaultProps = {
+  buttonText: 'Submit',
+  icon: 'send',
+  onClick: () => { },
+  position: 'right',
+  size: '',
+}
 
 export default FormSubmitButton

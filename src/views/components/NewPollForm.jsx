@@ -164,7 +164,7 @@ class NewPollForm extends Component {
                     onBlur={ handleInputBlur }
                     size="s7 offset-s2"
                   />
-                  <div className={"col s3"}>
+                  <div className="col">
                     <IconLink
                       href="#AddNewChoice"
                       title="Click"

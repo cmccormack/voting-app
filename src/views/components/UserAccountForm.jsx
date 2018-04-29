@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, } from 'react'
 import styled from 'styled-components'
 import { Link, } from 'react-router-dom'
 import path from 'path'
@@ -20,7 +20,7 @@ const StyledTabs = styled(Tabs)`
 `
 
 const DeleteButton = styled.a.attrs({
-  className: "waves-effect red waves-light btn"
+  className: "waves-effect red waves-light btn",
 })`
   width: 100%;
 `

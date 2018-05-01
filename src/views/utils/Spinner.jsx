@@ -1,12 +1,22 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
-const SpinnerWrapper = ({size, children}) => (
+const SpinnerWrapper = ({size, children, }) => (
   <div className={`preloader-wrapper ${size} active`}>
     { children }
   </div>
 )
 
-const SpinnerBody = ({color}) => (
+SpinnerWrapper.propTypes = {
+  size: PropTypes.string,
+  children: PropTypes.element,
+}
+
+SpinnerWrapper.defaultProps = {
+  size: 'big',
+}
+
+const SpinnerBody = ({color, }) => (
   <div className={`spinner-layer spinner-${color}`}>
     <div className="circle-clipper left">
       <div className="circle"></div>
@@ -18,14 +28,21 @@ const SpinnerBody = ({color}) => (
   </div>
 )
 
-const Spinner = ({ size='big' }) => (
-  <SpinnerWrapper size={ size }>
+SpinnerBody.propTypes = {
+  color: PropTypes.string,
+}
+
+SpinnerBody.defaultProps = {
+  color: 'teal',
+}
+
+const Spinner = props => (
+  <SpinnerWrapper { ...props }>
     <SpinnerBody color="blue" />
     <SpinnerBody color="red" />
     <SpinnerBody color="yellow" />
     <SpinnerBody color="green" />
   </SpinnerWrapper>
-
 )
 
 export default Spinner

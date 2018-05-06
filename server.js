@@ -124,7 +124,7 @@ routes(app, passport, models)
 //  Start Express Server
 ///////////////////////////////////////////////////////////
 const server = app.listen(app.get('port'), () => {
-  const {port, address} = server.address()
+  const {port, address, } = server.address()
   console.log(`Express server started on ${address}:${port}`)
 })
 

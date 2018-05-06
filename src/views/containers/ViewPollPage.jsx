@@ -23,7 +23,7 @@ class ViewPollPage extends Component {
       selectedChoice: null,
       showError: false,
       showVoteSubmitted: false,
-      timeRemaining: 0,
+      timeRemaining: null,
       voteSubmitted: '',
     }
 
@@ -177,10 +177,10 @@ class ViewPollPage extends Component {
       .then(res => res.json())
       .then(response => {
         if (!this._isMounted) return
+
         const { success, poll={}, message='', error={}, } = response
         const { timeRemaining=0, } = error
         const { choices=[], seedColor=0, } = poll
-
         this.setState({
           choiceColors: success 
             ? this.getColorArray(choices.length, seedColor) 

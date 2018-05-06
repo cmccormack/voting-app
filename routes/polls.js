@@ -1,8 +1,11 @@
 module.exports = (app, {User, Poll,}) => {
 
   require('./pollvote')(app, Poll)
+  require('./pollsubmit')(app, {User, Poll,})
 
+  ///////////////////////////////////////////////////////////
   // Get all Polls
+  ///////////////////////////////////////////////////////////
   app.get('/api/polls', (req, res, next) => {
 
     Poll.getPolls()
@@ -12,7 +15,35 @@ module.exports = (app, {User, Poll,}) => {
     .catch(next)
   })
 
+
+  ///////////////////////////////////////////////////////////
+  // Get all Polls and filter results
+  ///////////////////////////////////////////////////////////
+  app.get('/polls', (req, res, next) => {
+    console.log(`New Request for ${req.hostname + req.path}`)
+
+    const { skip = 0, limit = 0, } = req.query
+
+    Poll.find()
+      .skip(+skip)
+      .limit(+limit)
+      .populate('createdBy', 'username')
+      .exec((err, polls) => {
+        if (err) {
+          return next(Error('Error retrieving polls from database'))
+        }
+
+        Poll.count({}, (err, count) => {
+          res.type('json').send({ polls, count, })
+        })
+
+      })
+  })
+
+
+  ///////////////////////////////////////////////////////////
   // Get all polls of a single user
+  ///////////////////////////////////////////////////////////
   app.get('/api/:user/polls', (req, res, next) => {
 
     User
@@ -30,7 +61,9 @@ module.exports = (app, {User, Poll,}) => {
   })
 
 
+  ///////////////////////////////////////////////////////////
   // Get a single poll for a single user
+  ///////////////////////////////////////////////////////////
   app.get('/api/:user/polls/:poll', (req, res, next) => {
 
     const { user, poll, } = req.params
@@ -53,7 +86,10 @@ module.exports = (app, {User, Poll,}) => {
     })
   })
 
+
+  ///////////////////////////////////////////////////////////
   // Delete a single poll for a single user
+  ///////////////////////////////////////////////////////////
   app.post('/api/poll/delete', (req, res, next) => {
 
     const { id, } = req.body
@@ -62,9 +98,6 @@ module.exports = (app, {User, Poll,}) => {
     .exec((err, poll) => {
       if (err) return next(Error(err))
       if (!poll) return next(Error('Poll Not Found.'))
-
-      // Remove all but username from createdBy object
-      poll.createdBy = { 'username': poll.createdBy.username, }
 
       if (req.user.username !== poll.createdBy.username) {
         return next(Error('Only the creater may delete a poll'))

@@ -204,7 +204,7 @@ class ViewPollPage extends Component {
   render() {
 
     const { createdBy, newChoice, poll, } = this.state
-    document.title = `Votery | ${poll.title}`
+    document.title = `Votery | ${poll.title || 'Poll'}`
 
     return (
       <ViewPollForm

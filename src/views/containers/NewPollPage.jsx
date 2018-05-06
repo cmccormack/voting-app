@@ -100,7 +100,7 @@ class NewPollPage extends Component {
       if (!user.isAuthenticated) return
 
       const { title, shortName, choices, selectedChoiceIndex, } = this.state
-  
+
       fetch("/submit_new_poll", {
         method: "POST",
         headers: { "Content-Type": "application/json", },
@@ -109,6 +109,8 @@ class NewPollPage extends Component {
         body: JSON.stringify({ title, shortName, choices, selectedChoiceIndex, }),
       })
       .then(res => res.json()).then(data => {
+
+        console.log('data', data)
 
         // Return early if component not mounted
         if (!this._isMounted) return

@@ -4,6 +4,17 @@ module.exports = (app, {User, Poll, }) => {
 
 
   ///////////////////////////////////////////////////////////
+  // Get all Users
+  ///////////////////////////////////////////////////////////
+  app.get('/api/users', (req, res, next) => {
+    User.getUsers()
+      .then(docs => {
+        res.type('json').send(docs)
+      })
+      .catch(next)
+  })
+
+  ///////////////////////////////////////////////////////////
   // User Authentication Verification
   ///////////////////////////////////////////////////////////
   app.get('/isauthenticated', (req, res) => {
@@ -44,7 +55,6 @@ module.exports = (app, {User, Poll, }) => {
 
     })(req, res, next)
   })
-
 
 
   ///////////////////////////////////////////////////////////
@@ -125,6 +135,5 @@ module.exports = (app, {User, Poll, }) => {
       })
     })
   })
-
 
 }

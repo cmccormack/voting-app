@@ -4,7 +4,7 @@ module.exports = mongoose => {
   const PollSchema = new mongoose.Schema({
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
     },
     createdTime: {
       type: String,
@@ -22,11 +22,11 @@ module.exports = mongoose => {
       index: Number,
       choice: String,
       votes: Number,
-    }],
+    },],
     voters: [{
       sessionID: String,
       datevoted: Date,
-    }],
+    },],
     seedColor: Number,
   })
 
@@ -42,7 +42,7 @@ module.exports = mongoose => {
   PollSchema.pre('save', function(next) {
     Poll.find({})
       .where('createdBy').equals(this.createdBy)
-      .or([ { title: this.title }, { shortName: this.shortName } ])
+      .or([ { title: this.title, }, { shortName: this.shortName, }, ])
       .exec((err, docs) => {
         if (docs.length > 0) {
           if (this.title === docs[0].title) {

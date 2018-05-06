@@ -72,7 +72,7 @@ db.once('open', () => {
 
 const models = {
   User: require('./models/user')(mongoose),
-  Poll: require('./models/poll')(mongoose)
+  Poll: require('./models/poll')(mongoose),
 }
 
 ///////////////////////////////////////////////////////////

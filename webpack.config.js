@@ -19,7 +19,7 @@ const cssProd = ExtractTextPlugin.extract({
 
 
 module.exports = (env={}) => {
-  console.log(env)
+  console.info(`webpack env: ${JSON.stringify(env)}`)
   
   return {
     context: path.join(__dirname, './'),

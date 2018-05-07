@@ -97,6 +97,7 @@ const ViewPollForm = (props) => {
     handleInputChange,
     handleSubmit,
     loaded,
+    loggedIn,
     newChoice,
     newChoiceLengths,
     poll,
@@ -180,32 +181,34 @@ const ViewPollForm = (props) => {
             }
 
             {/* // Allow user to add their own poll choice */}
-            <VoteCollectionItem
-              choice={ newChoice }
-              handleChoiceSelect={ handleChoiceSelect }
-              index={ choices.length }
-              selectedChoice={ selectedChoice }
-              selectedIndex={ selectedIndex }
-            >
-              <NewChoiceInputWrapper>
-                <NewChoiceInput
-                  className='teal-text text-darken-1'
-                  maxLength={ newChoiceLengths.max }
-                  minLength={ newChoiceLengths.min }
-                  value={ newChoice }
-                  onChange={ handleInputChange.bind(null, choices.length) }
-                  placeholder="Add New Choice!"
-                />
-                <CharacterCounter
-                  count={ newChoice.length }
-                  max={ 32 }
-                  top={ 0 }
-                  bottom={ 0 }
-                  right={ '-20px' }
-                  lineHeight={ 1.4 }
-                />
-              </NewChoiceInputWrapper>
-            </VoteCollectionItem>
+            { loggedIn &&
+              <VoteCollectionItem
+                choice={ newChoice }
+                handleChoiceSelect={ handleChoiceSelect }
+                index={ choices.length }
+                selectedChoice={ selectedChoice }
+                selectedIndex={ selectedIndex }
+              >
+                <NewChoiceInputWrapper>
+                  <NewChoiceInput
+                    className='teal-text text-darken-1'
+                    maxLength={ newChoiceLengths.max }
+                    minLength={ newChoiceLengths.min }
+                    value={ newChoice }
+                    onChange={ handleInputChange.bind(null, choices.length) }
+                    placeholder="Add New Choice!"
+                  />
+                  <CharacterCounter
+                    count={ newChoice.length }
+                    max={ 32 }
+                    top={ 0 }
+                    bottom={ 0 }
+                    right={ '-20px' }
+                    lineHeight={ 1.4 }
+                  />
+                </NewChoiceInputWrapper>
+              </VoteCollectionItem>
+            }
 
           </Collection>
         </FormRow>
@@ -256,6 +259,7 @@ ViewPollForm.propTypes = {
   handleInputChange: PropTypes.func,
   handleSubmit: PropTypes.func,
   loaded: PropTypes.bool,
+  loggedIn: PropTypes.bool,
   newChoice: PropTypes.string,
   newChoiceLengths: PropTypes.object,
   poll: PropTypes.object,
@@ -272,6 +276,7 @@ ViewPollForm.defaultProps = {
   error: '',
   footer: '',
   loaded: false,
+  loggedIn: false,
   newChoice: '',
   newChoiceLengths: { min: 1, max: 32, },
   poll: {},

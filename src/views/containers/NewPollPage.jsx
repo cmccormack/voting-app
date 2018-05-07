@@ -110,8 +110,6 @@ class NewPollPage extends Component {
       })
       .then(res => res.json()).then(data => {
 
-        console.log('data', data)
-
         // Return early if component not mounted
         if (!this._isMounted) return
 

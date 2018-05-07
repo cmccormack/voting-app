@@ -100,6 +100,7 @@ const Routes = ({
       render={ ({ match, }) => 
         <ViewPollPage
           inputLengths={ inputLengths }
+          loggedIn={ loggedIn }
           match={ match }
           user={ user }
         /> 

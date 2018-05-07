@@ -1,22 +1,26 @@
-import React, { Component } from 'react'
+import { Component, } from 'react'
+import PropTypes from 'prop-types'
 
-class APILoaderWithTimeout extends Component {
+class LoaderWithTimeout extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      renderComponent: this.props.renderLoading
+      renderComponent: this.props.renderLoading,
     }
     this.timeoutID = 0
   }
 
   componentDidMount() {
-    const { renderFailed, timeout, } = this.props
+    const {
+      renderFailed,
+      timeout,
+    } = this.props
 
     this.timeoutID = setTimeout(() => {
-      console.log('Loading timed out...')
+      console.error('Loading timed out...')
       this.setState({
-        renderComponent: renderFailed
+        renderComponent: renderFailed,
       })
     }, timeout)
 
@@ -24,13 +28,32 @@ class APILoaderWithTimeout extends Component {
 
   render() {
 
-    this.props.loaded && clearInterval(this.timeoutID)
+    const {
+      loaded,
+      renderSuccess,
+    } = this.props
 
-    return this.props.loaded
-      ? this.props.renderSuccess
+    loaded && clearInterval(this.timeoutID)
+
+    return (
+      loaded
+      ? renderSuccess
       : this.state.renderComponent
+    )
   }
-
 }
 
-export default APILoaderWithTimeout
+LoaderWithTimeout.propTypes = {
+  loaded: PropTypes.bool,
+  renderFailed: PropTypes.element.isRequired,
+  renderLoading: PropTypes.element.isRequired,
+  renderSuccess: PropTypes.element.isRequired,
+  timeout: PropTypes.number,
+}
+
+LoaderWithTimeout.defaultProps = {
+  loaded: false,
+  timeout: 1000,
+}
+
+export default LoaderWithTimeout

@@ -13,7 +13,7 @@ module.exports = (app, passport, models) => {
   ///////////////////////////////////////////////////////////
   app.use((req, res, next) => {
     const { user = { username: null, }, } = req
-    console.log(`DEBUG user: ${user.username} sessionID: ${req.sessionID}`)
+    console.debug(`DEBUG user: ${user.username} sessionID: ${req.sessionID}`)
     next()
   })
 
@@ -29,7 +29,7 @@ module.exports = (app, passport, models) => {
   // Default Route Handler, Loads React App
   ///////////////////////////////////////////////////////////
   app.get('*', (req, res) => {
-    console.log(`Default Route Handler for ${req.hostname + req.path}`)
+    console.info(`Default Route Handler for ${req.hostname + req.path}`)
     res.sendFile(path.join(publicPath, 'index.html'))
   })
 
@@ -42,7 +42,7 @@ module.exports = (app, passport, models) => {
 
     const errmsg = (err.message ? err.message : err).replace('Error: ', '')
 
-    console.log(`Error Middleware: ${errmsg}`)
+    console.error(`Error Middleware: ${errmsg}`)
     res.type('json').send({
       success: false,
       message: errmsg,

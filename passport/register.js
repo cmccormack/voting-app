@@ -11,7 +11,7 @@ module.exports = (passport, models) => {
 
   passport.use('register', new LocalStrategy({
     session: true,
-    passReqToCallback: true
+    passReqToCallback: true,
   },
     (req, username, password, done) => {
       
@@ -19,19 +19,19 @@ module.exports = (passport, models) => {
       username = username.trim()
       password = password.trim()
 
-      User.findOne({ username: { $regex: new RegExp(`^${username}$`, 'i') } }, (err, user) => {
+      User.findOne({ username: { $regex: new RegExp(`^${username}$`, 'i'), }, }, (err, user) => {
         
         // Handle error when querying user
         if (err) return done(err)
 
         // Return early if user already exists in database
         if (user) { 
-          console.log(`Register: Username ${username} already exists`)
-          return done(null, false, {message: 'Username already in use.'})
+          console.error(`Register: Username ${username} already exists`)
+          return done(null, false, {message: 'Username already in use.', })
         }
         
         // Create new user
-        console.log(`Mongoose: User [${username}] not found in db, adding...`)
+        console.info(`Mongoose: User [${username}] not found in db, adding...`)
         const newUser = new User({
           username: username,
           password: hashPassword(password),
@@ -47,9 +47,9 @@ module.exports = (passport, models) => {
             console.error(`Mongoose error writing user to database: ${err}`)
             return done(err)
           }
-          console.log(`User ${newUser.username} added to database!`)
+          console.info(`User ${newUser.username} added to database!`)
           return done(null, newUser, {
-            message: `User ${username} added to database!`
+            message: `User ${username} added to database!`,
           })
         })
       

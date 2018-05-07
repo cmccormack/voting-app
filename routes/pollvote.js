@@ -60,7 +60,6 @@ module.exports = (app, Poll) => {
       const voterIds = recentVoters.map(({ sessionID, }) => sessionID)
       const voterIndex = voterIds.indexOf(req.sessionID)
 
-      console.log(voterIndex)
       if (voterIndex !== -1) {
         const timeRemaining = Math.floor(
           (expiry - (Date.now() - poll.voters[voterIndex].datevoted))
@@ -80,10 +79,14 @@ module.exports = (app, Poll) => {
       // Add new choice if doesn't exist else increment choice
       const choicesNames = choices.map(({ choice, }) => choice)
       const choiceIndex = choicesNames.indexOf(selectedChoice)
-      if (~choiceIndex) {
+      if (choiceIndex !== -1) {
         choices[choiceIndex].votes += 1
       } else {
-        choices.push({ choice: selectedChoice, votes: 1, })
+        if (req.user) {
+          choices.push({ choice: selectedChoice, votes: 1, })
+        } else {
+          return next(Error('Must be logged in to add a new choice'))
+        }
       }
 
       // Update Poll

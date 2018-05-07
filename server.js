@@ -11,7 +11,7 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
 const logger = require('morgan')
 const favicon = require('serve-favicon')
-require('dotenv').config({path: path.resolve(__dirname, '.env')})
+require('dotenv').config({path: path.resolve(__dirname, '.env'), })
 
 ///////////////////////////////////////////////////////////
 //  Configure and connect to MongoDB database
@@ -20,54 +20,13 @@ const dbconf = require('./db.js')
 mongoose.Promise = global.Promise
 mongoose.connect(dbconf.url, dbconf.options)
 
-
-// USED TO UPDATE MODELS, DELETE LATER
-// models.User.updateMany({}, { polls: [] }, (err, docs) => {
-//   if (err) return console.error(err)
-//   console.log(docs)
-// })
-
-function updateModel(model, update={}) {
-  models[model].updateMany({}, update, (err, docs) => {
-    if (err) return console.error(err)
-    console.log(docs)
-  })
-}
-
-
-// Delete all polls
-function wipePolls() {
-  models.User.updateMany({}, { polls: [] }, (err, docs) => {
-    if (err) return console.error(err)
-  })
-  db.dropCollection('polls')
-}
-
-// Delete a single user
-function wipeUser(username) {
-  models.User.findOneAndRemove({ username }, (err) => {
-    if (err) console.error(err)
-  })
-}
-
-// Delete all users
-function wipeUsers() {
-  db.dropCollection('users')
-}
-
-
 // The connection used by default for every model created using mongoose.model
 const db = mongoose.connection
 db.on('error', err => {
   console.error(`Mongoose default connection error: ${err}`) 
 })
 db.once('open', () => {
-  // wipePoll('0')
-  // wipeUsers()
-  // wipePolls()
-  // wipeUser('random')
-  // updateModel('User', { polls: [] })
-  console.log(`Mongoose default connection opened [${dbconf.db}]`)
+  console.info(`Mongoose default connection opened [${dbconf.db}]`)
 })
 
 const models = {
@@ -86,7 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(favicon(path.resolve(__dirname, 'public', 'images', 'favicon.ico')))
 
 // Body parsing - parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false, }))
 
 // Body parsing - parse json
 app.use(bodyParser.json())
@@ -101,15 +60,14 @@ const sessionOptions = {
   secret: 'cmccormack-voting-app',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false },
-  store: new MongoStore({ mongooseConnection: db })
+  cookie: { secure: false, },
+  store: new MongoStore({ mongooseConnection: db, }),
 }
 app.use(session(sessionOptions))
 app.use(passport.initialize())
 app.use(passport.session())
 
-const passportInit = require('./passport/init')
-passportInit(passport, models)
+require('./passport/init')(passport, models)
 
 
 ///////////////////////////////////////////////////////////
@@ -119,14 +77,10 @@ const routes = require('./routes/routes.js')
 routes(app, passport, models)
 
 
-
 ///////////////////////////////////////////////////////////
 //  Start Express Server
 ///////////////////////////////////////////////////////////
 const server = app.listen(app.get('port'), () => {
   const {port, address, } = server.address()
-  console.log(`Express server started on ${address}:${port}`)
+  console.info(`Express server started on ${address}:${port}`)
 })
-
-
-

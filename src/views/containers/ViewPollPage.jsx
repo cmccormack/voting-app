@@ -205,7 +205,7 @@ class ViewPollPage extends Component {
   render() {
 
     const { createdBy, newChoice, poll, } = this.state
-    const { inputLengths, } = this.props
+    const { inputLengths, loggedIn, } = this.props
 
     document.title = `Votery | ${poll.title || 'Poll'}`
 
@@ -221,6 +221,7 @@ class ViewPollPage extends Component {
         handleChoiceSelect={ this.handleChoiceSelect }
         handleInputChange={ this.handleInputChange }
         handleSubmit={ this.handleSubmit }
+        loggedIn={ loggedIn }
         newChoice={ newChoice }
         newChoiceLengths={ inputLengths.choice }
       >
@@ -231,6 +232,7 @@ class ViewPollPage extends Component {
 
 ViewPollPage.propTypes = {
   inputLengths: PropTypes.object,
+  loggedIn: PropTypes.bool.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       user: PropTypes.string,

@@ -126,7 +126,6 @@ class Main extends Component {
     const { pagesCount: pages, activePage, } = this.state
     if (page > pages -1 || page < 0 || page === activePage) return
 
-    console.log(this.mainOffset)
     Scroll.animateScroll.scrollTo(
       this.mainOffset,
       { duration: 500, smooth: 'easeOutQuad',}
@@ -149,9 +148,6 @@ class Main extends Component {
       // Return early if component unmounted
       if (!this._isMounted) return
 
-
-      // console.log(mainRect - bodyRect)
-      // window.scrollTo(0, 2000)
       const { lightness, saturation, increment, } = this.chartColorOptions
       this.setState({
         polls: polls.map(poll => {

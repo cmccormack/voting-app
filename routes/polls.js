@@ -20,7 +20,7 @@ module.exports = (app, {User, Poll,}) => {
   // Get all Polls and filter results
   ///////////////////////////////////////////////////////////
   app.get('/polls', (req, res, next) => {
-    console.log(`New Request for ${req.hostname + req.path}`)
+    console.info(`New Request for ${req.hostname + req.path}`)
 
     const { skip = 0, limit = 0, } = req.query
 

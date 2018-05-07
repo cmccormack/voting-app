@@ -45,7 +45,7 @@ module.exports = (app, {User, Poll, }) => {
       // Establish session with user
       req.login(user, err => {
         if (err) return next(err)
-        console.log(`New session created for user ${user.username} sessionID: ${req.sessionID}`)
+        console.info(`New session created for user ${user.username} sessionID: ${req.sessionID}`)
         res.type('json').send({
           message,
           success: true,
@@ -62,7 +62,7 @@ module.exports = (app, {User, Poll, }) => {
   ///////////////////////////////////////////////////////////
   app.post('/login', (req, res, next) => {
 
-    console.log(`/login POST sessionID: ${req.sessionID}`)
+    console.info(`/login POST sessionID: ${req.sessionID}`)
     passport.authenticate('login', (err, user, info) => {
 
       const { message = '', } = info ? info : {}
@@ -79,7 +79,7 @@ module.exports = (app, {User, Poll, }) => {
       req.login(user, err => {
 
         if (err) return next(err)
-        console.log(`New session created for user ${user.username}`)
+        console.info(`New session created for user ${user.username}`)
         res.type('json').send({
           message,
           success: true,

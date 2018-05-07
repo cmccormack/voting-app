@@ -39,7 +39,7 @@ module.exports = (app, passport, models) => {
   ///////////////////////////////////////////////////////////
   /* eslint no-unused-vars: 0 */
   app.use((err, req, res, next) => {
-    
+
     const errmsg = (err.message ? err.message : err).replace('Error: ', '')
 
     console.log(`Error Middleware: ${errmsg}`)

@@ -179,8 +179,9 @@ class ViewPollPage extends Component {
         if (!this._isMounted) return
 
         const { success, poll={}, message='', error={}, } = response
-        const { timeRemaining=0, } = error
+        const { timeRemaining=null, } = error
         const { choices=[], seedColor=0, } = poll
+
         this.setState({
           choiceColors: success 
             ? this.getColorArray(choices.length, seedColor) 
@@ -197,13 +198,15 @@ class ViewPollPage extends Component {
           voteSubmitted: success
             ? selectedChoice
             : '',
-        }, this.countdownTimer)
+        }, timeRemaining && this.countdownTimer)
       })
   }
 
   render() {
 
     const { createdBy, newChoice, poll, } = this.state
+    const { inputLengths, } = this.props
+
     document.title = `Votery | ${poll.title || 'Poll'}`
 
     return (
@@ -219,6 +222,7 @@ class ViewPollPage extends Component {
         handleInputChange={ this.handleInputChange }
         handleSubmit={ this.handleSubmit }
         newChoice={ newChoice }
+        newChoiceLengths={ inputLengths.choice }
       >
       </ViewPollForm>
     )
@@ -226,6 +230,7 @@ class ViewPollPage extends Component {
 }
 
 ViewPollPage.propTypes = {
+  inputLengths: PropTypes.object,
   match: PropTypes.shape({
     params: PropTypes.shape({
       user: PropTypes.string,

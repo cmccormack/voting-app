@@ -1,7 +1,31 @@
+const { body, validationResult, } = require('express-validator/check')
+const { sanitizeBody, } = require('express-validator/filter')
+
 module.exports = (app, Poll) => {
 
   // Vote on a single poll
-  app.post('/api/:user/polls/:poll', (req, res, next) => {
+  app.post('/api/:user/polls/:poll',
+  [
+    body('selectedChoice')
+    .trim()
+    .isLength({ min: 1, })
+    .withMessage('New choice should be at least 1 character.')
+    .isLength({ max: 32, })
+    .withMessage('New choice should be at most 32 characters.')
+    .isAscii()
+    .withMessage('New choice should include only valid ascii characters'),
+
+    sanitizeBody('selectedChoice').trim(),
+  ],
+  (req, res, next) => {
+
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      const { param, msg: message, } = errors.array()[0]
+      console.log(message)
+      return next({ param, message, })
+    }
+
     const { body, params, sessionID, } = req
     const { selectedChoice, } = body
     const expiry = 60 * 1000 // 60 seconds

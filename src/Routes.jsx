@@ -97,8 +97,13 @@ const Routes = ({
     {/* View a Poll Route */}
     <Route
       exact path="/user/:user/polls/:poll"
-      component={ ViewPollPage }
-      user={ user }
+      render={ ({ match, }) => 
+        <ViewPollPage
+          inputLengths={ inputLengths }
+          match={ match }
+          user={ user }
+        /> 
+      }
     />
 
 
@@ -115,9 +120,14 @@ const Routes = ({
 
 
     {/* Redirect to Main Page Route */}
-    <Route exact path="/" render={() => (
-      <Redirect to='/main' />
-    )} />
+    <Route
+      exact path="/"
+      render={ () => (
+        <Redirect
+          to='/main'
+        />
+      )} 
+    />
 
 
     {/* 404 Page not found Route */}

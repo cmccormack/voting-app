@@ -98,6 +98,7 @@ const ViewPollForm = (props) => {
     handleSubmit,
     loaded,
     newChoice,
+    newChoiceLengths,
     poll,
     selectedChoice,
     selectedIndex,
@@ -189,6 +190,8 @@ const ViewPollForm = (props) => {
               <NewChoiceInputWrapper>
                 <NewChoiceInput
                   className='teal-text text-darken-1'
+                  maxLength={ newChoiceLengths.max }
+                  minLength={ newChoiceLengths.min }
                   value={ newChoice }
                   onChange={ handleInputChange.bind(null, choices.length) }
                   placeholder="Add New Choice!"
@@ -254,6 +257,7 @@ ViewPollForm.propTypes = {
   handleSubmit: PropTypes.func,
   loaded: PropTypes.bool,
   newChoice: PropTypes.string,
+  newChoiceLengths: PropTypes.object,
   poll: PropTypes.object,
   selectedChoice: PropTypes.string,
   selectedIndex: PropTypes.number,
@@ -269,6 +273,7 @@ ViewPollForm.defaultProps = {
   footer: '',
   loaded: false,
   newChoice: '',
+  newChoiceLengths: { min: 1, max: 32, },
   poll: {},
   selectedChoice: '',
   selectedIndex: 0,

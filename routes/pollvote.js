@@ -22,7 +22,6 @@ module.exports = (app, Poll) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       const { param, msg: message, } = errors.array()[0]
-      console.log(message)
       return next({ param, message, })
     }
 

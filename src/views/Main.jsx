@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Link, } from 'react-router-dom'
 import Scroll from 'react-scroll'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
 import {
   Chart,
@@ -15,15 +16,13 @@ import {
 } from './layout'
 import { getColorsIncrementHue, } from '../utils/colors'
 
+
 const MainWrapper = styled(Container) `
-  border-radius: 5px;
   margin: 50px auto 80px;
-  padding: 20px;
   min-width: 420px;
 `
 
 const SectionWrapper = styled.div`
-  box-shadow: inset 1px 1px 3px #6aa;
   border-radius: 5px;
   padding: 20px;
 `
@@ -33,8 +32,18 @@ const TitleWrapper = SectionWrapper.extend`
 `
 
 const BodyWrapper = SectionWrapper.extend`
-  padding-top: 40px;
-  margin-top: 20px;
+
+`
+
+const SortRow = styled(Row)`
+  text-align: right;
+  margin: 0;
+`
+const SortRowItem = styled.span`
+  font-size: ${props => props.active ? '1.3' : '1.1'}rem;
+  font-weight: ${props => props.active ? '400' : '300'};
+  margin: 0 10px;
+  cursor: pointer;
 `
 
 const Header = styled.p.attrs({
@@ -76,6 +85,16 @@ const textContent = {
     'Check out some of the great user-submitted polls below, or create your own.',
     'See if the thing you like is better than the thing that other person likes!',
   ],
+  sortOptions: [
+    {
+      text: 'Recent',
+      param: 'recent',
+    },
+    {
+      text: 'Popular',
+      param: 'popular',
+    },
+  ],
 }
 
 
@@ -91,6 +110,7 @@ class Main extends Component {
       pagesCount: 0,
       polls: [],
       pollsCount: 0,
+      sort: 'recent',
     }
 
     this.chartColorOptions = {
@@ -122,7 +142,14 @@ class Main extends Component {
     this._isMounted = false
   }
 
+  handleSortClick(sort) {
+    this.setState({
+      sort,
+    }, () => this.fetchPolls(this.state.activePage))
+  }
+
   getPage(page) {
+    console.log('getpage')
     const { pagesCount: pages, activePage, } = this.state
     if (page > pages -1 || page < 0 || page === activePage) return
 
@@ -137,8 +164,8 @@ class Main extends Component {
 
   fetchPolls(skip=0) {
 
-    const { limit, } = this.state
-    const params = { skip: skip*limit, limit, }
+    const { limit, sort, } = this.state
+    const params = { skip: skip*limit, limit, sort, }
 
     const query = Object.keys(params).map(k => (`${k}=${params[k]}`)).join('&')
 
@@ -180,6 +207,7 @@ class Main extends Component {
       loaded,
       pagesCount,
       polls,
+      sort,
     } = this.state
 
     const title = (
@@ -215,6 +243,27 @@ class Main extends Component {
       <h1 className="teal-text text-darken-3">Loading...</h1>
     )
 
+    const sortGraphs = (
+      <SortRow>
+          <Col align="right">
+            {
+              textContent.sortOptions.map(({text, param, }) => (
+                <SortRowItem
+                  active={ sort === param }
+                  className={ classNames(
+                    'teal-text text-lighten-1',
+                  )}
+                  onClick={ this.handleSortClick.bind(this, param) }
+                  key={ param }
+                >
+                  { text }
+                </SortRowItem>
+              ))
+            }
+          </Col>
+      </SortRow>
+    )
+
     const body = (
       <Row>
         {polls.map(
@@ -224,24 +273,25 @@ class Main extends Component {
             return (
               <Col size="s12 xl6" key={`${username}-${shortName}`}>
                 <GraphCard
-                  title={
-                    <Link to={`user/${username}/polls/${shortName}`}>
-                      {title}
-                    </Link>
-                  }
-                  content={
-                    <Chart
-                      choices={poll.choices}
-                      colors={poll.choiceColors}
-                    />
-                  }
                   actions={
                     <span className={'card-footer-text'}>
                       {'Created by '}
                       <CardActionLink to={`user/${username}/polls`}>
-                        {username}
+                        { username }
                       </CardActionLink>
                     </span>
+                  }
+                  content={
+                    <Chart
+                      choices={ poll.choices }
+                      colors={ poll.choiceColors }
+                    />
+                  }
+                  hoverable={ false }
+                  title={
+                    <Link to={`user/${username}/polls/${shortName}`}>
+                      {title}
+                    </Link>
                   }
                 />
               </Col>
@@ -310,19 +360,22 @@ class Main extends Component {
       </PaginationStyled>
     )
 
+
+
     return (
       <MainWrapper
-        className="center teal lighten-4 z-depth-2"
+        className="center z-depth-1 teal lighten-5"
       >
         <TitleWrapper
-          className="teal lighten-5"
+          className=""
         >
           {title}
         </TitleWrapper>
         <BodyWrapper
-          className="teal lighten-5"
+          className=""
           id="mainBody"
         >
+          { loaded && sortGraphs }
           {
             !loaded
               ? loadingDisplay

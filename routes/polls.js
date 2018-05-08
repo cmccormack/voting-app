@@ -22,22 +22,27 @@ module.exports = (app, {User, Poll,}) => {
   app.get('/polls', (req, res, next) => {
     console.info(`New Request for ${req.hostname + req.path}`)
 
-    const { skip = 0, limit = 0, } = req.query
+    const { skip=0, limit=0, sort='recent', } = req.query
+    const sortOptions = {
+      'recent': '-createdTime',
+      'popular': '-totalVotes',
+    }
 
     Poll.find()
-      .skip(+skip)
-      .limit(+limit)
-      .populate('createdBy', 'username')
-      .exec((err, polls) => {
-        if (err) {
-          return next(Error('Error retrieving polls from database'))
-        }
+    .sort(sortOptions[sort])
+    .skip(+skip)
+    .limit(+limit)
+    .populate('createdBy', 'username')
+    .exec((err, polls) => {
+      if (err) {
+        return next(Error('Error retrieving polls from database'))
+      }
 
-        Poll.count({}, (err, count) => {
-          res.type('json').send({ polls, count, })
-        })
-
+      Poll.count({}, (err, count) => {
+        res.type('json').send({ polls, count, })
       })
+
+    })
   })
 
 

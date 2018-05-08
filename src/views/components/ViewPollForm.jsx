@@ -165,7 +165,7 @@ const ViewPollForm = (props) => {
           >
             Select a choice below to vote on your favorite!
           </ChoicesTitle>
-          <Collection className="col s8 offset-s2">
+          <Collection className="col s10 offset-s1 xl8 offset-xl2">
             {
               choices.map(({ choice, }, i) => (
                 <VoteCollectionItem

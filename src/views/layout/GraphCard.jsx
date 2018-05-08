@@ -70,13 +70,24 @@ GraphCardActions.defaultProps = {
 }
 
 
-const GraphCard = ({ ...props }) => (
-  <GraphCardWrapper className="card large hoverable">
+const GraphCard = ({ hoverable, ...props }) => (
+  <GraphCardWrapper className={ classNames(
+    "card large",
+    {'hoverable': hoverable, }
+  )}>
     <GraphCardContent { ...props }>
       <GraphCardTitle { ...props } />
     </GraphCardContent>
     <GraphCardActions { ...props } />
   </GraphCardWrapper>
 )
+
+GraphCard.propTypes = {
+  hoverable: PropTypes.bool,
+}
+
+GraphCard.defaultProps = {
+  hoverable: true,
+}
 
 export default GraphCard

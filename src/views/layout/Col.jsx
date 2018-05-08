@@ -23,7 +23,7 @@ Col.propTypes = {
 }
 
 Col.defaultProps = {
-  align: '',
+  align: 'center',
   className: '',
   size: 's12',
 }

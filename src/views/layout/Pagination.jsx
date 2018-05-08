@@ -51,8 +51,9 @@ PageNum.defaultProps = {
 
 const Pagination = ({
   children,
+  ...props
 }) => (
-  <ul>
+  <ul {...props}>
     { children }
   </ul>
 )

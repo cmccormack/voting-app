@@ -5,6 +5,7 @@ import { Link, } from 'react-router-dom'
 const NavItem = ({ hidden, to, content, updateAuth, }) => (
   <li hidden={hidden}>
     <Link
+      className='sidenav-close'
       onClick={updateAuth}
       to={to}
     >

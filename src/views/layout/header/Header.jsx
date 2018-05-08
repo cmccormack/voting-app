@@ -8,7 +8,7 @@ import { NavItems, } from './'
 class Header extends Component {
 
   componentDidMount() {
-    $('.button-collapse').sideNav()
+    $('.button-collapse').sideNav({closeOnClick: true,})
   }
 
   render() {

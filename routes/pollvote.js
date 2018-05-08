@@ -97,6 +97,9 @@ module.exports = (app, Poll) => {
             'choices': choices,
             'voters': recentVoters,
           },
+          $inc: {
+            totalVotes: 1,
+          },
         },
         { new: true, },
       )

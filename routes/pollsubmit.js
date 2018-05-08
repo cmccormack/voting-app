@@ -84,11 +84,13 @@ module.exports = (app, { User, Poll, }) => {
           sessionID: sessionID,
           datevoted: Date.now(),
         },],
+        totalVotes: 1,
       })
 
       poll.save(err => {
 
         if (err) return next(err)
+        
         User.findOneAndUpdate(
           { _id: user._id, },
           { $push: { polls: poll._id, }, },

@@ -9,7 +9,11 @@ module.exports = (app, {User, Poll, }) => {
   app.get('/api/users', (req, res, next) => {
     User.getUsers()
       .then(docs => {
-        res.type('json').send(docs)
+        res.type('json').send(docs.map(doc => {
+          delete doc.password
+          delete doc['__v']
+          return doc
+        }))
       })
       .catch(next)
   })

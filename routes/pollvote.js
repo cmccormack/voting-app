@@ -42,13 +42,18 @@ module.exports = (app, Poll) => {
     }
 
     Poll
-    .findOne({ 'shortName': params.poll, })
+    .find({ 'shortName': params.poll, })
     .populate('createdBy', 'username')
-    .exec((err, poll) => {
+    .exec((err, polls) => {
+
+      const poll = polls.filter(
+        poll=> poll.createdBy.username === params.user
+      )[0]
 
       if (err) return next(Error(err))
       if (!poll) return next(Error('Invalid Poll Short Name'))
 
+      console.log(poll.createdBy.username, params.user)
       if (poll.createdBy.username !== params.user) {
         return next(Error('Invalid Poll Short Name or User'))
       }

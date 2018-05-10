@@ -1,6 +1,6 @@
 const passport = require('passport')
 
-module.exports = (app, {User, Poll, }) => {
+module.exports = (app, {User, }) => {
 
 
   ///////////////////////////////////////////////////////////

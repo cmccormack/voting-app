@@ -10,11 +10,11 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 ////////////////////////////////////
 
 // CSS/SCSS
-const cssDev = ['style-loader', 'css-loader', 'sass-loader']
+const cssDev = ['style-loader', 'css-loader', 'sass-loader',]
 const cssProd = ExtractTextPlugin.extract({
   fallback: 'style-loader',
-  use: ['css-loader', 'sass-loader'],
-  publicPath: '../'
+  use: ['css-loader', 'sass-loader',],
+  publicPath: '../',
 })
 
 
@@ -24,7 +24,7 @@ module.exports = (env={}) => {
   return {
     context: path.join(__dirname, './'),
     entry: {
-      app: './src/App.jsx'
+      app: './src/App.jsx',
     },
     output: {
       path: path.resolve(__dirname, 'public'),
@@ -32,7 +32,7 @@ module.exports = (env={}) => {
       filename: '[name].bundle.js',
     },
     resolve: {
-      extensions: ['.js', '.jsx'],
+      extensions: ['.js', '.jsx',],
     },
     module: {
       rules: [
@@ -42,22 +42,22 @@ module.exports = (env={}) => {
           exclude: /node_modules/,
           include: path.join(__dirname, 'src'),
           options: {
-            presets: ['react', 'env'],
+            presets: ['react', 'env',],
             plugins: [
-              ["transform-object-rest-spread", { "useBuiltIns": true }]
-            ]
-          }
+              ["transform-object-rest-spread", { "useBuiltIns": true, },],
+            ],
+          },
         },
         {
           test: /\.s?css$/,
-          use: env.production ? cssProd : cssDev
+          use: env.production ? cssProd : cssDev,
         },
         {
           test: /\.(png|ico|jpe?g|gif)$/i,
           use: [
             'file-loader?name=images/[name].[ext]',
-            'image-webpack-loader'
-          ]
+            'image-webpack-loader',
+          ],
         },
       ],
     },
@@ -72,8 +72,8 @@ module.exports = (env={}) => {
       new ExtractTextPlugin({
         filename: './styles/styles.css',
         disable: !env.production,
-        allChunks: true
+        allChunks: true,
       }),
-    ]
+    ],
   }
 }

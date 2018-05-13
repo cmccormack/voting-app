@@ -67,7 +67,7 @@ module.exports = (env={}) => {
         title: 'Votery | Main',
         style: 'styles.css',
         inject: 'body',
-        favicon: './src/images/favicon.ico',
+        // favicon: '/images/favicon.ico',
       }),
       new ExtractTextPlugin({
         filename: './styles/styles.css',

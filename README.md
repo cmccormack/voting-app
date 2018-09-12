@@ -14,3 +14,7 @@ Fulfill the below user stories:
 * User Story: As an unauthenticated or authenticated user, I can see and vote on everyone's polls.
 * User Story: As an unauthenticated or authenticated user, I can see the results of polls in chart form. (This could be implemented using Chart.js or Google Charts.)
 * User Story: As an authenticated user, if I don't like the options on a poll, I can create a new option.
+
+Completed App
+-----
+ * https://votery.mackville.net/
